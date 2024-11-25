@@ -3,58 +3,59 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pbotargu <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/21 14:36:31 by pbotargu          #+#    #+#              #
-#    Updated: 2024/11/21 14:37:09 by pbotargu         ###   ########.fr        #
+#    Updated: 2024/11/25 11:04:20 by anovio-c         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = ircserv
+NAME 	= ircserv
 
-GREEN = \033[1;32m
-YELLOW = \033[1;33m
-CYAN = \033[1;36m
-RED = \033[1;31m
-MAGENTA = \033[1;35m
-BLUE = \033[38;5;75m
-ORIGINAL = \033[0m
+INC_DIR = inc/
+SRC_DIR = srcs/
+OBJ_DIR = objs/
 
-CPP = c++
-FLAGS = -Wall -Wextra -Werror -std=c++98 -g
-SRC = main.cpp
-RM = rm -rf
+INC		= $(INC_DIR)RPN.hpp \
 
-#DIRECTORIES
-D_OBJ = obj
-OBJ = $(addprefix $(D_OBJ)/, $(SRC:.cpp=.o))
-DEP = $(addprefix $(D_OBJ)/, $(SRC:.cpp=.d))
+SRC		= $(SRC_DIR)Server.cpp \
+		  #$(SRC_DIR)main.cpp
 
-all: dir $(NAME)
+OBJ = $(SRC:$(SRC_DIR)%.cpp=$(OBJ_DIR)%.o)
+DEP = $(OBJ:.o=.d)
+CC = c++
+CFLAGS = -Wall -Wextra -Werror -std=c++98 -pedantic -MMD -MP
+
+# Colored output
+ERASE	= \033[2K\r
+BLUE	= \033[34m
+YELLOW	= \033[33m
+GREEN	= \033[32m
+END		= \033[0m
+
+all: $(OBJ_DIR) $(NAME)
+
+$(OBJ_DIR):
+	@mkdir -p $(OBJ_DIR)
+
+$(OBJ_DIR)%.o : $(SRC_DIR)%.cpp Makefile
+	$(CC) $(CFLAGS) -I$(INC_DIR) -c $< -o $@
+	@echo "$(BLUE)-> $<$(END)"
+
+$(NAME): $(OBJ)
+	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
+	@echo "$(GREEN)$(NAME) made$(END)"
+
+clean:
+	@rm -rf $(OBJ_DIR)
+	@echo "$(YELLOW)Objects removed$(END)"
+
+fclean: clean
+	@rm -f $(NAME)
+	@echo "$(YELLOW)$(NAME) removed$(END)"
+
+re:	fclean all
 
 -include $(DEP)
 
-dir:
-		@mkdir -p $(D_OBJ)
-
-# Construcción de los objetos
-$(D_OBJ)/%.o: %.cpp Makefile
-		@$(CPP) $(FLAGS) -MMD -MP -c $< -o $@
-		@echo "$(GREEN)[OK]             $(BLUE).o Correctly done!"
-
-# Creación del ejecutable
-$(NAME): $(OBJ)
-		@$(CPP) $(FLAGS) $(OBJ) -o $(NAME)
-		@echo "$(GREEN)[OK]             $(BLUE)Project $(NAME) successfully compiled!!"
-
-clean:
-		@$(RM) $(D_OBJ)
-		@echo "$(GREEN)[OK]             $(RED)Cleaned successfully!"
-
-fclean: clean
-		@$(RM) $(NAME)
-		@echo "$(GREEN)[OK]             $(RED)All removed successfully!"
-
-re: fclean all
-
-.PHONY: all clean fclean re
+.PHONY:		all clean fclean re
