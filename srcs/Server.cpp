@@ -1,15 +1,20 @@
-#include <iostream>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <string>
-#include <arpa/inet.h>
-#include <netdb.h>
-#include <unistd.h>
-#include <vector>
-#include <poll.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Server.cpp                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/25 11:24:51 by anovio-c          #+#    #+#             */
+/*   Updated: 2024/11/25 11:25:01 by anovio-c         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-int	main()
+#include "Server.hpp"
+
+int	server(int port, std::string pass)
 {
+	// check if port is free ?
 	int listening = socket(AF_INET, SOCK_STREAM, 0);
 	if (listening == -1)
 	{
