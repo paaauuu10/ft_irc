@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:24:51 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/11/25 11:25:01 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/11/27 10:53:04 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
+
+
 
 int	server(int port, std::string pass)
 {
@@ -46,7 +48,7 @@ int	server(int port, std::string pass)
 	fds.push_back(listeningPoll);
 
 	while(42)
-	{
+	{// use epoll??
 		int pollCount = poll(fds.data(), fds.size(), -1);
 		if (pollCount == -1)
 		{
