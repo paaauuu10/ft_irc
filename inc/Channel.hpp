@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 12:08:38 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/11/28 19:44:32 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/11/30 12:22:39 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,21 +15,22 @@
 #include <unordered_set>
 #include <unordered_map>
 
-
-
 class Client;
 class Channel {
 	private:
 		std::string						_name;
 		Client *						_operatorClient;
+		std::string						_key;
+		int								_limit;
 		std::unordered_set<Client *>	_clients;
 		std::unordered_map<char, bool>	_modes;
 	public:
-		Channel(const std::string &channelName, Client *creator);
+		Channel(const std::string &channelName, const std::string &key, Client *creator);
 		~Channel();
 
 		// Getters
 		std::string	getName();
+		bool		getMode(char key);
 
 		// Setters
 
