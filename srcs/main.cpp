@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:18:08 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/11/25 11:24:26 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/11/26 14:45:45 by pborrull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,5 +17,7 @@ int main(int argc, char **argv) {
 		std::cerr << "Please use ./ircserv <port> <password>" << std::endl;
 		return (1);
 	}
-	server(atoi(argv[1]), argv[2]);
+	Server server(atoi(argv[1]), argv[2]);
+
+	server.start();
 }
