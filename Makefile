@@ -6,7 +6,7 @@
 #    By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/21 14:36:31 by pbotargu          #+#    #+#              #
-#    Updated: 2024/11/26 14:46:44 by pborrull         ###   ########.fr        #
+#    Updated: 2024/12/03 12:49:06 by pborrull         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,10 +16,14 @@ INC_DIR = inc/
 SRC_DIR = srcs/
 OBJ_DIR = objs/
 
-INC		= $(INC_DIR)RPN.hpp \
+INC		= $(INC_DIR)Server.hpp \
+		  $(INC_DIR)Client.hpp \
+		  $(INC_DIR)Channel.hpp \
 
 SRC		= $(SRC_DIR)Server.cpp \
-		  $(SRC_DIR)main.cpp 
+		  $(SRC_DIR)Client.cpp \
+		  $(SRC_DIR)PASS.cpp \
+		  $(SRC_DIR)main.cpp
 
 OBJ = $(SRC:$(SRC_DIR)%.cpp=$(OBJ_DIR)%.o)
 DEP = $(OBJ:.o=.d)

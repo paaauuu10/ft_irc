@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 12:00:38 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/11/26 13:36:01 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/03 12:23:57 by pborrull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ Client::Client(void)
 }
 
 Client::Client(std::string username, std::string nickname, int fd)
-	: _username(username), _nickname(nickname), _fd(fd) {
+	:  _fd(fd), _username(username), _nickname(nickname) {
 	
 }
 
@@ -58,10 +58,10 @@ bool		Client::getChannel(std::string &channelName) {
 	return (it != _channels.end());
 }
 
-bool	Client::setNickname(std::string &nickname) {
+void	Client::setNickname(std::string &nickname) {
 	this->_nickname = nickname ;
 }
-bool	Client::setUsername(std::string &username) {
+void	Client::setUsername(std::string &username) {
 		this->_username = username;
 }
 void	Client::setFd(int fd) {
