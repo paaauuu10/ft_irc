@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:20:37 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/02 13:25:58 by pborrull         ###   ########.fr       */
+/*   Updated: 2024/12/03 13:01:29 by pborrull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,10 @@
 #include <poll.h>
 #include <cstdlib>
 #include <algorithm>
+#include <limits.h>
 #include "Client.hpp"
 
+class Client;
 class Server
 {
 	private:
@@ -35,8 +37,8 @@ class Server
 
 		int _listeningSocket;
 		std::vector<pollfd> pollfds;
+	//	std::vector<Client *> client;
 	//	std::map<int, Client> clients;
-
 	//	std::map<std::string, Channel> channels;
 
 	public:
@@ -46,5 +48,13 @@ class Server
 		int			getPort(void);
 		std::string	getPass(void);
 
+		void parser(std::string str, Client *client);
+		bool validCommand(std::string str, Client *client);
+		void pass(std::string pass, Client *client);
+		void parsingbuffer(char *buffer, Client *client);
+
+
 		int	start();
 };
+
+
