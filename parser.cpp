@@ -6,7 +6,7 @@
 /*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 10:31:53 by pbotargu          #+#    #+#             */
-/*   Updated: 2024/11/25 14:19:48 by pborrull         ###   ########.fr       */
+/*   Updated: 2024/12/03 12:02:14 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,7 @@
 #include <algorithm>
 #include <cctype> 
 
-
-bool validCommand(std::string str)
+bool validCommand(std::string str, Client client)
 {
     int index = 0;
     std::string commands[17] = { "PASS", "NICK", "USER", "SERVER", "OPER", "QUIT", "SQUIT", "JOIN", "PART", "MODE", "TOPIC", "NAMES", "LIST", "INVITE", "KICK", "VERSION", "PRIVMSG"};
@@ -23,17 +22,19 @@ bool validCommand(std::string str)
     std::transform(cmd.begin(), cmd.end(), cmd.begin(), [](unsigned char c) {
         return std::toupper(c);
     }); // Convert str into capital letters
-    while (cmd != ('/' + commands[index++]))
+    while ((cmd != commands[index]) && cmd != ('/' + commands[index]))
     {
+        index++;
         if (index == 17)
             return false;
+  
     }
-
+    index++;
     switch(index)
     {
         case 1:
             std::cout << commands[index - 1] << std::endl;
-            //pass()
+                pass(str, client);
             break;
         case 2:
             std::cout << commands[index - 1] << std::endl;
@@ -86,11 +87,11 @@ bool validCommand(std::string str)
     }
     return true;
 }
-void parser(std::string str)
+void parser(std::string str, Client client) 
 {
-    if  (str.size() > 0 && str[0] == '/')
+    if  (str.size() > 0)
     {
-        if (!validCommand(str))
+        if (!validCommand(str, client))
             std::cout << str.erase(0,1) << " :Unknown command" << std::endl;
     }
     else
