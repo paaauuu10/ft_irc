@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:20:37 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/11/28 19:02:05 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/03 09:19:05 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,30 @@
 #include <netdb.h>
 #include <unistd.h>
 #include <vector>
+#include <map>
 #include <poll.h>
 #include <cstdlib>
 #include <algorithm>
-#include <stdexcept>
+#include "Client.hpp"
 
-int	server(int port, std::string pass);
+class Server
+{
+	private:
+		int _port;
+		std::string	_pass;
 
+		int _listeningSocket;
+		std::vector<pollfd> pollfds;
+	//	std::map<int, Client> clients;
+
+	//	std::map<std::string, Channel> channels;
+
+	public:
+		
+		Server(int port, const std::string &pass);
+		~Server();
+		int			getPort(void);
+		std::string	getPass(void);
+
+		int	start();
+};
