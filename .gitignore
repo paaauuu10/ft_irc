@@ -2,3 +2,5 @@
 .env
 .o
 .d
+cmds/
+.vscode

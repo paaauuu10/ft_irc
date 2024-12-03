@@ -6,7 +6,7 @@
 #    By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/21 14:36:31 by pbotargu          #+#    #+#              #
-#    Updated: 2024/11/25 11:04:20 by anovio-c         ###   ########.fr        #
+#    Updated: 2024/11/26 14:46:44 by pborrull         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ OBJ_DIR = objs/
 INC		= $(INC_DIR)RPN.hpp \
 
 SRC		= $(SRC_DIR)Server.cpp \
-		  #$(SRC_DIR)main.cpp
+		  $(SRC_DIR)main.cpp 
 
 OBJ = $(SRC:$(SRC_DIR)%.cpp=$(OBJ_DIR)%.o)
 DEP = $(OBJ:.o=.d)
