@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: pbotargu <pbotargu@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:31:40 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/03 12:24:31 by pborrull         ###   ########.fr       */
+/*   Updated: 2024/12/04 13:10:36 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ class Client {
 		std::string					_username;
 		std::string 				_nickname; // nickname max 9 chars
 		// See the protocol grammar rules for what may and may not be used in a nickname. 
+		std::string					_hostname;
+		std::string					_realname;
 		bool						_logged;
 		bool						_isRegistered;
 		std::string					_buffer;
@@ -37,6 +39,8 @@ class Client {
 		int			getFd(void);
 		std::string	getUsername(void);
 		std::string	getNickname(void);
+		std::string	getRealname(void);
+		std::string	getHostname(void);
 		bool		getLogged(void);
 		std::string	getBuffer(void);
 		bool		getRegistered(void);
@@ -49,6 +53,8 @@ class Client {
 		void	setLogged(bool value);
 		void	setBuffer(std::string &buffer);
 		void	setRegistered(bool value);
+		void	setRealName(std::string str);
+		void	setHostname(std::string str);
 		
 		// Member functions
 		void	addChannel(std::string &channelName);

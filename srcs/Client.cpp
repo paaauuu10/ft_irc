@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: pbotargu <pbotargu@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 12:00:38 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/03 12:23:57 by pborrull         ###   ########.fr       */
+/*   Updated: 2024/12/04 13:08:12 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ Client::~Client(void) {
 int			Client::getFd(void) { return this->_fd; }
 std::string	Client::getUsername(void) { return this->_username; }
 std::string	Client::getNickname(void) { return this->_nickname; }
+std::string	Client::getRealname(void) { return this->_realname; }
+std::string	Client::getHostname(void) { return this->_hostname; }
 bool		Client::getLogged(void) { return this->_logged; }
 std::string	Client::getBuffer(void) { return this->_buffer; }
 bool		Client::getRegistered(void) { return this->_isRegistered; }
@@ -75,6 +77,14 @@ void	Client::setBuffer(std::string &buffer) {
 }
 void	Client::setRegistered(bool value) {
 		this->_isRegistered = value;
+}
+
+void	Client::setRealName(std::string str) {
+		this->_realname = str;
+}
+
+void	Client::setHostname(std::string str) {
+		this->_hostname = str;
 }
 
 void	Client::addChannel(std::string &channelName) {
