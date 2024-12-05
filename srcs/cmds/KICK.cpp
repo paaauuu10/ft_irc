@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Kick.cpp                                           :+:      :+:    :+:   */
+/*   KICK.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 19:44:07 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/11/26 13:31:28 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/05 09:54:42 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ std::string extractReason(std::string &line, std::vector<std::string> &parsed) {
 	
 }
 
-std::string reason = SplitCmdK(cmd, tmp); // Extrae los primeros elementos y la razón.
+std::string reason = SplitCmdKick(cmd, tmp); // Extrae los primeros elementos y la razón.
 if (tmp.size() < 2) { 
     // Error: No hay suficientes parámetros.
     senderror(461, GetClient(fd)->GetNickName(), GetClient(fd)->GetFd(), " :Not enough parameters\r\n"); 
