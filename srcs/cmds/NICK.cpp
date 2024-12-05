@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 11:47:10 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/05 11:55:00 by pborrull         ###   ########.fr       */
+/*   Updated: 2024/12/05 12:32:47 by pborrull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -17,6 +17,16 @@
 #include <string>
 #include <iostream>
 #include <set>
+
+static int checkNickname(Client *client, std::string &nickname)
+{
+	for (int i = 0; i < client.size(); i++)
+	{
+		if (client[i].getNickname() == nickname)
+			return 1;
+	}
+	return 0;
+}
 
 static int validateNick(std::string &nick)
 {
@@ -34,22 +44,30 @@ static int validateNick(std::string &nick)
 	return 0;
 }
 
-//int		NICK(Client *client, std::string &nickname)
+//int		NICK(Client *client, std::string &nickname) //Este es el correcto
 int		NICK(std::string &nick, std::string &nicka)
 {
 	if (nick.empty())	
 		std::cout << "No nickname given" << std::endl;
 		//sendError(client, 431, "No nickname given"); //ERR_NONICKNAMEGIVEN
-	if (validateNick(nick))
+	else if (validateNick(nick))
 		std::cout << "Erroneous nickname" << std::endl;
 		//sendError(client, 432, "Erroneous nickname"); //ERR_ERRONEUSNICKNAME
-	//if (nick == client.getNickname())
-	if (nick == nicka)
+	//if (nick == client.getNickname()) //Este es el correcto
+	else if (nick == nicka)
 		std::cout << "Nickname collision KILL" << std::endl;
 		//sendError(client, 436, "Nickname collision KILL"); //ERR_NICKCOLLISION
-	if (checkNickname(client, nickname))
+	else if (checkNickname(client, nickname))
 		std::cout << "Nickname is already in use" << std::endl;
 		//sendError(client, 433, "Nickname is already in use"); //ERR_NICKNAMEINUSE
+	else
+	{
+		if (client._nickname.empty())
+			std::cout << "Introducing new nick \"" << nick << "\"." << std::endl; //Se tiene que utilizar send
+		else
+			std::cout << client.getNickname() << " changed his nickname to " << nick << "." << std::endl; //Se tiene que utilizar send y enviarlo a todos
+		client.setNickname(nick);
+	}
 	return 0;
 }
 

@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:20:37 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/03 13:01:29 by pborrull         ###   ########.fr       */
+/*   Updated: 2024/12/05 12:12:29 by pborrull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,7 @@ class Server
 
 		int _listeningSocket;
 		std::vector<pollfd> pollfds;
-	//	std::vector<Client *> client;
-	//	std::map<int, Client> clients;
+	//	std::vector<Client *> client; // Cliente solo se añade si pasa el PASS
 	//	std::map<std::string, Channel> channels;
 
 	public:
