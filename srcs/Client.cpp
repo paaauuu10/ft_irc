@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 12:00:38 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/11/26 13:36:01 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/03 11:48:37 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <algorithm>
 
 Client::Client(void)
-	: _fd(-1), _username("Default"), _nickname("Default"), _logged(false),
+	: _fd(-1), _username(""), _nickname(""), _logged(false),
 	_isRegistered(false), _buffer("") {
 	
 }
@@ -44,6 +44,8 @@ Client::~Client(void) {
 	
 } 
 
+// GETTERS
+
 int			Client::getFd(void) { return this->_fd; }
 std::string	Client::getUsername(void) { return this->_username; }
 std::string	Client::getNickname(void) { return this->_nickname; }
@@ -57,6 +59,9 @@ bool		Client::getChannel(std::string &channelName) {
 	it = std::find(_channels.begin(), _channels.end(), channelName);
 	return (it != _channels.end());
 }
+
+
+// SETTERS
 
 bool	Client::setNickname(std::string &nickname) {
 	this->_nickname = nickname ;
@@ -76,6 +81,9 @@ void	Client::setBuffer(std::string &buffer) {
 void	Client::setRegistered(bool value) {
 		this->_isRegistered = value;
 }
+
+
+// MEMBER FUNCTIONS
 
 void	Client::addChannel(std::string &channelName) {
 	this->_channels.push_back(channelName);

@@ -3,23 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   parser.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 10:31:53 by pbotargu          #+#    #+#             */
-/*   Updated: 2024/11/25 14:19:48 by pborrull         ###   ########.fr       */
+/*   Updated: 2024/12/03 12:41:43 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
 #include <algorithm>
-#include <cctype> 
+#include <cctype>
+#include "Server.hpp"
+#include "cmds/NICK.cpp"
 
 
-bool validCommand(std::string str)
+bool validCommand(Client *client, std::string str)
 {
     int index = 0;
     std::string commands[17] = { "PASS", "NICK", "USER", "SERVER", "OPER", "QUIT", "SQUIT", "JOIN", "PART", "MODE", "TOPIC", "NAMES", "LIST", "INVITE", "KICK", "VERSION", "PRIVMSG"};
     std::string cmd = str.substr(0, str.find(' '));
+	std::string	value = str.substr(cmd.size(), str.size() - cmd.size());
     std::transform(cmd.begin(), cmd.end(), cmd.begin(), [](unsigned char c) {
         return std::toupper(c);
     }); // Convert str into capital letters
@@ -33,10 +36,11 @@ bool validCommand(std::string str)
     {
         case 1:
             std::cout << commands[index - 1] << std::endl;
-            //pass()
+            //pass(client, value)
             break;
         case 2:
             std::cout << commands[index - 1] << std::endl;
+			NICK(client, value);
             break;
         case 3:
             std::cout << commands[index - 1] << std::endl;
@@ -86,11 +90,11 @@ bool validCommand(std::string str)
     }
     return true;
 }
-void parser(std::string str)
+void parser(Client *client, std::string str)
 {
     if  (str.size() > 0 && str[0] == '/')
     {
-        if (!validCommand(str))
+        if (!validCommand(client, str))
             std::cout << str.erase(0,1) << " :Unknown command" << std::endl;
     }
     else

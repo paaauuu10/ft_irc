@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:24:51 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/03 09:19:22 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/03 12:12:39 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ int	Server::start()
 				else
 				{
 					// Old connection
-					char buffer[1024] = {0};
+					char buffer[1024] = {0}; //this atribute is in client.hpp
 					int received = recv(pollfds[i].fd, buffer, sizeof(buffer) - 1, 0);
 					if (received <= 0)
 					{

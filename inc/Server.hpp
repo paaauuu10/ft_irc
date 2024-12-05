@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:20:37 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/03 09:19:05 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/03 12:12:51 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 class Server
 {
 	private:
+		static std::string	_srvName;
 		int _port;
 		std::string	_pass;
 
@@ -47,4 +48,11 @@ class Server
 		std::string	getPass(void);
 
 		int	start();
+		
+		static std::string	getServerName() {
+			return _srvName;
+		}
+		static void			setServerName() {
+			_srvName = "Chikorita.server.com";
+		}
 };

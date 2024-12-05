@@ -1,23 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   Utils.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/25 11:18:08 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/03 10:54:08 by anovio-c         ###   ########.fr       */
+/*   Created: 2024/12/03 12:00:52 by anovio-c          #+#    #+#             */
+/*   Updated: 2024/12/03 12:19:47 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#pragma once
+
 #include "Server.hpp"
 
-int main(int argc, char **argv) {
-	if (argc != 3) {
-		std::cerr << "Please use ./ircserv <port> <password>" << std::endl;
-		return (1);
-	}
-	Server server(atoi(argv[1]), argv[2]);
-
-	server.start();
-}
+// target se predefine en "", si no es pasado como parametro
+void sendError(Client* client, int errorCode, const std::string& errorMessage,
+	const std::string& target = "");
