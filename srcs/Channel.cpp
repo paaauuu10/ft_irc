@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:58:33 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/07 12:05:52 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/07 20:34:22 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Server.hpp"
 #include "Channel.hpp"
-#include "Client.hpp"
 
 Channel::Channel(const std::string &channelName, const std::string &key, Client *creator) : _topic("") {
 	if (channelName.empty() || (channelName[0] != '&' && channelName[0] != '#'))
@@ -48,6 +46,7 @@ void	Channel::setMode(char mode, bool status, int value) {
 // · k: Set/remove the channel key (password)
 // · o: Give/take channel operator privilege
 // l: Set/remove the user limit to channel
+	(void)value;
 	_modes[mode] = status;
 	std::cout << "Channel " << _name << " mode " << mode << " set to " << (status ? "ON" : "OFF") << ".\n";
 }
@@ -63,7 +62,7 @@ bool	Channel::checkKey(const std::string &str) const {
 bool	Channel::isEmtpy() { return this->_clients.empty() ; }
 
 bool	Channel::isFull() { 
-	return ((this->_clients.size() + this->_operatorClients.size()) == this->_limit ? true : false );
+	return ((this->_clients.size() + this->_operatorClients.size()) == static_cast<u_long>(this->_limit) ? true : false );
 	}
 
 void	Channel::addClient(Client *client) { this->_clients.insert(client); }

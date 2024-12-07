@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 12:00:38 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/07 11:58:42 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/07 20:32:35 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,20 +52,22 @@ bool		Client::getLogged(void) { return this->_logged; }
 std::string	Client::getBuffer(void) { return this->_buffer; }
 bool		Client::getRegistered(void) { return this->_isRegistered; }
 
-bool		Client::getChannel(std::string &channelName) {
-	std::vector<std::string>::iterator it;
+Channel		*Client::getChannel(Channel *channel) {
+	std::vector<Channel *>::iterator it;
 
-	it = std::find(_channels.begin(), _channels.end(), channelName);
-	return (it != _channels.end());
+	it = std::find(_channels.begin(), _channels.end(), channel);
+	if (it != _channels.end())
+		return (*it);
+	return (NULL);
 }
 
 
 // SETTERS
 
-bool	Client::setNickname(std::string &nickname) {
+void	Client::setNickname(std::string &nickname) {
 	this->_nickname = nickname ;
 }
-bool	Client::setUsername(std::string &username) {
+void	Client::setUsername(std::string &username) {
 		this->_username = username;
 }
 void	Client::setFd(int fd) {

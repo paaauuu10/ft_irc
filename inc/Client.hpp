@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:31:40 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/07 11:57:28 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/07 20:31:24 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,11 @@ class Client {
 		bool		getLogged(void);
 		std::string	getBuffer(void);
 		bool		getRegistered(void);
-		bool		getChannel(std::string &channelName);
+		Channel		*getChannel(Channel *channel);
 		
 		// Setters
-		bool	setNickname(std::string &nickname);
-		bool	setUsername(std::string &username);
+		void	setNickname(std::string &nickname);
+		void	setUsername(std::string &username);
 		void	setFd(int fd);
 		void	setLogged(bool value);
 		void	setBuffer(std::string &buffer);

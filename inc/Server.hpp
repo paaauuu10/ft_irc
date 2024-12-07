@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:20:37 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/07 12:15:25 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/07 20:40:18 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 #include <unistd.h>
 #include <vector>
 #include <map>
+#include <set>
 #include <poll.h>
 #include <cstdlib>
 #include <algorithm>
@@ -74,15 +75,11 @@ class Server
 		int			start();
 		int			getPort(void);
 		std::string	getPass(void);
-
 		
 		static std::string	getServerName() {
 			return _srvName;
 		}
-		static void			setServerName(const std::string &name) {
-			_srvName = name;
-		}
+		// static void			setServerName(const std::string &name) {
+		// 	_srvName = name;
+		// }
 };
-
-Server	*Server::instance = NULL;
-std::string	Server::_srvName = "pikachu.server.com";

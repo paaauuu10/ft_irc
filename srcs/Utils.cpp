@@ -16,7 +16,7 @@
 // :irc.example.com 432 user123 :Erroneous nickname
 
 // target se predefine en "", si no es pasado como parametro
-void sendError(Client* client, int errorCode, const std::string& errorMessage, const std::string& target = "") {
+void sendError(Client* client, int errorCode, const std::string& errorMessage, const std::string& target) {
     if (!client || !client->getLogged()) {
         std::cerr << "Error: Cliente no está conectado.\n";
         return;
