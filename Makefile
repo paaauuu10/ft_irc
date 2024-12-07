@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+         #
+#    By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/21 14:36:31 by pbotargu          #+#    #+#              #
-#    Updated: 2024/11/26 14:46:44 by pborrull         ###   ########.fr        #
+#    Updated: 2024/12/07 12:08:03 by anovio-c         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,9 +16,16 @@ INC_DIR = inc/
 SRC_DIR = srcs/
 OBJ_DIR = objs/
 
-INC		= $(INC_DIR)RPN.hpp \
+INC		= $(INC_DIR)Server.hpp \
+		  $(INC_DIR)Client.hpp \
+		  $(INC_DIR)Channel.hpp \
+		  $(INC_DIR)utils.hpp
 
 SRC		= $(SRC_DIR)Server.cpp \
+		  $(SRC_DIR)Client.cpp \
+		  $(SRC_DIR)Channel.cpp \
+		  $(SRC_DIR)utils.cpp \
+		  $(SRC_DIR)/cmds/JOIN.cpp \
 		  $(SRC_DIR)main.cpp 
 
 OBJ = $(SRC:$(SRC_DIR)%.cpp=$(OBJ_DIR)%.o)

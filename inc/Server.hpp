@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:20:37 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/03 12:12:51 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/07 12:15:25 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,33 +26,63 @@
 #include <cstdlib>
 #include <algorithm>
 #include "Client.hpp"
+#include "Channel.hpp"
 
 class Server
 {
 	private:
-		static std::string	_srvName;
-		int _port;
-		std::string	_pass;
+		static Server			*instance;
+		static std::string		_srvName;
+		
+		int 					_port;
+		std::string				_pass;
 
-		int _listeningSocket;
-		std::vector<pollfd> pollfds;
-	//	std::map<int, Client> clients;
+		int 					_listeningSocket;
+		std::vector<pollfd>		pollfds;
+		std::vector<Client *>	_clients;
+		std::vector<Channel *>	_channels;
+		Server(int port, const std::string &pass)
+			: _port(port), _pass(pass) { };
+		~Server();
 
-	//	std::map<std::string, Channel> channels;
+		// !!!!!  HACER PARA EVITAR LA COPIA!!!!!
+		//Server(const Server &src);
+		//Server	&operator=(const Server *src);
 
 	public:
+		static Server	*getInstance(int port, const std::string &pass) {
+			if (port < 1024 || port > 49151)
+				throw std::invalid_argument("Invalid port number");
+			if (!instance)
+				instance = new Server(port, pass);
+			return (instance);
+		}
 		
-		Server(int port, const std::string &pass);
-		~Server();
+		static void	destroyInstance() {
+			if (instance) {
+				//for (size_t i = 0; i < instance->_clients.size(); ++i)
+				//	delete instance->_clients[i];
+				instance->_clients.clear();
+				//for (size_t i = 0; i < instance->_channels.size(); ++i)
+				//	delete instance->_channels[i];
+				instance->_channels.clear();
+			}
+			delete instance;
+			instance = NULL;
+		}
+
+		int			start();
 		int			getPort(void);
 		std::string	getPass(void);
 
-		int	start();
 		
 		static std::string	getServerName() {
 			return _srvName;
 		}
-		static void			setServerName() {
-			_srvName = "Chikorita.server.com";
+		static void			setServerName(const std::string &name) {
+			_srvName = name;
 		}
 };
+
+Server	*Server::instance = NULL;
+std::string	Server::_srvName = "pikachu.server.com";

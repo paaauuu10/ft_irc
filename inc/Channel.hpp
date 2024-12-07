@@ -6,24 +6,27 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 12:08:38 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/03 09:18:56 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/07 12:05:57 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#pragma once
+
 #include "Server.hpp"
 #include "Client.hpp"
-#include <unordered_set>
-#include <unordered_map>
+#include <set>
+#include <map>
 
 class Client;
 class Channel {
 	private:
 		std::string						_name;
-		Client *						_operatorClient;
 		std::string						_key;
+		std::string						_topic;
 		int								_limit;
-		std::unordered_set<Client *>	_clients;
-		std::unordered_map<char, bool>	_modes;
+		std::set<Client *>	_operatorClients;
+		std::set<Client *>	_clients;
+		std::map<char, bool>	_modes;
 	public:
 		Channel(const std::string &channelName, const std::string &key, Client *creator);
 		~Channel();
@@ -38,7 +41,14 @@ class Channel {
 		void	setMode(char mode, bool status, int value);
 		
 		// Methods
+		
+		bool	isKeyProtected();
+		bool	checkKey(const std::string &key) const;
 		bool	isEmtpy();
-		void	leave(Client *client);
+		bool	isFull();
+		void	addOperatorClient(Client *client);
+		void	addClient(Client *client);
+		void	rmClient(Client *client);
+		std::vector<int>	listFdClients();
 
 };

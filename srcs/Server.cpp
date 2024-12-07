@@ -6,30 +6,29 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:24:51 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/03 12:12:39 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/07 11:29:43 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-Server::Server(int port, const std::string &pass)
-	: _port(port), _pass(pass)
-{
-}
-
-Server::~Server()
-{
+Server::~Server() {
+	if (this->_listeningSocket > 0)
+		close(_listeningSocket);
+		
+	for (size_t i = 0; i < _clients.size(); ++i)
+		delete _clients[i];
+	_clients.clear();
+	
+	for (size_t i = 0; i < _channels.size(); ++i)
+		delete _channels[i];
+	_channels.clear();
+	std::cout << "Server destroyed..." << std::endl;
 }
 
 int	Server::start()
 {
 	// check if port is free ?
-
-	if (this->_port < 1024 || this->_port > 49151)
-	{
-		std::cerr << "Error trying to use a invalid port" << std::endl;
-		return 1;
-	}
 
 	this->_listeningSocket = socket(AF_INET, SOCK_STREAM, 0);
 	if (this->_listeningSocket == -1)
@@ -62,7 +61,7 @@ int	Server::start()
 
 	while(42)
 	{
-		int pollCount = poll(pollfds.data(), pollfds.size(), -1);
+		int pollCount = poll(pollfds.data(), pollfds.size(), -1); //poll espera infinito (-1), si consideramos ejem 1000 ms para ocntrolar clientes incactivos
 		if (pollCount == -1)
 		{
 			std::cerr << "Error doing poll" << std::endl;

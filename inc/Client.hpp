@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:31:40 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/03 11:45:22 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/07 11:57:28 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 #include "Server.hpp"
 
+class Channel;
 class Client {
 	private:
 		int							 _fd;
@@ -23,7 +24,7 @@ class Client {
 		bool						_logged;
 		bool						_isRegistered;
 		std::string					_buffer;
-		std::vector<std::string>	_channels;
+		std::vector<Channel *>		_channels;
 		
 	public:
 		Client();
@@ -56,7 +57,7 @@ class Client {
 		bool	NAME(std::string &str);
 		
 		// Member functions
-		void	addChannel(std::string &channelName);
+		void	addChannel(Channel *channelName);
 		void	rmChannel(std::string &channelName);
 		void	freeBuffer(void);
 };

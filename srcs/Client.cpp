@@ -6,12 +6,11 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 12:00:38 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/03 11:48:37 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/07 11:58:42 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Client.hpp"
-#include <algorithm>
 
 Client::Client(void)
 	: _fd(-1), _username(""), _nickname(""), _logged(false),
@@ -20,7 +19,7 @@ Client::Client(void)
 }
 
 Client::Client(std::string username, std::string nickname, int fd)
-	: _username(username), _nickname(nickname), _fd(fd) {
+	: _fd(fd), _username(username), _nickname(nickname) {
 	
 }
 
@@ -85,16 +84,19 @@ void	Client::setRegistered(bool value) {
 
 // MEMBER FUNCTIONS
 
-void	Client::addChannel(std::string &channelName) {
-	this->_channels.push_back(channelName);
+void	Client::addChannel(Channel *channel) {
+	if (channel != NULL) { // Verifica que el puntero no sea nulo
+        _channels.push_back(channel); // Añade el puntero al vector
+    }
 }
 
 void	Client::rmChannel(std::string &channelName) {
-	std::vector<std::string>::iterator it;
-
-	it = std::find(_channels.begin(), _channels.end(), channelName);
-	if (it != _channels.end())
-		this->_channels.erase(it);
+	for (std::vector<Channel *>::iterator it = _channels.begin(); it != _channels.end(); ++it) {
+        if ((*it)->getName() == channelName) {
+            _channels.erase(it);
+            break;
+        }
+    }
 }
 
 void	Client::freeBuffer(void) {
