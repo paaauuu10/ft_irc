@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:20:37 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/07 20:40:18 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/07 21:04:22 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,14 @@
 #include <algorithm>
 #include "Client.hpp"
 #include "Channel.hpp"
+#include "Utils.hpp"
 
 class Server
 {
 	private:
-		static Server			*instance;
-		static std::string		_srvName;
+		static	Server					*instance;
+		static	std::string				_srvName;
+		static	std::vector<Channel *>	_channels;
 		
 		int 					_port;
 		std::string				_pass;
@@ -41,7 +43,6 @@ class Server
 		int 					_listeningSocket;
 		std::vector<pollfd>		pollfds;
 		std::vector<Client *>	_clients;
-		std::vector<Channel *>	_channels;
 		Server(int port, const std::string &pass)
 			: _port(port), _pass(pass) { };
 		~Server();
@@ -75,6 +76,7 @@ class Server
 		int			start();
 		int			getPort(void);
 		std::string	getPass(void);
+		static Channel		*getCheckChannel(std::string &name);
 		
 		static std::string	getServerName() {
 			return _srvName;

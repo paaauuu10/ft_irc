@@ -30,3 +30,22 @@ void sendError(Client* client, int errorCode, const std::string& errorMessage, c
         << " :" << errorMessage;
     //client->SendMessage(oss.str());
 }
+
+std::vector<std::string> split(const std::string& input, char delimiter) {
+    std::vector<std::string> tokens;
+    std::string token;
+
+	for (std::string::size_type i = 0; i < input.size(); i++) {
+		if (input[0] == delimiter) {
+			if (!token.empty())
+				tokens.push_back(token);
+			token.clear();
+		}
+		else {
+			token += input[i];
+		}
+	}
+	if (!token.empty())
+		tokens.push_back(token);
+	return (tokens);
+}

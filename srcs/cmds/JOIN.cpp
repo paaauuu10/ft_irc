@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   JOIN.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 09:55:32 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/07 11:06:28 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/08 19:13:26 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
-#include "Client.hpp"
-#include "Utils.hpp"
+// #include "Client.hpp"
+// #include "Utils.hpp"
 
 //JOIN <channel1>{,<channel2>} [<key1>{,<key2>}]
 // :irc.example.com 353 <nick> = <channel> :user1 user2 user3
@@ -23,33 +23,10 @@
 // 475 <channel> :Cannot join channel (+k): El canal requiere una clave y la proporcionada es incorrecta.
 // 471 <channel> :Cannot join channel (+l): El canal ha alcanzado su límite de usuarios.
 
-static std::vector<std::string> split(const std::string& input, char delimiter) {
-    std::vector<std::string> tokens;
-    std::string token;
-
-	for (std::string::size_type i = 0; i < input.size(); i++) {
-		if (input[0] == delimiter) {
-			if (!token.empty())
-				tokens.push_back(token);
-			token.clear();
-		}
-		else {
-			token += input[i];
-		}
-	}
-	if (!token.empty())
-		tokens.push_back(token);
-	return (tokens);
-}
-
 static bool isValidChannelName(std::string &name) {
 	if (name[0] == '#' || name[0] == '&')
 		return (true);
 	return (false);
-}
-
-static Channel	*getCheckChannel(std::string &name) {
-	
 }
 
 // default password == "default"
@@ -62,16 +39,27 @@ void	JOIN(Client *client, const std::string& args) {
 		: std::vector<std::string>();
 	
 	for (size_t i = 0; i < channels.size(); ++i) {
-		std::string channel = channels[i];
+		std::string channelName = channels[i];
 		std::string key = (i < keys.size()) ? keys[i] : "";
 		
-		if (!isValidChannelName(channel)) {
+		if (!isValidChannelName(channelName)) {
 			sendError(client, 403, "No such channel");
 			continue ;
 		}
 		
-		Channel *channel = getCheckChannel(channel);
+		Channel *channel = Server::getCheckChannel(channelName);
 		
+		if (!channel) {
+			channel = new Channel(channelName, key, client);
+		}
+		if (channel->isKeyProtected() && !channel->checkKey(key))
+			sendError(client, 475, "Cannot join channel (+k)"); // channelName
+		if (channel->isFull())
+			sendError(client, 471, "Cannot join channel (+l)"); // channelName
+		channel->addClient(client);
+        //channel->broadcast(":" + client->getNick() + " JOIN :" + channelName);
+        //send(client, 353, channelName, channel->getUserList());
+        //send(client, 366, channelName, "End of /NAMES list");
 	}
 
 }

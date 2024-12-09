@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:24:51 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/07 20:40:14 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/07 21:04:36 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 Server* Server::instance = NULL;
 std::string Server::_srvName = "pikachu.server.com";
+std::vector<Channel *> Server::_channels;
 
 Server::~Server() {
 	if (this->_listeningSocket > 0)
@@ -27,6 +28,16 @@ Server::~Server() {
 		delete _channels[i];
 	_channels.clear();
 	std::cout << "Server destroyed..." << std::endl;
+}
+
+Channel	*Server::getCheckChannel(std::string &name) {
+	std::vector<Channel *>::iterator	it;
+
+	for (it = _channels.begin(); it != _channels.end(); ++it) {
+		if ((*it)->getName() == name)
+			return (*it);
+	}
+	return (NULL);
 }
 
 int	Server::start()
