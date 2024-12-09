@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:58:33 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/09 12:14:33 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/09 14:09:07 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ Channel::Channel(const std::string &channelName, const std::string &key, Client 
 		throw std::invalid_argument("Invalid channel name. Must start with '&' or '#'.");
 	else
 		_name = channelName;
-	_operatorClients.insert(creator);
+	_operatorClients.push_back(creator);
 	// invitation mode, by default is false
 	_modes['i'] = false;
 	if (key.empty()) {
@@ -70,25 +70,23 @@ bool	Channel::isFull() {
 	return ((this->_clients.size() + this->_operatorClients.size()) == static_cast<u_long>(this->_limit) ? true : false );
 	}
 
-void	Channel::addClient(Client *client) { this->_clients.insert(client); }
+void	Channel::addClient(Client *client) { this->_clients.push_back(client); }
 
-void	Channel::addOperatorClient(Client *client) { this->_operatorClients.insert(client); }
+void	Channel::addOperatorClient(Client *client) { this->_operatorClients.push_back(client); }
 
 void	Channel::rmClient(Client *client) {
-	std::set<Client *>::iterator it;
-	it = _clients.find(client);
-	if (it != _clients.end()) {
+	for (size_t i = 0; i < _clients.size(); ++i) {
 		// send message all of clients before erase.
-		_clients.erase(it);
+		if (_clients[i]->getUsername() == client->getUsername())
+			delete _clients[i];
 	}
-	
 	if (_clients.empty())
 		delete this;
 }
 
 std::vector<int>	Channel::listFdClients() {
 	std::vector<int>	list;
-	std::set<Client *>::iterator it = _clients.begin();
+	std::vector<Client *>::iterator it = _clients.begin();
 
 	for (; it != _clients.end(); ++it) {
 		list.push_back((*it)->getFd());

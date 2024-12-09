@@ -6,7 +6,7 @@
 #    By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/21 14:36:31 by pbotargu          #+#    #+#              #
-#    Updated: 2024/12/07 20:35:51 by anovio-c         ###   ########.fr        #
+#    Updated: 2024/12/09 15:21:59 by anovio-c         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,7 @@ SRC		= $(SRC_DIR)Server.cpp \
 		  $(SRC_DIR)Client.cpp \
 		  $(SRC_DIR)Channel.cpp \
 		  $(SRC_DIR)Utils.cpp \
+		  $(SRC_DIR)cmds/JOIN.cpp \
 		  $(SRC_DIR)main.cpp 
 		  
 #$(SRC_DIR)/cmds/JOIN.cpp \
@@ -45,6 +46,7 @@ all: $(OBJ_DIR) $(NAME)
 
 $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
+	@mkdir -p $(OBJ_DIR)/cmds
 
 $(OBJ_DIR)%.o : $(SRC_DIR)%.cpp Makefile
 	$(CC) $(CFLAGS) -I$(INC_DIR) -c $< -o $@

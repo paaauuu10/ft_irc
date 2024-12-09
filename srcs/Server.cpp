@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:24:51 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/09 12:29:55 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/09 14:30:09 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ void	Server::init(int port, const std::string &pass) {
 		std::cout << "Server is already running" << std::endl;
 		return ;
 	}
+	if (port < 1024 || port > 49151)
+		throw std::invalid_argument("Invalid port number");
 	instance._port = port;
 	instance._pass = pass;
 	_initialized = true;

@@ -3,25 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   JOIN.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 09:55:32 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/09 11:23:40 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/09 15:23:05 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
-// #include "Client.hpp"
-// #include "Utils.hpp"
+#include "Channel.hpp"
 
 //JOIN <channel1>{,<channel2>} [<key1>{,<key2>}]
 // :irc.example.com 353 <nick> = <channel> :user1 user2 user3
 // :irc.example.com 366 <nick> <channel> :End of /NAMES list
-
-
-// 403 <channel> :No such channel: El canal especificado no existe.
-// 475 <channel> :Cannot join channel (+k): El canal requiere una clave y la proporcionada es incorrecta.
-// 471 <channel> :Cannot join channel (+l): El canal ha alcanzado su límite de usuarios.
 
 static bool isValidChannelName(std::string &name) {
 	if (name[0] == '#' || name[0] == '&')
@@ -51,14 +45,13 @@ void	JOIN(Client *client, const std::string& args) {
 			sendError(client, 403, "ERR_NOSUCHCHANNEL");
 			continue ;
 		}
-		
-		//Channel *channel = Server::getCheckChannel(channelName);
-		Channel *channel = Server::getInstance()->getCheckChannel(channelName);
+
+		Channel *channel = Server::getInstance().getCheckChannel(channelName);
 		
 		if (!channel) {
 			// channel constructor puts the creator client to operator client;
 			channel = new Channel(channelName, key, client);
-			Server::addChannel(channel);
+			Server::getInstance().addChannel(channel);
 		}
 		if (channel->isKeyProtected() && !channel->checkKey(key))
 			sendError(client, 475, "ERR_BADCHANNELKEY"); // channelName
@@ -70,5 +63,4 @@ void	JOIN(Client *client, const std::string& args) {
         //send(client, 353, channelName, channel->getUserList());
         //send(client, 366, channelName, "End of /NAMES list");
 	}
-
 }

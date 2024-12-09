@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 12:08:38 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/09 12:14:02 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/09 13:22:56 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ class Channel {
 		std::string						_key;
 		std::string						_topic;
 		int								_limit;
-		std::set<Client *>	_operatorClients;
-		std::set<Client *>	_clients;
+		std::vector<Client *>	_operatorClients;
+		std::vector<Client *>	_clients;
 		std::map<char, bool>	_modes;
 	public:
 		Channel(const std::string &channelName, const std::string &key, Client *creator);

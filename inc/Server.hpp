@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:20:37 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/09 12:30:08 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/09 14:29:27 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,11 @@ class Server
 		std::vector<Client *>			_clients;
 		
 		Server() : _port(6667), _pass("default") {}
-		Server(int port, const std::string &pass)
-			: _port(port), _pass(pass) {
-				if (port < 1024 || port > 49151)
-					throw std::invalid_argument("Invalid port number");
-			};
+		// Server(int port, const std::string &pass)
+		// 	: _port(port), _pass(pass) {
+		// 		if (port < 1024 || port > 49151)
+		// 			throw std::invalid_argument("Invalid port number");
+		// 	};
 		~Server();
 
 		// !!!!!  HACER PARA EVITAR LA COPIA!!!!!
