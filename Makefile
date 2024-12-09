@@ -6,7 +6,7 @@
 #    By: pbotargu <pbotargu@student.42barcelona.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/21 14:36:31 by pbotargu          #+#    #+#              #
-#    Updated: 2024/12/04 11:21:45 by pbotargu         ###   ########.fr        #
+#    Updated: 2024/12/09 10:06:57 by pbotargu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,8 @@ SRC		= $(SRC_DIR)Server.cpp \
 		  $(SRC_DIR)Client.cpp \
 		  $(SRC_DIR)PASS.cpp \
 		  $(SRC_DIR)USER.cpp \
+		  $(SRC_DIR)INVITE.cpp \
+		  $(SRC_DIR)checker.cpp \
 		  $(SRC_DIR)parser.cpp \
 		  $(SRC_DIR)main.cpp
 

@@ -6,7 +6,7 @@
 /*   By: pbotargu <pbotargu@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:20:37 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/04 11:15:34 by pbotargu         ###   ########.fr       */
+/*   Updated: 2024/12/09 10:07:28 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,15 @@ class Server
 
 		void parser(std::string str, Client *client);
 		bool validCommand(std::string str, Client *client);
-		void pass(std::string pass, Client *client);
 		void parsingbuffer(char *buffer, Client *client);
+		
+		//Commands
+		void pass(std::string pass, Client *client);
 		void user(std::string str, Client *client);
+		void invite(std::string str, Client *client);
 
-
+		//utils 
+		bool checker(Client *client);
 		int	start();
 };
 

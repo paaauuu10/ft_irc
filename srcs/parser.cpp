@@ -6,7 +6,7 @@
 /*   By: pbotargu <pbotargu@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 10:31:53 by pbotargu          #+#    #+#             */
-/*   Updated: 2024/12/04 11:26:17 by pbotargu         ###   ########.fr       */
+/*   Updated: 2024/12/09 09:59:49 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,8 @@ bool Server::validCommand(std::string str, Client *client)
             std::cout << commands[index - 1] << std::endl;
             break;
         case 14:
-            std::cout << commands[index - 1] << std::endl;
+            //std::cout << commands[index - 1] << std::endl;
+            invite(rest, client);
             break;
         case 15:
             std::cout << commands[index - 1] << std::endl;

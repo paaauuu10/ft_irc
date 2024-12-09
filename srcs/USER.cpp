@@ -6,7 +6,7 @@
 /*   By: pbotargu <pbotargu@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 11:12:30 by pbotargu          #+#    #+#             */
-/*   Updated: 2024/12/04 13:07:34 by pbotargu         ###   ########.fr       */
+/*   Updated: 2024/12/09 10:10:42 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,11 @@ std::vector<std::string> split(const std::string& str, char delimiter) {
     
     return result;
 }
+
 void Server::user(std::string str, Client *client)
 {
-    (void)client;
+    if (checker(client) == false)
+        return ;
     std::vector<std::string> words = split(str, ' ');
     if (words.size() < 4)
     {
