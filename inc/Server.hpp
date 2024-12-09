@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:20:37 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/07 21:04:22 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/09 12:30:08 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#pragma once
+#ifndef SERVER_HPP
+# define SERVER_HPP
 
 #include <iostream>
 #include <sys/types.h>
@@ -26,62 +27,56 @@
 #include <poll.h>
 #include <cstdlib>
 #include <algorithm>
-#include "Client.hpp"
-#include "Channel.hpp"
 #include "Utils.hpp"
+
+class Client;
+class Channel;
 
 class Server
 {
 	private:
-		static	Server					*instance;
+		static	Server					instance;
 		static	std::string				_srvName;
-		static	std::vector<Channel *>	_channels;
+		static	bool					_initialized;
 		
-		int 					_port;
-		std::string				_pass;
+		int 							_port;
+		std::string						_pass;
 
-		int 					_listeningSocket;
-		std::vector<pollfd>		pollfds;
-		std::vector<Client *>	_clients;
+		int 							_listeningSocket;
+		std::vector<pollfd>				pollfds;
+		std::vector<Channel *>			_channels;
+		std::vector<Client *>			_clients;
+		
+		Server() : _port(6667), _pass("default") {}
 		Server(int port, const std::string &pass)
-			: _port(port), _pass(pass) { };
+			: _port(port), _pass(pass) {
+				if (port < 1024 || port > 49151)
+					throw std::invalid_argument("Invalid port number");
+			};
 		~Server();
 
 		// !!!!!  HACER PARA EVITAR LA COPIA!!!!!
-		//Server(const Server &src);
-		//Server	&operator=(const Server *src);
+		Server(const Server &src);
+		Server	&operator=(const Server *src);
 
 	public:
-		static Server	*getInstance(int port, const std::string &pass) {
-			if (port < 1024 || port > 49151)
-				throw std::invalid_argument("Invalid port number");
-			if (!instance)
-				instance = new Server(port, pass);
+		static Server	&getInstance() {
 			return (instance);
 		}
-		
-		static void	destroyInstance() {
-			if (instance) {
-				//for (size_t i = 0; i < instance->_clients.size(); ++i)
-				//	delete instance->_clients[i];
-				instance->_clients.clear();
-				//for (size_t i = 0; i < instance->_channels.size(); ++i)
-				//	delete instance->_channels[i];
-				instance->_channels.clear();
-			}
-			delete instance;
-			instance = NULL;
-		}
 
-		int			start();
-		int			getPort(void);
-		std::string	getPass(void);
-		static Channel		*getCheckChannel(std::string &name);
+		static void	init(int port, const std::string &pass);
+		
+		void	cleanServer();
+
+		int					start();
+		int					getPort(void);
+		std::string			getPass(void);
+		void				addChannel(Channel *channel);
+		Channel				*getCheckChannel(const std::string &name);
 		
 		static std::string	getServerName() {
 			return _srvName;
 		}
-		// static void			setServerName(const std::string &name) {
-		// 	_srvName = name;
-		// }
 };
+
+#endif

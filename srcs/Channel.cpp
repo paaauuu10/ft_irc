@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:58:33 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/07 20:34:22 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/09 12:14:33 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Channel.hpp"
+#include "Client.hpp"
 
 Channel::Channel(const std::string &channelName, const std::string &key, Client *creator) : _topic("") {
 	if (channelName.empty() || (channelName[0] != '&' && channelName[0] != '#'))
@@ -20,10 +21,14 @@ Channel::Channel(const std::string &channelName, const std::string &key, Client 
 	_operatorClients.insert(creator);
 	// invitation mode, by default is false
 	_modes['i'] = false;
-	if (key.empty())
+	if (key.empty()) {
 		_key = "";
-	else
+		_modes['k'] = false;
+	}
+	else {
 		_key = key;
+		_modes['k'] = true;
+	}
 	_limit = 999; // ??
 	std::cout << "Channel '" << channelName << "' created by " << creator->getUsername() << ".\n";
 }

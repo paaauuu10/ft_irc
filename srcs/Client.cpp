@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 12:00:38 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/07 20:32:35 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/09 12:06:02 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Client.hpp"
+#include "Channel.hpp"
 
 Client::Client(void)
 	: _fd(-1), _username(""), _nickname(""), _logged(false),
@@ -93,12 +94,10 @@ void	Client::addChannel(Channel *channel) {
 }
 
 void	Client::rmChannel(std::string &channelName) {
-	for (std::vector<Channel *>::iterator it = _channels.begin(); it != _channels.end(); ++it) {
-        if ((*it)->getName() == channelName) {
-            _channels.erase(it);
-            break;
-        }
-    }
+	for (size_t i = 0; i < _channels.size(); ++i) {
+		if (_channels[i]->getName() == channelName)
+			delete _channels[i];
+	}
 }
 
 void	Client::freeBuffer(void) {

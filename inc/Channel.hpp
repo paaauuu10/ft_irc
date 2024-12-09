@@ -3,16 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 12:08:38 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/07 21:01:36 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/09 12:14:02 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#pragma once
+#ifndef CHANNEL_HPP
+# define CHANNEL_HPP
 
-#include "Server.hpp"
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <unistd.h>
+#include <vector>
+#include <map>
+#include <set>
+#include <algorithm>
 
 class Client;
 class Channel {
@@ -49,3 +57,5 @@ class Channel {
 		std::vector<int>	listFdClients();
 
 };
+
+#endif

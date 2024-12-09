@@ -3,39 +3,55 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:24:51 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/07 21:04:36 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/09 12:29:55 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
+#include "Client.hpp"
+#include "Channel.hpp"
 
-Server* Server::instance = NULL;
+Server Server::instance;
+bool Server::_initialized = false;
 std::string Server::_srvName = "pikachu.server.com";
-std::vector<Channel *> Server::_channels;
+
+void	Server::init(int port, const std::string &pass) {
+	if (_initialized) {
+		std::cout << "Server is already running" << std::endl;
+		return ;
+	}
+	instance._port = port;
+	instance._pass = pass;
+	_initialized = true;
+}
+
+void	Server::cleanServer() {
+			for (size_t i = 0; i < _clients.size(); ++i)
+				delete _clients[i];
+			_clients.clear();
+			for (size_t i = 0; i < _channels.size(); ++i)
+				delete _channels[i];
+			_channels.clear();
+	}
 
 Server::~Server() {
 	if (this->_listeningSocket > 0)
 		close(_listeningSocket);
-		
-	for (size_t i = 0; i < _clients.size(); ++i)
-		delete _clients[i];
-	_clients.clear();
-	
-	for (size_t i = 0; i < _channels.size(); ++i)
-		delete _channels[i];
-	_channels.clear();
+	cleanServer();
 	std::cout << "Server destroyed..." << std::endl;
-}
+	}
 
-Channel	*Server::getCheckChannel(std::string &name) {
-	std::vector<Channel *>::iterator	it;
+void			Server::addChannel(Channel *channel) {
+	Server::getInstance()._channels.push_back(channel);
+	}
 
-	for (it = _channels.begin(); it != _channels.end(); ++it) {
-		if ((*it)->getName() == name)
-			return (*it);
+Channel	*Server::getCheckChannel(const std::string &name) {
+	for (size_t i = 0; i < _channels.size(); ++i) {
+		if (_channels[i]->getName() == name)
+			return (_channels[i]);
 	}
 	return (NULL);
 }

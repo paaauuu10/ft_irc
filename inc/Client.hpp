@@ -3,18 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:31:40 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/07 20:31:24 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/09 12:13:50 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#pragma once
+#ifndef CLIENT_HPP
+# define CLIENT_HPP
 
-#include "Server.hpp"
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <unistd.h>
+#include <vector>
+#include <map>
+#include <set>
+#include <algorithm>
 
 class Channel;
+
 class Client {
 	private:
 		int							 _fd;
@@ -61,3 +70,5 @@ class Client {
 		void	rmChannel(std::string &channelName);
 		void	freeBuffer(void);
 };
+
+#endif
