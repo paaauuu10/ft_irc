@@ -6,7 +6,7 @@
 #    By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/21 14:36:31 by pbotargu          #+#    #+#              #
-#    Updated: 2024/12/10 15:28:58 by pbotargu         ###   ########.fr        #
+#    Updated: 2024/12/10 15:49:20 by pbotargu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,7 +38,8 @@ SRC		= $(SRC_DIR)Server.cpp \
 
 OBJ = $(SRC:$(SRC_DIR)%.cpp=$(OBJ_DIR)%.o)
 DEP = $(OBJ:.o=.d)
-CC = c++
+CC = c++ 
+#CC = g++ 
 CFLAGS = -Wall -Wextra -Werror -std=c++98 -pedantic -MMD -MP -g
 
 # Colored output
