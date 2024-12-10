@@ -6,7 +6,7 @@
 /*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 10:31:53 by pbotargu          #+#    #+#             */
-/*   Updated: 2024/12/03 12:19:08 by pborrull         ###   ########.fr       */
+/*   Updated: 2024/12/09 15:26:37 by pborrull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ bool validCommand(std::string str, Client client)
     int index = 0;
     std::string commands[17] = { "PASS", "NICK", "USER", "SERVER", "OPER", "QUIT", "SQUIT", "JOIN", "PART", "MODE", "TOPIC", "NAMES", "LIST", "INVITE", "KICK", "VERSION", "PRIVMSG"};
     std::string cmd = str.substr(0, str.find(' '));
-  /*  std::transform(cmd.begin(), cmd.end(), cmd.begin(), [](unsigned char c) {
-        return std::toupper(c);
-    });*/ // Convert str into capital letters
+    std::transform(cmd.begin(), cmd.end(), cmd.begin(), [](unsigned char c)
+        cmd = std::toupper(cmd);
+    }); // Convert str into capital letters
     while ((cmd != commands[index]) && cmd != ('/' + commands[index]))
     {
         index++;
