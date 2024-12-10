@@ -6,7 +6,7 @@
 #    By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/21 14:36:31 by pbotargu          #+#    #+#              #
-#    Updated: 2024/12/10 12:18:13 by anovio-c         ###   ########.fr        #
+#    Updated: 2024/12/10 12:49:56 by anovio-c         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,17 +24,16 @@ INC		= $(INC_DIR)Server.hpp \
 SRC		= $(SRC_DIR)Server.cpp \
 		  $(SRC_DIR)Client.cpp \
 		  $(SRC_DIR)Channel.cpp \
-		  $(SRC_DIR)checker.cpp \
 		  $(SRC_DIR)Utils.cpp \
 		  $(SRC_DIR)cmds/JOIN.cpp \
-		  $(SRC_DIR)cmds/PASS.cpp \
+		  $(SRC_DIR)parser.cpp \
+		  $(SRC_DIR)main.cpp 
+
+#$(SRC_DIR)cmds/PASS.cpp \
 		  $(SRC_DIR)cmds/NICK.cpp \
 		  $(SRC_DIR)cmds/PRIVMSG.cpp \
 		  $(SRC_DIR)cmds/USER.cpp \
 		  $(SRC_DIR)cmds/INVITE.cpp \
-		  $(SRC_DIR)parser.cpp \
-		  $(SRC_DIR)main.cpp 
-
 
 OBJ = $(SRC:$(SRC_DIR)%.cpp=$(OBJ_DIR)%.o)
 DEP = $(OBJ:.o=.d)

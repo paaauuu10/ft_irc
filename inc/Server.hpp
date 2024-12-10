@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:20:37 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/10 12:19:30 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/10 12:52:00 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,8 @@ class Server
 		}
 };
 
-bool validCommand(Client *client, std::string str);
-void parser(Client *client, std::string str);
+void 	parser(Client *client, std::string str);
 void	JOIN(Client *client, const std::string& args);
+//void	PASS( Client *client, std::string pass);
 
 #endif

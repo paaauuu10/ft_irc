@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:31:40 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/10 12:23:51 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/10 12:41:31 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@ class Client {
 		void	setLogged(bool value);
 		void	setBuffer(std::string &buffer);
 		void	setRegistered(bool value);
+		void	setRealName(std::string str);
+		void	setHostname(std::string str);
 
 		// Checkers
 

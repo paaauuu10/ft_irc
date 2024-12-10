@@ -49,3 +49,14 @@ std::vector<std::string> split(const std::string& input, char delimiter) {
 		tokens.push_back(token);
 	return (tokens);
 }
+
+bool    checkerIsLogged(Client *client)
+{
+    if (client->getLogged() == false)
+    {
+        // el missatge s'ha d'enviar al Client!!!
+        std::cout << "First you have to enter the password" << std::endl;
+        return false;
+    }
+    return true;
+}
