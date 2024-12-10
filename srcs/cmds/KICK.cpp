@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Kick.cpp                                           :+:      :+:    :+:   */
+/*   KICK.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 19:44:07 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/11/26 13:31:28 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/10 12:05:16 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 // for expulse, and notificate the others clients in channel
 // Only a channel operator may kick another user out of a  channel.
 
-// std::string SplitCmdK(std::string &cmd, std::vector<std::string> &tmp)
+// std::string SplitCmdKICK(std::string &cmd, std::vector<std::string> &tmp)
 // {
 // 	std::stringstream ss(cmd);
 // 	std::string str, reason;
@@ -37,69 +37,7 @@
 // 	while (ss >> str && count--)
 // 		tmp.push_back(str);
 // 	if(tmp.size() != 3) return std::string("");
-// 	FindK(cmd, tmp[2], reason);
+// 	FindKICK(cmd, tmp[2], reason);
 // 	return reason;
 // }
 
-std::string extractReason(std::string &line, std::vector<std::string> &parsed) {
-	std::stringstream 	ss(line);
-	std::string			str, reason;
-	int					c = 3;
-
-	while (ss >> parsed && c--)
-		
-	
-}
-
-std::string reason = SplitCmdK(cmd, tmp); // Extrae los primeros elementos y la razón.
-if (tmp.size() < 2) { 
-    // Error: No hay suficientes parámetros.
-    senderror(461, GetClient(fd)->GetNickName(), GetClient(fd)->GetFd(), " :Not enough parameters\r\n"); 
-    return ""; 
-}
-
-// Dividir canales.
-std::vector<std::string> channels;
-std::stringstream channelStream(tmp[0]);
-std::string channel;
-while (std::getline(channelStream, channel, ',')) {
-    channels.push_back(channel);
-}
-
-// Dividir usuarios.
-std::vector<std::string> users;
-std::stringstream userStream(tmp[1]);
-std::string user;
-while (std::getline(userStream, user, ',')) {
-    users.push_back(user);
-}
-
-// Verificar tamaño de las listas.
-if (channels.size() != users.size()) {
-    senderror(461, GetClient(fd)->GetNickName(), GetClient(fd)->GetFd(), " :Mismatched channel and user lists\r\n");
-    return "";
-}
-
-
-void	extractChannels(std::vector<std::string> &channels, std::string &line) {
-	
-}
-
-
-void KICK(std::string line, int fd) {
-	std::vector<std::string>	channels;
-	std::vector<std::string>	users;
-	std::string					parsed;
-	std::string					reason;
-	
-	
-	reason = extractReason(line);
-	extractChannels(channels, line);
-}
-
-
-cnanal,
-user
-
-
- :reason

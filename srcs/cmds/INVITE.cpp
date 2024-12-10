@@ -3,58 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   INVITE.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pborrull <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/05 12:32:23 by pbotargu          #+#    #+#             */
-/*   Updated: 2024/12/10 11:26:57 by pbotargu         ###   ########.fr       */
+/*   Created: 2024/12/05 13:51:35 by pborrull          #+#    #+#             */
+/*   Updated: 2024/12/05 14:25:13 by pborrull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/*
 #include "Server.hpp"
+#include "Client.hpp"
+#include "Utils.hpp"
+*/
 
-static std::vector<std::string> split(const std::string& str, char delimiter) {
-    std::vector<std::string> result;
-    std::stringstream ss(str);
-    std::string token;
-    
-    while (std::getline(ss, token, delimiter)) {
-        result.push_back(token);
-    }
-    
-    return result;
-}
-
-void Server::invite(std::string str, Client *client)
-{
-    if (checker(client) == false)
-        return ;
-    std::vector<std::string> words = split(str, ' ');
-    if (words.size() < 2)
-    {
-        std::cout << "Need more params" << std::endl; // ha de ser un missatge al client no sortida per la terminal
-        return ;
-    }
-    std::string channel_n = words[1];
-    std::string client_i = words[0];
-    
-    //estructura de la funció
-    // existeix el canal?
-    
-    //es membre del canal el client que fa la invitacio
-    //es membre del canal el client convidat
-    
-    //enviar el missatge d'invitacio al client convidat
-    
-}
-
-/*#include <string>
+#include <string>
 #include <iostream>
 
 int		INVITE(Client *client, Channel *channel)
 {
-	
-    
-    if (client.empty() || channel.empty())
+	if (client.empty() || channel.empty())
 		std::cout << "Not enough parameters" << std::endl;
 		//sendError(client, 461, "Not enough parameters"); //ERR_NEEDMOREPARAMS
 	else if (!nickExist()) //Falta fer-la
@@ -76,4 +43,4 @@ int		INVITE(Client *client, Channel *channel)
 		std::cout << client.getNickname() << " is inviting you to #" << channel.getName << std::endl;
 		//sendError(client, 341, "Client is inviting you to #<channel>"); //
 	return 0;
-}*/
+}

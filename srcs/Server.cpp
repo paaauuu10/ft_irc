@@ -3,34 +3,73 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbotargu <pbotargu@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:24:51 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/04 10:51:10 by pbotargu         ###   ########.fr       */
+/*   Updated: 2024/12/10 12:39:48 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
+#include "Client.hpp"
+#include "Channel.hpp"
 
-Server::Server(int port, const std::string &pass)
-	: _port(port), _pass(pass)
-{
+Server Server::instance;
+bool Server::_initialized = false;
+std::string Server::_srvName = "pikachu.server.com";
+
+void	Server::init(int port, const std::string &pass) {
+	if (_initialized) {
+		std::cout << "Server is already running" << std::endl;
+		return ;
+	}
+	if (port < 1024 || port > 49151)
+		throw std::invalid_argument("Invalid port number");
+	instance._port = port;
+	instance._pass = pass;
+	_initialized = true;
 }
 
-Server::~Server()
-{
+Client	*Server::getClientBySocket(int fd) {
+	for (size_t i = 0; i < _clients.size(); ++i) {
+		if (_clients[i]->getFd() == fd)
+			return (_clients[i]);
+	}
+	return (NULL);
+}
+
+void	Server::cleanServer() {
+			for (size_t i = 0; i < _clients.size(); ++i)
+				delete _clients[i];
+			_clients.clear();
+			for (size_t i = 0; i < _channels.size(); ++i)
+				delete _channels[i];
+			_channels.clear();
+	}
+
+Server::~Server() {
+	if (this->_listeningSocket > 0)
+		close(_listeningSocket);
+	cleanServer();
+	std::cout << "Server destroyed..." << std::endl;
+	}
+
+void			Server::addChannel(Channel *channel) {
+	Server::getInstance()._channels.push_back(channel);
+	}
+
+Channel	*Server::getCheckChannel(const std::string &name) {
+	for (size_t i = 0; i < _channels.size(); ++i) {
+		if (_channels[i]->getName() == name)
+			return (_channels[i]);
+	}
+	return (NULL);
 }
 
 
 int	Server::start()
 {
 	// check if port is free ?
-
-	if (this->_port < 1024 || this->_port > 49151)
-	{
-		std::cerr << "Error trying to use a invalid port" << std::endl;
-		return 1;
-	}
 
 	this->_listeningSocket = socket(AF_INET, SOCK_STREAM, 0);
 	if (this->_listeningSocket == -1)
@@ -63,7 +102,7 @@ int	Server::start()
 
 	while(42)
 	{
-		int pollCount = poll(pollfds.data(), pollfds.size(), -1);
+		int pollCount = poll(pollfds.data(), pollfds.size(), -1); //poll espera infinito (-1), si consideramos ejem 1000 ms para ocntrolar clientes incactivos
 		if (pollCount == -1)
 		{
 			std::cerr << "Error doing poll" << std::endl;
@@ -85,7 +124,6 @@ int	Server::start()
 			host[received] = '\0';
 		std::cout << "Message from client: " << host << std::endl;
 	}*/
-	Client *client;
 	for (size_t i = 0; i < pollfds.size(); ++i)
 	{
 			if (pollfds[i].revents & POLLIN)
@@ -102,22 +140,23 @@ int	Server::start()
 						continue;
 					}
 					std::cout << "New connection established" << std::endl;
-					
-					client = new Client();
+					Client *newClient = new Client("", "", clientSocket);
+					_clients.push_back(newClient);
+
 					pollfd clientPoll;
 					clientPoll.fd = clientSocket;
 					clientPoll.events = POLLIN;
 					pollfds.push_back(clientPoll);
-					client->setFd(pollfds[i].fd);
 				}
 				else
 				{
 					// Old connection
-					char buffer[1024] = {0};
+					char buffer[1024] = {0}; //this atribute is in client.hpp
 					int received = recv(pollfds[i].fd, buffer, sizeof(buffer) - 1, 0);
 					if (received <= 0)
 					{
 						std::cout << "Client disconnected" << std::endl;
+						// delete de client aqui??
 						close(pollfds[i].fd);
 						pollfds.erase(pollfds.begin() + i);
 						--i;
@@ -125,8 +164,13 @@ int	Server::start()
 					else
 					{
 						buffer[received] = '\0';
-						parsingbuffer(buffer, client);
-					//	std::cout << "Message from client: " << buffer << std::endl;
+						std::cout << "Message from client: " << buffer << std::endl;
+						Client *client = getClientBySocket(pollfds[i].fd); // Implementar esta función según tu diseño
+						if (client) {
+							std::string message(buffer);
+							// parsing buffer
+							parser(client, buffer);
+						}
 						std::string response = "Message received: " + std::string(buffer) + "\r\n";
 						send(pollfds[i].fd, response.c_str(), response.size(), 0);
 					}

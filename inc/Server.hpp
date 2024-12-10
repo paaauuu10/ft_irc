@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbotargu <pbotargu@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:20:37 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/09 10:07:28 by pbotargu         ###   ########.fr       */
+/*   Updated: 2024/12/10 12:52:00 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#pragma once
+#ifndef SERVER_HPP
+# define SERVER_HPP
 
 #include <iostream>
 #include <sys/types.h>
@@ -22,44 +23,67 @@
 #include <unistd.h>
 #include <vector>
 #include <map>
+#include <set>
 #include <poll.h>
 #include <cstdlib>
 #include <algorithm>
 #include <limits.h>
-#include "Client.hpp"
+#include "Utils.hpp"
+
+class Client;
+class Channel;
 
 class Client;
 class Server
 {
 	private:
-		int _port;
-		std::string	_pass;
+		static	Server					instance;
+		static	std::string				_srvName;
+		static	bool					_initialized;
+		
+		int 							_port;
+		std::string						_pass;
 
-		int _listeningSocket;
-		std::vector<pollfd> pollfds;
-	//	std::vector<Client *> client;
-	//	std::map<int, Client> clients;
-	//	std::map<std::string, Channel> channels;
+		int 							_listeningSocket;
+		std::vector<pollfd>				pollfds;
+		std::vector<Channel *>			_channels;
+		std::vector<Client *>			_clients;
+		
+		Server() : _port(6667), _pass("default") {}
+		// Server(int port, const std::string &pass)
+		// 	: _port(port), _pass(pass) {
+		// 		if (port < 1024 || port > 49151)
+		// 			throw std::invalid_argument("Invalid port number");
+		// 	};
+		~Server();
+
+		// !!!!!  HACER PARA EVITAR LA COPIA!!!!!
+		Server(const Server &src);
+		Server	&operator=(const Server *src);
 
 	public:
-		
-		Server(int port, const std::string &pass);
-		~Server();
-		int			getPort(void);
-		std::string	getPass(void);
+		static Server	&getInstance() {
+			return (instance);
+		}
 
-		void parser(std::string str, Client *client);
-		bool validCommand(std::string str, Client *client);
-		void parsingbuffer(char *buffer, Client *client);
+		static void	init(int port, const std::string &pass);
 		
-		//Commands
-		void pass(std::string pass, Client *client);
-		void user(std::string str, Client *client);
-		void invite(std::string str, Client *client);
+		void	cleanServer();
 
-		//utils 
-		bool checker(Client *client);
-		int	start();
+		int					start();
+		int					getPort(void);
+		std::string			getPass(void);
+		void				addChannel(Channel *channel);
+		Client 				*getClientBySocket(int fd);
+		Channel				*getCheckChannel(const std::string &name);
+		
+		static std::string	getServerName() {
+			return _srvName;
+		}
 };
 
+void 	parser(Client *client, std::string str);
+void	JOIN(Client *client, const std::string& args);
+//void	PASS( Client *client, std::string pass);
 
+#endif

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   PASS.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:57:43 by pbotargu          #+#    #+#             */
-/*   Updated: 2024/12/10 11:30:59 by pbotargu         ###   ########.fr       */
+/*   Updated: 2024/12/10 12:45:58 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-void Server::pass(std::string pass, Client *client)
+void	PASS( Client *client, std::string pass)
 {
    	std::cout << "PASS: " << pass << std::endl; 
    	std::cout << "_pass: " << this->_pass << std::endl; 
@@ -25,11 +25,13 @@ void Server::pass(std::string pass, Client *client)
     }
     if (pass != this->_pass)
     {
-       std::cout << "Wrong Password" << std::endl; // EL MISSATGE HA DE SER EL CLIENT 
-        //send(client->getFd(), response.c_str(), response.size(), 0);
+       // std::cout << "Wrong Password" << std::endl; // EL MISSATGE HA DE SER EL CLIENT 
+        
+		std::string response = "Error: Wrong password\r\n";
+		send(client->getFd(), response.c_str(), response.size(), 0);
         // CALDRA VEURE COM ES GESTIONA EL CLIENT 
+        
         return ;
     }
-    std::cout << "Correct Password! Welcome!" << std::endl;
     client->setLogged(true);
 }

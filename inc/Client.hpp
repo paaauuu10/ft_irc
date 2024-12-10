@@ -3,16 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbotargu <pbotargu@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:31:40 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/04 13:12:48 by pbotargu         ###   ########.fr       */
+/*   Updated: 2024/12/10 12:41:31 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#pragma once
+#ifndef CLIENT_HPP
+# define CLIENT_HPP
 
-#include "Server.hpp"
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <unistd.h>
+#include <vector>
+#include <map>
+#include <set>
+#include <algorithm>
+
+class Channel;
 
 class Client {
 	private:
@@ -25,7 +35,7 @@ class Client {
 		bool						_logged;
 		bool						_isRegistered;
 		std::string					_buffer;
-		std::vector<std::string>	_channels;
+		std::vector<Channel *>		_channels;
 		
 	public:
 		Client();
@@ -44,9 +54,9 @@ class Client {
 		bool		getLogged(void);
 		std::string	getBuffer(void);
 		bool		getRegistered(void);
-		bool		getChannel(std::string &channelName);
+		Channel		*getChannel(Channel *channel);
+		
 		// Setters
-
 		void	setNickname(std::string &nickname);
 		void	setUsername(std::string &username);
 		void	setFd(int fd);
@@ -55,9 +65,16 @@ class Client {
 		void	setRegistered(bool value);
 		void	setRealName(std::string str);
 		void	setHostname(std::string str);
+
+		// Checkers
+
+		bool	NICK(std::string &str);
+		bool	NAME(std::string &str);
 		
 		// Member functions
-		void	addChannel(std::string &channelName);
+		void	addChannel(Channel *channel);
 		void	rmChannel(std::string &channelName);
 		void	freeBuffer(void);
 };
+
+#endif

@@ -3,27 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   parser.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 10:31:53 by pbotargu          #+#    #+#             */
-/*   Updated: 2024/12/10 11:53:36 by pbotargu         ###   ########.fr       */
+/*   Updated: 2024/12/10 12:52:32 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-bool Server::validCommand(std::string str, Client *client)
+bool validCommand(Client *client, std::string str)
 {
 	(void)client;
     int index = 0;
     std::string commands[17] = { "PASS", "NICK", "USER", "SERVER", "OPER", "QUIT", "SQUIT", "JOIN", "PART", "MODE", "TOPIC", "NAMES", "LIST", "INVITE", "KICK", "VERSION", "PRIVMSG"};
     std::string cmd = str.substr(0, str.find(' '));
   /*  std::transform(cmd.begin(), cmd.end(), cmd.begin(), [](unsigned char c) {
-        return std::toupper(c);
+        cmd = std::toupper(c);
     });*/ // Convert str into capital letters
-    std::string rest = str.substr(str.find(' ') + 1); // Eliminar el salto de línea (si existe) al final
-	if (!rest.empty() && ((rest[rest.size() - 1]) == '\n' || (rest[rest.size() - 1]) == '\r'))
-		rest.erase(rest.size() -1);
+	std::string	value = str.substr(cmd.size(), str.size() - cmd.size());
+    //std::string rest = str.substr(str.find(' ') + 1); // Eliminar el salto de línea (si existe) al final
+	//if (!rest.empty() && ((rest[rest.size() - 1]) == '\n' || (rest[rest.size() - 1]) == '\r'))
+	//	rest.erase(rest.size() -1);
 	while ((cmd != commands[index]) && cmd != ('/' + commands[index]))
     {
         index++;
@@ -34,15 +35,16 @@ bool Server::validCommand(std::string str, Client *client)
     switch(index)
     {
         case 1:
-            //std::cout << commands[index - 1] << std::endl;
-			pass(rest, client);
+            std::cout << commands[index - 1] << std::endl;
+            //pass(client, value)
             break;
         case 2:
             std::cout << commands[index - 1] << std::endl;
+			//NICK(client, value);
             break;
         case 3:
             //std::cout << commands[index - 1] << std::endl;
-            user(rest, client);
+            //user(client, value);
             break;
         case 4:
             std::cout << commands[index - 1] << std::endl;
@@ -58,6 +60,7 @@ bool Server::validCommand(std::string str, Client *client)
             break;
         case 8:
             std::cout << commands[index - 1] << std::endl;
+			//JOIN(client, value);
             break;
         case 9:
             std::cout << commands[index - 1] << std::endl;
@@ -76,7 +79,7 @@ bool Server::validCommand(std::string str, Client *client)
             break;
         case 14:
             //std::cout << commands[index - 1] << std::endl;
-            invite(rest, client);
+            //invite(client, value);
             break;
         case 15:
             std::cout << commands[index - 1] << std::endl;
@@ -90,22 +93,21 @@ bool Server::validCommand(std::string str, Client *client)
     }
     return true;
 }
-void Server::parser(std::string str, Client *client)
+void parser(Client *client, std::string str)
 {
-    if  (str.size() > 0)
-	{
-		std::string s = str.substr(0, str.find(' '));
-		if (!validCommand(str, client))
-            std::cout << s << " :Unknown command" << std::endl;
-			//ha de ser SEND
+	std::cout << "FLAG PARSER INIT\n";
+    if  (str.size() > 0)// && str[0] == '/')
+    {
+        if (!validCommand(client, str))
+            std::cout << str.erase(0,1) << " :Unknown command" << std::endl;
     }
 }
 
-void Server::parsingbuffer(char *buffer, Client *client)
-{
-	std::istringstream stream(buffer);
-    std::string line;
-
-	while (std::getline(stream, line))
-		parser(line, client);
-}
+//void Server::parsingbuffer(char *buffer, Client *client)
+//{
+//	std::istringstream stream(buffer);
+//    std::string line;
+//
+//	while (std::getline(stream, line))
+//		parser(line, client);
+//}

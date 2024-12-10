@@ -3,24 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbotargu <pbotargu@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 12:00:38 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/04 13:08:12 by pbotargu         ###   ########.fr       */
+/*   Updated: 2024/12/10 12:24:28 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Client.hpp"
-#include <algorithm>
+#include "Channel.hpp"
 
 Client::Client(void)
-	: _fd(-1), _username("Default"), _nickname("Default"), _logged(false),
+	: _fd(-1), _username(""), _nickname(""), _logged(false),
 	_isRegistered(false), _buffer("") {
 	
 }
 
 Client::Client(std::string username, std::string nickname, int fd)
-	:  _fd(fd), _username(username), _nickname(nickname) {
+	: _fd(fd), _username(username), _nickname(nickname) {
 	
 }
 
@@ -44,6 +44,8 @@ Client::~Client(void) {
 	
 } 
 
+// GETTERS
+
 int			Client::getFd(void) { return this->_fd; }
 std::string	Client::getUsername(void) { return this->_username; }
 std::string	Client::getNickname(void) { return this->_nickname; }
@@ -53,12 +55,17 @@ bool		Client::getLogged(void) { return this->_logged; }
 std::string	Client::getBuffer(void) { return this->_buffer; }
 bool		Client::getRegistered(void) { return this->_isRegistered; }
 
-bool		Client::getChannel(std::string &channelName) {
-	std::vector<std::string>::iterator it;
+Channel		*Client::getChannel(Channel *channel) {
+	std::vector<Channel *>::iterator it;
 
-	it = std::find(_channels.begin(), _channels.end(), channelName);
-	return (it != _channels.end());
+	it = std::find(_channels.begin(), _channels.end(), channel);
+	if (it != _channels.end())
+		return (*it);
+	return (NULL);
 }
+
+
+// SETTERS
 
 void	Client::setNickname(std::string &nickname) {
 	this->_nickname = nickname ;
@@ -87,16 +94,17 @@ void	Client::setHostname(std::string str) {
 		this->_hostname = str;
 }
 
-void	Client::addChannel(std::string &channelName) {
-	this->_channels.push_back(channelName);
+void	Client::addChannel(Channel *channel) {
+	if (channel != NULL) { // Verifica que el puntero no sea nulo
+        _channels.push_back(channel); // Añade el puntero al vector
+    }
 }
 
 void	Client::rmChannel(std::string &channelName) {
-	std::vector<std::string>::iterator it;
-
-	it = std::find(_channels.begin(), _channels.end(), channelName);
-	if (it != _channels.end())
-		this->_channels.erase(it);
+	for (size_t i = 0; i < _channels.size(); ++i) {
+		if (_channels[i]->getName() == channelName)
+			delete _channels[i];
+	}
 }
 
 void	Client::freeBuffer(void) {
