@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 10:31:53 by pbotargu          #+#    #+#             */
-/*   Updated: 2024/12/03 12:41:43 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/10 11:49:06 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,19 @@
 #include <algorithm>
 #include <cctype>
 #include "Server.hpp"
-#include "cmds/NICK.cpp"
 
 
 bool validCommand(Client *client, std::string str)
 {
+	std::cout << "FLAG 1\n"; 
     int index = 0;
     std::string commands[17] = { "PASS", "NICK", "USER", "SERVER", "OPER", "QUIT", "SQUIT", "JOIN", "PART", "MODE", "TOPIC", "NAMES", "LIST", "INVITE", "KICK", "VERSION", "PRIVMSG"};
     std::string cmd = str.substr(0, str.find(' '));
 	std::string	value = str.substr(cmd.size(), str.size() - cmd.size());
-    std::transform(cmd.begin(), cmd.end(), cmd.begin(), [](unsigned char c) {
-        return std::toupper(c);
-    }); // Convert str into capital letters
-    while (cmd != ('/' + commands[index++]))
+    //std::transform(cmd.begin(), cmd.end(), cmd.begin(), [](unsigned char c) {
+     //   return std::toupper(c);
+    //}); // Convert str into capital letters
+    while (cmd != commands[index++])
     {
         if (index == 17)
             return false;
@@ -40,7 +40,7 @@ bool validCommand(Client *client, std::string str)
             break;
         case 2:
             std::cout << commands[index - 1] << std::endl;
-			NICK(client, value);
+			//NICK(client, value);
             break;
         case 3:
             std::cout << commands[index - 1] << std::endl;
@@ -59,6 +59,7 @@ bool validCommand(Client *client, std::string str)
             break;
         case 8:
             std::cout << commands[index - 1] << std::endl;
+			JOIN(client, value);
             break;
         case 9:
             std::cout << commands[index - 1] << std::endl;
@@ -92,7 +93,8 @@ bool validCommand(Client *client, std::string str)
 }
 void parser(Client *client, std::string str)
 {
-    if  (str.size() > 0 && str[0] == '/')
+	std::cout << "FLAG PARSER INIT\n";
+    if  (str.size() > 0)// && str[0] == '/')
     {
         if (!validCommand(client, str))
             std::cout << str.erase(0,1) << " :Unknown command" << std::endl;
@@ -101,8 +103,4 @@ void parser(Client *client, std::string str)
         std::cout << "Message send: " << str << std::endl;
 
 }
-int main(int argc, char **argv)
-{
-	if (argc > 1)
-    parser(argv[1]);
-}
+

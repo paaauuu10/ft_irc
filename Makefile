@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+         #
+#    By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/21 14:36:31 by pbotargu          #+#    #+#              #
-#    Updated: 2024/12/09 15:21:59 by anovio-c         ###   ########.fr        #
+#    Updated: 2024/12/10 10:50:22 by anovio-c         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,7 @@ SRC		= $(SRC_DIR)Server.cpp \
 		  $(SRC_DIR)Channel.cpp \
 		  $(SRC_DIR)Utils.cpp \
 		  $(SRC_DIR)cmds/JOIN.cpp \
+		  $(SRC_DIR)parser.cpp \
 		  $(SRC_DIR)main.cpp 
 		  
 #$(SRC_DIR)/cmds/JOIN.cpp \

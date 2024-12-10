@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:24:51 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/09 14:30:09 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/10 12:01:12 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,14 @@ void	Server::init(int port, const std::string &pass) {
 	instance._port = port;
 	instance._pass = pass;
 	_initialized = true;
+}
+
+Client	*Server::getClientBySocket(int fd) {
+	for (size_t i = 0; i < _clients.size(); ++i) {
+		if (_clients[i]->getFd() == fd)
+			return (_clients[i]);
+	}
+	return (NULL);
 }
 
 void	Server::cleanServer() {
@@ -131,6 +139,8 @@ int	Server::start()
 						continue;
 					}
 					std::cout << "New connection established" << std::endl;
+					Client *newClient = new Client("", "", clientSocket);
+					_clients.push_back(newClient);
 
 					pollfd clientPoll;
 					clientPoll.fd = clientSocket;
@@ -145,6 +155,7 @@ int	Server::start()
 					if (received <= 0)
 					{
 						std::cout << "Client disconnected" << std::endl;
+						// delete de client aqui??
 						close(pollfds[i].fd);
 						pollfds.erase(pollfds.begin() + i);
 						--i;
@@ -153,6 +164,11 @@ int	Server::start()
 					{
 						buffer[received] = '\0';
 						std::cout << "Message from client: " << buffer << std::endl;
+						Client *client = getClientBySocket(pollfds[i].fd); // Implementar esta función según tu diseño
+						if (client) {
+							std::string message(buffer);
+							parser(client, buffer);
+						}
 						std::string response = "Message received: " + std::string(buffer) + "\r\n";
 						send(pollfds[i].fd, response.c_str(), response.size(), 0);
 					}
