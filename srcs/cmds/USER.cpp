@@ -6,7 +6,7 @@
 /*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 11:12:30 by pbotargu          #+#    #+#             */
-/*   Updated: 2024/12/10 11:36:41 by pbotargu         ###   ########.fr       */
+/*   Updated: 2024/12/10 14:33:50 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,8 @@
 #include <sstream>
 #include <vector>
 #include <string>
+#include "Utils.hpp"
 
-std::vector<std::string> split(const std::string& str, char delimiter) {
-    std::vector<std::string> result;
-    std::stringstream ss(str);
-    std::string token;
-    
-    while (std::getline(ss, token, delimiter)) {
-        result.push_back(token);
-    }
-    
-    return result;
-}
 
 void Server::user(std::string str, Client *client)
 {

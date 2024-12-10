@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+         #
+#    By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/21 14:36:31 by pbotargu          #+#    #+#              #
-#    Updated: 2024/12/10 12:49:56 by anovio-c         ###   ########.fr        #
+#    Updated: 2024/12/10 15:28:58 by pbotargu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,10 +26,11 @@ SRC		= $(SRC_DIR)Server.cpp \
 		  $(SRC_DIR)Channel.cpp \
 		  $(SRC_DIR)Utils.cpp \
 		  $(SRC_DIR)cmds/JOIN.cpp \
+		  $(SRC_DIR)cmds/PASS.cpp \
 		  $(SRC_DIR)parser.cpp \
 		  $(SRC_DIR)main.cpp 
 
-#$(SRC_DIR)cmds/PASS.cpp \
+#$ \
 		  $(SRC_DIR)cmds/NICK.cpp \
 		  $(SRC_DIR)cmds/PRIVMSG.cpp \
 		  $(SRC_DIR)cmds/USER.cpp \
@@ -38,7 +39,7 @@ SRC		= $(SRC_DIR)Server.cpp \
 OBJ = $(SRC:$(SRC_DIR)%.cpp=$(OBJ_DIR)%.o)
 DEP = $(OBJ:.o=.d)
 CC = c++
-CFLAGS = -Wall -Wextra -Werror -std=c++98 -pedantic -MMD -MP
+CFLAGS = -Wall -Wextra -Werror -std=c++98 -pedantic -MMD -MP -g
 
 # Colored output
 ERASE	= \033[2K\r

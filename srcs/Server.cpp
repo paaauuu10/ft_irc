@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:24:51 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/10 12:39:48 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/10 15:17:27 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,7 +169,7 @@ int	Server::start()
 						if (client) {
 							std::string message(buffer);
 							// parsing buffer
-							parser(client, buffer);
+							parser(client, message);
 						}
 						std::string response = "Message received: " + std::string(buffer) + "\r\n";
 						send(pollfds[i].fd, response.c_str(), response.size(), 0);
