@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:20:37 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/10 11:40:54 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/10 12:11:15 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,13 @@
 #include <poll.h>
 #include <cstdlib>
 #include <algorithm>
+#include <limits.h>
 #include "Utils.hpp"
 
 class Client;
 class Channel;
 
+class Client;
 class Server
 {
 	private:

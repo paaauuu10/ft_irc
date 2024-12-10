@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:24:51 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/10 12:01:12 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/10 12:14:27 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ int	Server::start()
 		return 1;
 	}
 	
-	if (listen(this->_listeningSocket, 5) == -1)
+	if (listen(this->_listeningSocket, FD_SETSIZE) == -1)
 	{
 		std::cerr << "Error listening" << std::endl;
 		return 1;
@@ -123,16 +123,17 @@ int	Server::start()
 			host[received] = '\0';
 		std::cout << "Message from client: " << host << std::endl;
 	}*/
-	 for (size_t i = 0; i < pollfds.size(); ++i)
-	 {
+	Client *client;
+	for (size_t i = 0; i < pollfds.size(); ++i)
+	{
 			if (pollfds[i].revents & POLLIN)
 			{
 				if (pollfds[i].fd == this->_listeningSocket)
 				{
 					// New connection
-					sockaddr_in client;
-					socklen_t clientSize = sizeof(client);
-					int clientSocket = accept(this->_listeningSocket, (sockaddr*)&client, &clientSize);
+					sockaddr_in clientSock;
+					socklen_t clientSize = sizeof(clientSock);
+					int clientSocket = accept(this->_listeningSocket, (sockaddr*)&clientSock, &clientSize);
 					if (clientSocket == -1)
 					{
 						std::cerr << "Error accepting client" << std::endl;
@@ -146,6 +147,7 @@ int	Server::start()
 					clientPoll.fd = clientSocket;
 					clientPoll.events = POLLIN;
 					pollfds.push_back(clientPoll);
+					client->setFd(pollfds[i].fd);
 				}
 				else
 				{
