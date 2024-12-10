@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:31:40 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/10 12:19:19 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/10 12:23:51 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ class Client {
 		bool	NAME(std::string &str);
 		
 		// Member functions
-		void	addChannel(Channel *channelName);
+		void	addChannel(Channel *channel);
 		void	rmChannel(std::string &channelName);
 		void	freeBuffer(void);
 };

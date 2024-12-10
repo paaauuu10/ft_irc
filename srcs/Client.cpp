@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 12:00:38 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/10 12:23:35 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/10 12:24:28 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,9 @@ void	Client::setHostname(std::string str) {
 }
 
 void	Client::addChannel(Channel *channel) {
-	this->_channels.push_back(channel);
+	if (channel != NULL) { // Verifica que el puntero no sea nulo
+        _channels.push_back(channel); // Añade el puntero al vector
+    }
 }
 
 void	Client::rmChannel(std::string &channelName) {
