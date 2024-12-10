@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 12:00:38 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/10 12:11:30 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/10 12:23:35 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ Client::~Client(void) {
 int			Client::getFd(void) { return this->_fd; }
 std::string	Client::getUsername(void) { return this->_username; }
 std::string	Client::getNickname(void) { return this->_nickname; }
+std::string	Client::getRealname(void) { return this->_realname; }
+std::string	Client::getHostname(void) { return this->_hostname; }
 bool		Client::getLogged(void) { return this->_logged; }
 std::string	Client::getBuffer(void) { return this->_buffer; }
 bool		Client::getRegistered(void) { return this->_isRegistered; }
@@ -84,13 +86,16 @@ void	Client::setRegistered(bool value) {
 		this->_isRegistered = value;
 }
 
+void	Client::setRealName(std::string str) {
+		this->_realname = str;
+}
 
-// MEMBER FUNCTIONS
+void	Client::setHostname(std::string str) {
+		this->_hostname = str;
+}
 
 void	Client::addChannel(Channel *channel) {
-	if (channel != NULL) { // Verifica que el puntero no sea nulo
-        _channels.push_back(channel); // Añade el puntero al vector
-    }
+	this->_channels.push_back(channel);
 }
 
 void	Client::rmChannel(std::string &channelName) {

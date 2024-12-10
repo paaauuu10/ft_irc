@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:31:40 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/10 12:09:23 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/10 12:19:19 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ class Client {
 		std::string					_username;
 		std::string 				_nickname; // nickname max 9 chars
 		// See the protocol grammar rules for what may and may not be used in a nickname. 
+		std::string					_hostname;
+		std::string					_realname;
 		bool						_logged;
 		bool						_isRegistered;
 		std::string					_buffer;
@@ -47,6 +49,8 @@ class Client {
 		int			getFd(void);
 		std::string	getUsername(void);
 		std::string	getNickname(void);
+		std::string	getRealname(void);
+		std::string	getHostname(void);
 		bool		getLogged(void);
 		std::string	getBuffer(void);
 		bool		getRegistered(void);

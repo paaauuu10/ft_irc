@@ -6,32 +6,32 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 10:31:53 by pbotargu          #+#    #+#             */
-/*   Updated: 2024/12/10 12:13:06 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/10 12:29:50 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <iostream>
-#include <algorithm>
-#include <cctype>
 #include "Server.hpp"
 
-
-bool validCommand(Client *client, std::string str)
+bool Server::validCommand(std::string str, Client *client)
 {
-	std::cout << "FLAG 1\n"; 
+	(void)client;
     int index = 0;
     std::string commands[17] = { "PASS", "NICK", "USER", "SERVER", "OPER", "QUIT", "SQUIT", "JOIN", "PART", "MODE", "TOPIC", "NAMES", "LIST", "INVITE", "KICK", "VERSION", "PRIVMSG"};
     std::string cmd = str.substr(0, str.find(' '));
+  /*  std::transform(cmd.begin(), cmd.end(), cmd.begin(), [](unsigned char c) {
+        cmd = std::toupper(c);
+    });*/ // Convert str into capital letters
 	std::string	value = str.substr(cmd.size(), str.size() - cmd.size());
-    //std::transform(cmd.begin(), cmd.end(), cmd.begin(), [](unsigned char c)) {
-    //   cmd = std::toupper(c);
-    //}; // Convert str into capital letters
-    while (cmd != commands[index++])
+    //std::string rest = str.substr(str.find(' ') + 1); // Eliminar el salto de línea (si existe) al final
+	//if (!rest.empty() && ((rest[rest.size() - 1]) == '\n' || (rest[rest.size() - 1]) == '\r'))
+	//	rest.erase(rest.size() -1);
+	while ((cmd != commands[index]) && cmd != ('/' + commands[index]))
     {
+        index++;
         if (index == 17)
             return false;
     }
-
+    index++;
     switch(index)
     {
         case 1:
@@ -43,7 +43,8 @@ bool validCommand(Client *client, std::string str)
 			//NICK(client, value);
             break;
         case 3:
-            std::cout << commands[index - 1] << std::endl;
+            //std::cout << commands[index - 1] << std::endl;
+            user(client, value);
             break;
         case 4:
             std::cout << commands[index - 1] << std::endl;
@@ -59,7 +60,7 @@ bool validCommand(Client *client, std::string str)
             break;
         case 8:
             std::cout << commands[index - 1] << std::endl;
-			JOIN(client, value);
+			//JOIN(client, value);
             break;
         case 9:
             std::cout << commands[index - 1] << std::endl;
@@ -77,7 +78,8 @@ bool validCommand(Client *client, std::string str)
             std::cout << commands[index - 1] << std::endl;
             break;
         case 14:
-            std::cout << commands[index - 1] << std::endl;
+            //std::cout << commands[index - 1] << std::endl;
+            invite(client, value);
             break;
         case 15:
             std::cout << commands[index - 1] << std::endl;
@@ -99,8 +101,13 @@ void parser(Client *client, std::string str)
         if (!validCommand(client, str))
             std::cout << str.erase(0,1) << " :Unknown command" << std::endl;
     }
-    else
-        std::cout << "Message send: " << str << std::endl;
-
 }
 
+//void Server::parsingbuffer(char *buffer, Client *client)
+//{
+//	std::istringstream stream(buffer);
+//    std::string line;
+//
+//	while (std::getline(stream, line))
+//		parser(line, client);
+//}

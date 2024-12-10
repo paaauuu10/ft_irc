@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:24:51 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/10 12:14:27 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/10 12:30:27 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ Channel	*Server::getCheckChannel(const std::string &name) {
 	}
 	return (NULL);
 }
+
 
 int	Server::start()
 {
@@ -169,6 +170,7 @@ int	Server::start()
 						Client *client = getClientBySocket(pollfds[i].fd); // Implementar esta función según tu diseño
 						if (client) {
 							std::string message(buffer);
+							// parsing buffer
 							parser(client, buffer);
 						}
 						std::string response = "Message received: " + std::string(buffer) + "\r\n";
