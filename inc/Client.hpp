@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:31:40 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/10 18:26:11 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/11 12:14:42 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ class Client {
 
 		int			getFd(void) const;
 		std::string	getUsername(void) const;
-		std::string	getNickname(void) const;
+		std::string	getNickname(void);
 		std::string	getRealname(void) const;
 		std::string	getHostname(void) const;
 		bool		getLogged(void) const;

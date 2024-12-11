@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:24:51 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/10 17:11:37 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/11 15:02:53 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,12 @@ Client	*Server::getClientBySocket(int fd) {
 }
 
 void	Server::cleanServer() {
-			for (size_t i = 0; i < _clients.size(); ++i)
-				delete _clients[i];
-			_clients.clear();
-			for (size_t i = 0; i < _channels.size(); ++i)
-				delete _channels[i];
-			_channels.clear();
+	for (size_t i = 0; i < _clients.size(); ++i)
+		delete _clients[i];
+	_clients.clear();
+	for (size_t i = 0; i < _channels.size(); ++i)
+		delete _channels[i];
+	_channels.clear();
 	}
 
 Server::~Server() {
@@ -140,7 +140,8 @@ int	Server::start()
 						continue;
 					}
 					std::cout << "New connection established" << std::endl;
-					Client *newClient = new Client("", "", clientSocket);
+					Client *newClient = new Client("Asier", "epale", clientSocket);
+					newClient->setLogged(true);
 					_clients.push_back(newClient);
 
 					pollfd clientPoll;
@@ -171,8 +172,8 @@ int	Server::start()
 							// parsing buffer
 							parser(client, buffer);
 						}
-						std::string response = "Message received: " + std::string(buffer) + "\r\n";
-						send(pollfds[i].fd, response.c_str(), response.size(), 0);
+						//std::string response = "Message received: " + std::string(buffer) + "\r\n";
+						//send(pollfds[i].fd, response.c_str(), response.size(), 0);
 					}
 				}
 			}

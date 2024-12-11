@@ -3,18 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   parser.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 10:31:53 by pbotargu          #+#    #+#             */
-/*   Updated: 2024/12/10 17:39:00 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/11 14:41:45 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
+static std::string cleanString(std::string& str) {
+    std::string result;
+    for (size_t i = 0; i < str.size(); ++i) {
+        if (str[i] != '\n' && str[i] != '\r') {
+            result += str[i];
+        }
+    }
+    return result;
+}
+
 bool validCommand(Client *client, std::string str)
 {
-	(void)client;
     int index = 0;
     std::string commands[17] = { "PASS", "NICK", "USER", "SERVER", "OPER", "QUIT", "SQUIT", "JOIN", "PART", "MODE", "TOPIC", "NAMES", "LIST", "INVITE", "KICK", "VERSION", "PRIVMSG"};
     std::string cmd = str.substr(0, str.find(' '));
@@ -22,9 +31,7 @@ bool validCommand(Client *client, std::string str)
         cmd = std::toupper(c);
     });*/ // Convert str into capital letters
 	std::string	value = str.substr(cmd.size(), str.size() - cmd.size());
-    //std::string rest = str.substr(str.find(' ') + 1); // Eliminar el salto de línea (si existe) al final
-	//if (!rest.empty() && ((rest[rest.size() - 1]) == '\n' || (rest[rest.size() - 1]) == '\r'))
-	//	rest.erase(rest.size() -1);
+    value = cleanString(value);
 	while ((cmd != commands[index]) && cmd != ('/' + commands[index]))
     {
         index++;

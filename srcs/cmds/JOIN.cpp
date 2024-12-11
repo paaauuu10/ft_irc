@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   JOIN.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 09:55:32 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/10 18:14:00 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/11 14:55:25 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,30 +23,20 @@ static bool isValidChannelName(std::string &name) {
 	return (false);
 }
 
-static void cleanStr(std::string &str) {
-	if (str.back() == '\n')
-		str.pop_back();
-}
-
 // default password == "default"
 //          ERR_INVITEONLYCHAN             ERR_BADCHANMASK
 //		    ERR_TOOMANYCHANNELS
 //          RPL_TOPIC
 
 void	JOIN(Client *client, std::string& args) {
-	std::cout << args << "\n";
-	cleanStr(args);
-	std::cout << args << "\n";
+	if (args.empty())
+		sendError(client, 1, "ERR_NEEDMOREPARAMS");
 	std::vector<std::string> tokens = split(args, ' ');
-	std::cout << "FLAG 2\n";
     std::vector<std::string> channels = split(tokens[0], ',');
     std::vector<std::string> keys = (tokens.size() > 1)
 		? split(tokens[1], ',')
 		: std::vector<std::string>();
-	std::cout << "FLAG 3\n";
 	//the user must be invited if the channel is invite-only
-	if (args.empty())
-		sendError(client, 1, "ERR_NEEDMOREPARAMS");
 	for (size_t i = 0; i < channels.size(); ++i) {
 		std::string channelName = channels[i];
 		std::string key = (i < keys.size()) ? keys[i] : "";
@@ -62,17 +52,19 @@ void	JOIN(Client *client, std::string& args) {
 			// channel constructor puts the creator client to operator client;
 			channel = new Channel(channelName, key, client);
 			Server::getInstance().addChannel(channel);
-		}
-		std::cout << "CHANNEL =====" << channelName << "\n";
+			}
 		if (channel->isKeyProtected() && !channel->checkKey(key))
 			sendError(client, 475, "ERR_BADCHANNELKEY"); // channelName
 		if (channel->isFull())
 			sendError(client, 471, "ERR_CHANNELISFULL"); // channelName
-		channel->addClient(client);
-		
+		//channel->addClient(client);
+		std::cout << "CLIENT NAME === " << client->getNickname() << "..\n";
 		//sendTopic
-        //channel->broadcast(":" + client->getNick() + " JOIN :" + channelName);
-        //send(client, 353, channelName, channel->getUserList());
-        //send(client, 366, channelName, "End of /NAMES list");
+		std::string msg = ":" + client->getNickname() + " JOIN :" + channelName + "\n";
+        channel->broadcast(msg);
+		//std::string list = channel->getUserList();
+		//send(client->getFd(), list.c_str(), list.size(), 0);
+		//send(client->getFd(), list.c_str(), list.size(), 0);
+        //send(client, "End of /NAMES list\r\n", 20, 0);
 	}
 }

@@ -3,21 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:58:33 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/10 18:18:04 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/11 14:53:35 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Channel.hpp"
 #include "Client.hpp"
 
+Channel::Channel(void) : _name(""), _key(""), _topic(""), _limit(999) {}
+
+
 Channel::Channel(const std::string &channelName, const std::string &key, Client *creator) : _topic("") {
 	if (channelName.empty() || (channelName[0] != '&' && channelName[0] != '#'))
 		throw std::invalid_argument("Invalid channel name. Must start with '&' or '#'.");
-	else
-		_name = channelName;
+	_name = channelName;
 	_operatorClients.push_back(creator);
 	// invitation mode, by default is false
 	_modes['i'] = false;
@@ -42,6 +44,20 @@ bool		Channel::getMode(char key) {
         return true; //_modes[key];
     }
     return false;
+}
+
+std::string	Channel::getUserList() {
+	std::string	names;
+	for (size_t i = 0; i < _operatorClients.size(); ++i) {
+		names += _operatorClients[i]->getNickname();
+		names += " ,";
+	}
+	for (size_t i = 0; i < _clients.size(); ++i) {
+		names += _clients[i]->getNickname();
+		names += " ,";
+	}
+	names += "\r\n";
+	return names;
 }
 
 void	Channel::setMode(char mode, bool status, int value) {
@@ -96,4 +112,21 @@ std::vector<int>	Channel::listFdClients() {
 		list.push_back((*it)->getFd());
 	}
 	return (list);
+}
+
+void	Channel::broadcast(std::string message) {
+
+	std::vector<int> fds = listFdClients();
+	std::cout << "MESSAGE: " << message << std::endl;
+	for (size_t i = 0; i < fds.size(); ++i) {
+		//usleep(500000);
+		std::cout << "Broadcasting to fd: " << fds[i] << std::endl;
+		ssize_t bytesSent = send(fds[i], message.c_str(), message.size(), 0);
+		if (bytesSent == -1) {
+    		std::cerr << "Error sending message to fd: " << fds[i] << std::endl;
+		} else {
+    		std::cout << "Sent " << bytesSent << " bytes to fd: " << fds[i] << std::endl;
+		}
+	}
+	
 }

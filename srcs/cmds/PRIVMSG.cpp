@@ -11,6 +11,9 @@
 /* ************************************************************************** */
 
 #include "Server.hpp"
+#include "Client.hpp"
+#include "Channel.hpp"
+#include "Utils.hpp"
 
 void privMsg(const Client *sender, const std::string &target, const std::string &message)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 12:00:38 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/10 18:26:03 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/11 12:14:58 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ Client::~Client(void) {
 
 int			Client::getFd(void) const { return this->_fd; }
 std::string	Client::getUsername(void) const { return this->_username; }
-std::string	Client::getNickname(void) const { return this->_nickname; }
+std::string	Client::getNickname(void) { return this->_nickname; }
 std::string	Client::getRealname(void) const { return this->_realname; }
 std::string	Client::getHostname(void) const { return this->_hostname; }
 bool		Client::getLogged(void) const { return this->_logged; }

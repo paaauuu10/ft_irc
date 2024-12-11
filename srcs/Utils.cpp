@@ -44,6 +44,9 @@ std::vector<std::string> split(const std::string& input, char delimiter) {
 		}
 		else {
 			token += input[i];
+			// Testear
+			//if (input[i] == delimiter)
+			//	++i;
 		}
 	}
 	if (!token.empty())
