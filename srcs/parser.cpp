@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parser.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 10:31:53 by pbotargu          #+#    #+#             */
-/*   Updated: 2024/12/10 12:29:50 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/10 17:39:00 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-bool Server::validCommand(std::string str, Client *client)
+bool validCommand(Client *client, std::string str)
 {
 	(void)client;
     int index = 0;
@@ -44,7 +44,7 @@ bool Server::validCommand(std::string str, Client *client)
             break;
         case 3:
             //std::cout << commands[index - 1] << std::endl;
-            user(client, value);
+            //user(client, value);
             break;
         case 4:
             std::cout << commands[index - 1] << std::endl;
@@ -60,7 +60,7 @@ bool Server::validCommand(std::string str, Client *client)
             break;
         case 8:
             std::cout << commands[index - 1] << std::endl;
-			//JOIN(client, value);
+			JOIN(client, value);
             break;
         case 9:
             std::cout << commands[index - 1] << std::endl;
@@ -79,7 +79,7 @@ bool Server::validCommand(std::string str, Client *client)
             break;
         case 14:
             //std::cout << commands[index - 1] << std::endl;
-            invite(client, value);
+            //invite(client, value);
             break;
         case 15:
             std::cout << commands[index - 1] << std::endl;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:20:37 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/10 12:19:30 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/10 18:11:12 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ class Server
 
 bool validCommand(Client *client, std::string str);
 void parser(Client *client, std::string str);
-void	JOIN(Client *client, const std::string& args);
+void	JOIN(Client *client, std::string& args);
+void 	PASS(std::string pass, Client *client);
 
 #endif

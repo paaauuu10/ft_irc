@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   PASS.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:57:43 by pbotargu          #+#    #+#             */
-/*   Updated: 2024/12/03 15:04:37 by pborrull         ###   ########.fr       */
+/*   Updated: 2024/12/10 17:14:56 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-void Server::pass(std::string pass, Client *client)
+void PASS(std::string pass, Client *client)
 {
    	std::cout << "PASS: " << pass << std::endl; 
    	std::cout << "_pass: " << this->_pass << std::endl; 

@@ -36,10 +36,11 @@ std::vector<std::string> split(const std::string& input, char delimiter) {
     std::string token;
 
 	for (std::string::size_type i = 0; i < input.size(); i++) {
-		if (input[0] == delimiter) {
-			if (!token.empty())
+		if (input[i] == delimiter) {
+			if (!token.empty()) {
 				tokens.push_back(token);
-			token.clear();
+				token.clear();
+			}
 		}
 		else {
 			token += input[i];
@@ -48,4 +49,15 @@ std::vector<std::string> split(const std::string& input, char delimiter) {
 	if (!token.empty())
 		tokens.push_back(token);
 	return (tokens);
+}
+
+bool    checkerIsLogged(Client *client)
+{
+    if (client->getLogged() == false)
+    {
+        // el missatge s'ha d'enviar al Client!!!
+        std::cout << "First you have to enter the password" << std::endl;
+        return false;
+    }
+    return true;
 }

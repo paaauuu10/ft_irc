@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:58:33 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/09 14:09:07 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/10 18:18:04 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ Channel::Channel(const std::string &channelName, const std::string &key, Client 
 		_modes['k'] = true;
 	}
 	_limit = 999; // ??
-	std::cout << "Channel '" << channelName << "' created by " << creator->getUsername() << ".\n";
+	std::cout << "Channel '" << _name << "' created by " << creator->getUsername() << ".\n";
 }
 
 Channel::~Channel() { }

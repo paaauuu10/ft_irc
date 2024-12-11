@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:31:40 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/10 12:23:51 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/10 18:26:11 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ class Client {
 		std::vector<Channel *>		_channels;
 		
 	public:
-		Client();
+		Client(void);
 		Client(std::string username, std::string nickname, int fd);
 		Client(const Client &src);
 		Client &operator=(const Client &src);
@@ -46,15 +46,15 @@ class Client {
 
 		// Getters
 
-		int			getFd(void);
-		std::string	getUsername(void);
-		std::string	getNickname(void);
-		std::string	getRealname(void);
-		std::string	getHostname(void);
-		bool		getLogged(void);
-		std::string	getBuffer(void);
-		bool		getRegistered(void);
-		Channel		*getChannel(Channel *channel);
+		int			getFd(void) const;
+		std::string	getUsername(void) const;
+		std::string	getNickname(void) const;
+		std::string	getRealname(void) const;
+		std::string	getHostname(void) const;
+		bool		getLogged(void) const;
+		std::string	getBuffer(void) const;
+		bool		getRegistered(void) const;
+		Channel		*getChannel(Channel *channel) ;
 		
 		// Setters
 		void	setNickname(std::string &nickname);
@@ -63,6 +63,8 @@ class Client {
 		void	setLogged(bool value);
 		void	setBuffer(std::string &buffer);
 		void	setRegistered(bool value);
+		void	setRealName(std::string str);
+		void	setHostname(std::string str);
 
 		// Checkers
 
