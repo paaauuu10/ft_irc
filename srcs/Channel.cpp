@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:58:33 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/11 14:53:35 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/11 16:04:30 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ Channel::Channel(const std::string &channelName, const std::string &key, Client 
 		_key = key;
 		_modes['k'] = true;
 	}
-	_limit = 999; // ??
+	_limit = 999; // ?? -1
 	std::cout << "Channel '" << _name << "' created by " << creator->getUsername() << ".\n";
 }
 

@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 09:55:32 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/11 14:55:25 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/11 15:45:44 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	JOIN(Client *client, std::string& args) {
 		//channel->addClient(client);
 		std::cout << "CLIENT NAME === " << client->getNickname() << "..\n";
 		//sendTopic
-		std::string msg = ":" + client->getNickname() + " JOIN :" + channelName + "\n";
+		std::string msg = ":" + client->getNickname() + " JOIN :" + channelName + "\r\n";
         channel->broadcast(msg);
 		//std::string list = channel->getUserList();
 		//send(client->getFd(), list.c_str(), list.size(), 0);
