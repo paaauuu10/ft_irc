@@ -6,7 +6,7 @@
 /*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:24:51 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/11 15:10:45 by pbotargu         ###   ########.fr       */
+/*   Updated: 2024/12/11 15:27:54 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,15 +166,15 @@ int	Server::start()
 					else
 					{
 						buffer[received] = '\0';
-						std::cout << "Message from client: " << buffer << std::endl;
+						//std::cout << "Message from client: " << buffer << std::endl;
 						Client *client = getClientBySocket(pollfds[i].fd); // Implementar esta función según tu diseño
 						if (client) {
 							std::string message(buffer);
 							// parsing buffer
 							parser(client, message);
 						}
-						std::string response = "Message received: " + std::string(buffer) + "\r\n";
-						send(pollfds[i].fd, response.c_str(), response.size(), 0);
+						//std::string response = "Message received: " + std::string(buffer) + "\r\n";
+						//send(pollfds[i].fd, response.c_str(), response.size(), 0);
 					}
 				}
 			}

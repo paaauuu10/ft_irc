@@ -6,26 +6,21 @@
 /*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 10:31:53 by pbotargu          #+#    #+#             */
-/*   Updated: 2024/12/11 15:10:04 by pbotargu         ###   ########.fr       */
+/*   Updated: 2024/12/11 15:54:18 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-bool validCommand(Client *client, std::string str)
+bool validCommand(Client *client, std::string str, std::string cmd)
 {
-	(void)client;
+
     int index = 0;
     std::string commands[17] = { "PASS", "NICK", "USER", "SERVER", "OPER", "QUIT", "SQUIT", "JOIN", "PART", "MODE", "TOPIC", "NAMES", "LIST", "INVITE", "KICK", "VERSION", "PRIVMSG"};
-    std::string cmd = str.substr(0, str.find(' '));
   /*  std::transform(cmd.begin(), cmd.end(), cmd.begin(), [](unsigned char c) {
         cmd = std::toupper(c);
     });*/ // Convert str into capital letters
 	std::string	value = str.substr(cmd.size(), str.size() - cmd.size());
-	while (!value.empty() && ((value[value.size() - 1]) == '\n' || (value[value.size() - 1]) == '\r'))
-    {
-		value.erase(value.size() -1);
-	}
 	while ((cmd != commands[index]) && cmd != ('/' + commands[index]))
     {
         index++;
@@ -93,11 +88,21 @@ bool validCommand(Client *client, std::string str)
 }
 void parser(Client *client, std::string str)
 {
-	std::cout << "FLAG PARSER INIT\n";
+	while (!str.empty() && ((str[str.size() - 1]) == '\n' || (str[str.size() - 1]) == '\r'))
+    {
+		str.erase(str.size() -1);
+	}
+    std::string cmd = str.substr(0, str.find(' '));
+    std::cout << "FLAG PARSER INIT\n";
+    if (str == "\r\n") // revisar aquesta guarrada: Si treiem aixo mostra :UNKNOWN COMMAND!
+        return ;
     if  (str.size() > 0)// && str[0] == '/')
     {
-        if (!validCommand(client, str))
-            std::cout << str.erase(0,1) << " :Unknown command" << std::endl;
+        if (!validCommand(client, str, cmd))
+        {
+            std::string response = cmd + " :Unknown command\r\n";
+            send(client->getFd(), response.c_str(), response.size(), 0);
+        }
     }
 }
 

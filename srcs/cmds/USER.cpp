@@ -6,7 +6,7 @@
 /*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 11:12:30 by pbotargu          #+#    #+#             */
-/*   Updated: 2024/12/11 15:12:45 by pbotargu         ###   ########.fr       */
+/*   Updated: 2024/12/11 15:53:21 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ void	USER(Client *client, std::string pass)
         //send error
     }
     //username es unic? en cas que si cal revisar si ja existeix o no. Mirar si el client ja esta registrat?
+
+    
     
     // <username> <hostname> <servername> <realname>
     client->setUsername(words[1]);
