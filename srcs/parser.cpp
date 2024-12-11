@@ -6,7 +6,7 @@
 /*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 10:31:53 by pbotargu          #+#    #+#             */
-/*   Updated: 2024/12/10 15:55:28 by pbotargu         ###   ########.fr       */
+/*   Updated: 2024/12/11 15:10:04 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,10 @@ bool validCommand(Client *client, std::string str)
         cmd = std::toupper(c);
     });*/ // Convert str into capital letters
 	std::string	value = str.substr(cmd.size(), str.size() - cmd.size());
-    
+	while (!value.empty() && ((value[value.size() - 1]) == '\n' || (value[value.size() - 1]) == '\r'))
+    {
+		value.erase(value.size() -1);
+	}
 	while ((cmd != commands[index]) && cmd != ('/' + commands[index]))
     {
         index++;
@@ -33,15 +36,12 @@ bool validCommand(Client *client, std::string str)
     switch(index)
     {
         case 1:
-            std::cout << commands[index - 1] << std::endl;
             PASS(client, value);
             break;
         case 2:
-            std::cout << commands[index - 1] << std::endl;
-			//NICK(client, value);
+			NICK(client, value);
             break;
         case 3:
-            //std::cout << commands[index - 1] << std::endl;
             USER(client, value);
             break;
         case 4:

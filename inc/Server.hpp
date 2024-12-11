@@ -6,7 +6,7 @@
 /*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:20:37 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/10 16:00:32 by pbotargu         ###   ########.fr       */
+/*   Updated: 2024/12/11 15:07:36 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ class Server
 		void				addChannel(Channel *channel);
 		Client 				*getClientBySocket(int fd);
 		Channel				*getCheckChannel(const std::string &name);
-		
+		std::vector<Client *>	getClients(void);	
 		static std::string	getServerName() {
 			return _srvName;
 		}
@@ -86,5 +86,6 @@ void 	parser(Client *client, std::string str);
 void	JOIN(Client *client, const std::string& args);
 void	PASS(Client *client, std::string pass);
 void	USER(Client *client, std::string pass);
+void	NICK(Client *client, std::string &nickname);
 
 #endif

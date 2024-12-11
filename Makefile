@@ -6,7 +6,7 @@
 #    By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/21 14:36:31 by pbotargu          #+#    #+#              #
-#    Updated: 2024/12/10 16:10:28 by pbotargu         ###   ########.fr        #
+#    Updated: 2024/12/11 15:05:09 by pbotargu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,11 +28,11 @@ SRC		= $(SRC_DIR)Server.cpp \
 		  $(SRC_DIR)cmds/JOIN.cpp \
 		  $(SRC_DIR)cmds/PASS.cpp \
 		  $(SRC_DIR)cmds/USER.cpp \
+		  $(SRC_DIR)cmds/NICK.cpp \
 		  $(SRC_DIR)parser.cpp \
 		  $(SRC_DIR)main.cpp 
 
 #$ \
-		  $(SRC_DIR)cmds/NICK.cpp \
 		  $(SRC_DIR)cmds/PRIVMSG.cpp \
 		  $(SRC_DIR)cmds/INVITE.cpp \
 

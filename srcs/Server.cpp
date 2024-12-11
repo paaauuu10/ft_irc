@@ -6,7 +6,7 @@
 /*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:24:51 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/10 15:17:27 by pbotargu         ###   ########.fr       */
+/*   Updated: 2024/12/11 15:10:45 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ Client	*Server::getClientBySocket(int fd) {
 	}
 	return (NULL);
 }
+
+std::vector<Client *> Server::getClients(void){ return _clients; }
 
 void	Server::cleanServer() {
 			for (size_t i = 0; i < _clients.size(); ++i)
