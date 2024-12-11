@@ -6,7 +6,7 @@
 /*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 10:31:53 by pbotargu          #+#    #+#             */
-/*   Updated: 2024/12/10 14:56:21 by pbotargu         ###   ########.fr       */
+/*   Updated: 2024/12/10 15:55:28 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ bool validCommand(Client *client, std::string str)
             break;
         case 3:
             //std::cout << commands[index - 1] << std::endl;
-            //user(client, value);
+            USER(client, value);
             break;
         case 4:
             std::cout << commands[index - 1] << std::endl;

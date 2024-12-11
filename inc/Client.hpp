@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:31:40 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/10 12:41:31 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/10 15:53:38 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ class Client {
 		// See the protocol grammar rules for what may and may not be used in a nickname. 
 		std::string					_hostname;
 		std::string					_realname;
+		std::string					_servername;
 		bool						_logged;
 		bool						_isRegistered;
 		std::string					_buffer;
@@ -51,6 +52,7 @@ class Client {
 		std::string	getNickname(void);
 		std::string	getRealname(void);
 		std::string	getHostname(void);
+		std::string	getServername(void);
 		bool		getLogged(void);
 		std::string	getBuffer(void);
 		bool		getRegistered(void);
@@ -65,6 +67,7 @@ class Client {
 		void	setRegistered(bool value);
 		void	setRealName(std::string str);
 		void	setHostname(std::string str);
+		void	setServername(std::string str);
 
 		// Checkers
 

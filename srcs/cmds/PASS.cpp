@@ -6,7 +6,7 @@
 /*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:57:43 by pbotargu          #+#    #+#             */
-/*   Updated: 2024/12/10 15:35:13 by pbotargu         ###   ########.fr       */
+/*   Updated: 2024/12/11 14:13:13 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,24 +21,30 @@ void	PASS( Client *client, std::string pass)
     	clean_pass.erase(clean_pass.size() -1);
     }
    
-	if (client->getLogged() == true)
+	if (pass.empty())
     {
-        std::cout << "Already registered" << std::endl; // EL MISSATGE HA DE SER EL CLIENT
+		std::string response = "Empty password!\r\n";
+        send(client->getFd(), response.c_str(), response.size(), 0);
+        return ;
+    }
+    if (client->getLogged() == true)
+    {
 		std::string response = "Already registered\r\n";
-	//	send(client->getFd(), response.c_str(), response.size(), 0);
+		send(client->getFd(), response.c_str(), response.size(), 0);
         return ;
     }
 
     if (clean_pass != password)
     {
-        std::cout << "Wrong Password" << std::endl; // EL MISSATGE HA DE SER EL CLIENT 
+        //std::cout << "Wrong Password" << std::endl; // EL MISSATGE HA DE SER EL CLIENT 
         
-		/*std::string response = "Error: Wrong password\r\n";
-		send(client->getFd(), response.c_str(), response.size(), 0);*/
+		std::string response = "Error: Wrong password\r\n";
+		send(client->getFd(), response.c_str(), response.size(), 0);
         // CALDRA VEURE COM ES GESTIONA EL CLIENT 
         
         return ;
     }
-    std::cout << "Correct Password! Welcome to ft_irc!" << std::endl;
+	std::string response = "Correct Password! Welcome to ft_irc!\r\n";
+    send(client->getFd(), response.c_str(), response.size(), 0);
     client->setLogged(true);
 }

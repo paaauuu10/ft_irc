@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 12:00:38 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/10 12:24:28 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/10 15:54:38 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ std::string	Client::getUsername(void) { return this->_username; }
 std::string	Client::getNickname(void) { return this->_nickname; }
 std::string	Client::getRealname(void) { return this->_realname; }
 std::string	Client::getHostname(void) { return this->_hostname; }
+std::string	Client::getServername(void) { return this->_servername; }
 bool		Client::getLogged(void) { return this->_logged; }
 std::string	Client::getBuffer(void) { return this->_buffer; }
 bool		Client::getRegistered(void) { return this->_isRegistered; }
@@ -88,6 +89,10 @@ void	Client::setRegistered(bool value) {
 
 void	Client::setRealName(std::string str) {
 		this->_realname = str;
+}
+
+void	Client::setServername(std::string str) {
+		this->_servername = str;
 }
 
 void	Client::setHostname(std::string str) {

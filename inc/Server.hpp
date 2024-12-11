@@ -6,7 +6,7 @@
 /*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:20:37 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/10 14:53:28 by pbotargu         ###   ########.fr       */
+/*   Updated: 2024/12/10 16:00:32 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ class Server
 
 void 	parser(Client *client, std::string str);
 void	JOIN(Client *client, const std::string& args);
-void	PASS( Client *client, std::string pass);
+void	PASS(Client *client, std::string pass);
+void	USER(Client *client, std::string pass);
 
 #endif
