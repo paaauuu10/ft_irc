@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:24:51 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/10 12:39:48 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/11 11:24:52 by pborrull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ Client	*Server::getClientBySocket(int fd) {
 	}
 	return (NULL);
 }
+
+std::vector<Client *> Server::getClients(void){ return _clients; }
 
 void	Server::cleanServer() {
 			for (size_t i = 0; i < _clients.size(); ++i)

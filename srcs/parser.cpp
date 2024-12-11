@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 10:31:53 by pbotargu          #+#    #+#             */
-/*   Updated: 2024/12/10 12:52:32 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/11 12:23:01 by pborrull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,10 @@ bool validCommand(Client *client, std::string str)
         cmd = std::toupper(c);
     });*/ // Convert str into capital letters
 	std::string	value = str.substr(cmd.size(), str.size() - cmd.size());
-    //std::string rest = str.substr(str.find(' ') + 1); // Eliminar el salto de línea (si existe) al final
-	//if (!rest.empty() && ((rest[rest.size() - 1]) == '\n' || (rest[rest.size() - 1]) == '\r'))
-	//	rest.erase(rest.size() -1);
+	while (!value.empty() && ((value[value.size() - 1]) == '\n' || (value[value.size() - 1]) == '\r'))
+    {
+		value.erase(value.size() -1);
+	}
 	while ((cmd != commands[index]) && cmd != ('/' + commands[index]))
     {
         index++;
@@ -36,15 +37,15 @@ bool validCommand(Client *client, std::string str)
     {
         case 1:
             std::cout << commands[index - 1] << std::endl;
-            //pass(client, value)
+            //PASS(client, value)
             break;
         case 2:
             std::cout << commands[index - 1] << std::endl;
-			//NICK(client, value);
+			NICK(client, value);
             break;
         case 3:
             //std::cout << commands[index - 1] << std::endl;
-            //user(client, value);
+            //USER(client, value);
             break;
         case 4:
             std::cout << commands[index - 1] << std::endl;

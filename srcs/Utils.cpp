@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Utils.cpp                                         :+:      :+:    :+:   */
+/*   Utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 12:00:21 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/03 12:00:22 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/11 12:39:49 by pborrull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,37 +17,36 @@
 
 // target se predefine en "", si no es pasado como parametro
 void sendError(Client* client, int errorCode, const std::string& errorMessage, const std::string& target) {
-    if (!client || !client->getLogged()) {
+    /*if (!client || !client->getLogged()) {
         std::cerr << "Error: Cliente no está conectado.\n";
         return;
-    }
+    }*/
+	(void)errorCode;
 
     std::string serverName = Server::getServerName();
-
-    std::ostringstream oss;
-    oss << ":" << serverName << " " << errorCode << " " 
-        << (target.empty() ? "*" : target) // Usa "*" si el target no está definido.
-        << " :" << errorMessage;
-    //client->SendMessage(oss.str());
+    std::string str = ":" + serverName + " "// + errorCode + " " 
+        + (target.empty() ? "*" : target) // Usa "*" si el target no está definido.
+        + " :" + errorMessage + "\n\r";
+    send(client->getFd(), str.c_str(), str.size(), 0);
 }
 
 std::vector<std::string> split(const std::string& input, char delimiter) {
     std::vector<std::string> tokens;
     std::string token;
-
-	for (std::string::size_type i = 0; i < input.size(); i++) {
-		if (input[0] == delimiter) {
-			if (!token.empty())
-				tokens.push_back(token);
-			token.clear();
-		}
-		else {
-			token += input[i];
-		}
-	}
-	if (!token.empty())
-		tokens.push_back(token);
-	return (tokens);
+    for (std::string::size_type i = 0; i < input.size(); i++) {
+        if (input[i] == delimiter) {
+            if (!token.empty()) {
+                tokens.push_back(token);
+                token.clear();
+            }
+        }
+        else {
+            token += input[i];
+        }
+    }
+    if (!token.empty())
+        tokens.push_back(token);
+    return (tokens);
 }
 
 bool    checkerIsLogged(Client *client)
