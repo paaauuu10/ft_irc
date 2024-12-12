@@ -6,11 +6,12 @@
 /*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 09:55:32 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/12 13:13:05 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/12 16:32:21 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
+#include "Client.hpp"
 #include "Channel.hpp"
 
 //JOIN <channel1>{,<channel2>} [<key1>{,<key2>}]

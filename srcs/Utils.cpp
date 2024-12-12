@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 12:00:21 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/12 15:55:51 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/12 16:30:11 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,13 +64,3 @@ bool    checkerIsLogged(Client *client)
     return true;
 }
 
-bool    checkerIsLogged(Client *client)
-{
-    if (client->getLogged() == false)
-    {
-        // el missatge s'ha d'enviar al Client!!!
-        std::cout << "First you have to enter the password" << std::endl;
-        return false;
-    }
-    return true;
-}

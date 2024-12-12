@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:20:37 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/12 15:48:42 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/12 16:36:29 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,9 @@ class Server
 
 void 	parser(Client *client, std::string str);
 void parsingbuffer(char *buffer, Client *client);
-void	JOIN(Client *client, const std::string& args);
 void	PASS(Client *client, std::string pass);
 void	USER(Client *client, std::string pass);
 void	NICK(Client *client, std::string &nickname);
+void	JOIN(Client *client, std::string& args);
 
 #endif

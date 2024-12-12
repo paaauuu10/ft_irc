@@ -34,8 +34,6 @@ bool validCommand(Client *client, std::string str, std::string cmd)
 			sendError(client, 1, "You need to use cmd NICK <nickname>");
 		return true;
 	}
-	
-
 
 	std::string	value = str.substr(cmd.size(), str.size() - cmd.size());
 	while ((cmd != commands[index]) && cmd != ('/' + commands[index]))
@@ -70,7 +68,7 @@ bool validCommand(Client *client, std::string str, std::string cmd)
 			break;
 		case 8:
 			std::cout << commands[index - 1] << std::endl;
-			//JOIN(client, value);
+			JOIN(client, value);
 			break;
 		case 9:
 			std::cout << commands[index - 1] << std::endl;

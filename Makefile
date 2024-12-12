@@ -6,7 +6,7 @@
 #    By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/21 14:36:31 by pbotargu          #+#    #+#              #
-#    Updated: 2024/12/12 15:47:00 by anovio-c         ###   ########.fr        #
+#    Updated: 2024/12/12 16:33:34 by anovio-c         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,7 +38,6 @@ SRC		= $(SRC_DIR)Server.cpp \
 
 OBJ = $(SRC:$(SRC_DIR)%.cpp=$(OBJ_DIR)%.o)
 DEP = $(OBJ:.o=.d)
-#CC = c++ 
 CC = g++ 
 CFLAGS = -Wall -Wextra -Werror -std=c++98 -pedantic -MMD -MP -g
 
