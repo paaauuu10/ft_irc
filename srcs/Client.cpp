@@ -6,7 +6,7 @@
 /*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 12:00:38 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/11 15:08:30 by pbotargu         ###   ########.fr       */
+/*   Updated: 2024/12/12 14:00:12 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ Client::Client(void)
 }
 
 Client::Client(std::string username, std::string nickname, int fd)
-	: _fd(fd), _username(username), _nickname(nickname) {
+	: _fd(fd), _username(username), _nickname(nickname), _logged(false), _isRegistered(false) {
 	
 }
 

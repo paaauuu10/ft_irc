@@ -24,10 +24,17 @@ bool validCommand(Client *client, std::string str, std::string cmd)
 	if (!client->getLogged() && cmd != "PASS")
 	{	
 		sendError(client, 1, "No logged, put the password PASS <password>");
-		return 0;
+		return true;
 	}
-//	if (!client->getRegistered() && cmd != "USER" && cmd != "NICK")
-//		sendError(client, 1, "No registered");
+	if (!client->getRegistered() && cmd != "USER" && cmd != "NICK" && client->getLogged())
+	{
+		if (client->getUsername().empty())
+			sendError(client, 1, "You need to use cmd USER <username> <hostname> <servername> <realname>");
+		if (client->getNickname().empty())
+			sendError(client, 1, "You need to use cmd NICK <nickname>");
+		return true;
+	}
+	
 
 
 	std::string	value = str.substr(cmd.size(), str.size() - cmd.size());

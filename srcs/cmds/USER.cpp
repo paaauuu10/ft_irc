@@ -6,7 +6,7 @@
 /*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 11:12:30 by pbotargu          #+#    #+#             */
-/*   Updated: 2024/12/12 13:50:16 by pbotargu         ###   ########.fr       */
+/*   Updated: 2024/12/12 14:06:34 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,6 @@ void	USER(Client *client, std::string pass)
     client->setHostname(words[1]); // revisar com ha de ser hostname
     client->setServername(words[2]);
     client->setRealName(words[3]);
-    
-    std::cout << client->getUsername() << std::endl;
-    std::cout << client->getHostname() << std::endl;
-    std::cout << client->getServername() << std::endl;
-    std::cout << client->getRealname() << std::endl;
 	std::string response = "User created!\r\n";
     send(client->getFd(), response.c_str(), response.size(), 0);
     if (!client->getNickname().empty() && !client->getRegistered())
