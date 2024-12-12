@@ -6,7 +6,7 @@
 /*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 11:12:30 by pbotargu          #+#    #+#             */
-/*   Updated: 2024/12/11 15:53:21 by pbotargu         ###   ########.fr       */
+/*   Updated: 2024/12/12 12:14:00 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,23 @@
 #include <string>
 #include "Utils.hpp"
 
+static bool checkUser(std::string &username)
+{
+	
+	std::vector<Client *>	vclient = Server::getInstance().getClients();
+	for (long unsigned int i = 0; i < vclient.size(); i++)
+	{
+		if (vclient[i]->getUsername() == username)
+			return false;
+	}
+	return true;
+}
 
 void	USER(Client *client, std::string pass)
 {
     if (checkerIsLogged(client) == false)
         return ;
     std::vector<std::string> words = split(pass, ' ');
-    std::cout << words[0] << std::endl;
     if (words.size() < 4)
     {
         std::cout << "No hay los parametros necesarios" << std::endl;
@@ -31,14 +41,15 @@ void	USER(Client *client, std::string pass)
         //send error
     }
     //username es unic? en cas que si cal revisar si ja existeix o no. Mirar si el client ja esta registrat?
-
+    if (!checkUser(words[0]))
+        sendError()
     
     
     // <username> <hostname> <servername> <realname>
-    client->setUsername(words[1]);
-    client->setHostname(words[2]); // revisar com ha de ser hostname
-    client->setServername(words[3]);
-    client->setRealName(words[4]);
+    client->setUsername(words[0]);
+    client->setHostname(words[1]); // revisar com ha de ser hostname
+    client->setServername(words[2]);
+    client->setRealName(words[3]);
     
     std::cout << client->getUsername() << std::endl;
     std::cout << client->getHostname() << std::endl;
