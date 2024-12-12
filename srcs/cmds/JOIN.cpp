@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   JOIN.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 09:55:32 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/11 15:45:44 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/12 13:13:05 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 #include "Channel.hpp"
 
 //JOIN <channel1>{,<channel2>} [<key1>{,<key2>}]
-// :irc.example.com 353 <nick> = <channel> :user1 user2 user3
-// :irc.example.com 366 <nick> <channel> :End of /NAMES list
 
 static bool isValidChannelName(std::string &name) {
 	if (name[0] == '#' || name[0] == '&')
@@ -24,9 +22,8 @@ static bool isValidChannelName(std::string &name) {
 }
 
 // default password == "default"
-//          ERR_INVITEONLYCHAN             ERR_BADCHANMASK
+//          ERR_INVITEONLYCHAN
 //		    ERR_TOOMANYCHANNELS
-//          RPL_TOPIC
 
 void	JOIN(Client *client, std::string& args) {
 	if (args.empty())
@@ -53,18 +50,14 @@ void	JOIN(Client *client, std::string& args) {
 			channel = new Channel(channelName, key, client);
 			Server::getInstance().addChannel(channel);
 			}
+		else
+			channel->addClient(client);
 		if (channel->isKeyProtected() && !channel->checkKey(key))
 			sendError(client, 475, "ERR_BADCHANNELKEY"); // channelName
 		if (channel->isFull())
 			sendError(client, 471, "ERR_CHANNELISFULL"); // channelName
-		//channel->addClient(client);
-		std::cout << "CLIENT NAME === " << client->getNickname() << "..\n";
-		//sendTopic
-		std::string msg = ":" + client->getNickname() + " JOIN :" + channelName + "\r\n";
-        channel->broadcast(msg);
-		//std::string list = channel->getUserList();
-		//send(client->getFd(), list.c_str(), list.size(), 0);
-		//send(client->getFd(), list.c_str(), list.size(), 0);
-        //send(client, "End of /NAMES list\r\n", 20, 0);
+        channel->broadcast(client);
+		channel->RPLTOPIC(client);
+		channel->RPL_NAMREPLY(client);
 	}
 }

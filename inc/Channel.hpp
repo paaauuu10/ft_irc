@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 12:08:38 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/11 12:11:37 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/12 13:12:52 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,9 @@ class Channel {
 		void	addClient(Client *client);
 		void	rmClient(Client *client);
 		std::vector<int>	listFdClients();
-		void	broadcast(std::string message);
+		void	broadcast(Client *client);
+		void	RPLTOPIC(Client *client);
+		void	RPL_NAMREPLY(Client *client);
 
 };
 

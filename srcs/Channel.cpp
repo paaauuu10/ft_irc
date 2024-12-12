@@ -3,20 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:58:33 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/11 16:04:30 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/12 15:37:05 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Channel.hpp"
+#include "Server.hpp"
 #include "Client.hpp"
 
 Channel::Channel(void) : _name(""), _key(""), _topic(""), _limit(999) {}
 
 
-Channel::Channel(const std::string &channelName, const std::string &key, Client *creator) : _topic("") {
+Channel::Channel(const std::string &channelName, const std::string &key, Client *creator) : _topic("EEEEEEESEEE") {
 	if (channelName.empty() || (channelName[0] != '&' && channelName[0] != '#'))
 		throw std::invalid_argument("Invalid channel name. Must start with '&' or '#'.");
 	_name = channelName;
@@ -41,7 +42,7 @@ std::string	Channel::getName() { return this->_name ; }
 
 bool		Channel::getMode(char key) {
 	if (_modes.find(key) != _modes.end()) {
-        return true; //_modes[key];
+        return _modes[key];
     }
     return false;
 }
@@ -50,13 +51,16 @@ std::string	Channel::getUserList() {
 	std::string	names;
 	for (size_t i = 0; i < _operatorClients.size(); ++i) {
 		names += _operatorClients[i]->getNickname();
-		names += " ,";
+		if (i != _operatorClients.size() - 1) {
+            names += " ";
+        }
 	}
 	for (size_t i = 0; i < _clients.size(); ++i) {
 		names += _clients[i]->getNickname();
-		names += " ,";
+		if (i != _clients.size() - 1) {
+            names += " ";
+        }
 	}
-	names += "\r\n";
 	return names;
 }
 
@@ -114,19 +118,55 @@ std::vector<int>	Channel::listFdClients() {
 	return (list);
 }
 
-void	Channel::broadcast(std::string message) {
-
-	std::vector<int> fds = listFdClients();
-	std::cout << "MESSAGE: " << message << std::endl;
-	for (size_t i = 0; i < fds.size(); ++i) {
-		//usleep(500000);
-		std::cout << "Broadcasting to fd: " << fds[i] << std::endl;
-		ssize_t bytesSent = send(fds[i], message.c_str(), message.size(), 0);
-		if (bytesSent == -1) {
-    		std::cerr << "Error sending message to fd: " << fds[i] << std::endl;
-		} else {
-    		std::cout << "Sent " << bytesSent << " bytes to fd: " << fds[i] << std::endl;
-		}
-	}
+void	Channel::broadcast(Client *client) {
+	//:<servidor> JOIN <cliente> <canal>
 	
+	std::vector<int> fds = listFdClients();
+	std::ostringstream oss;
+
+	oss << ":" << Server::getServerName() << " JOIN "
+		<< client->getNickname() << " " << this->getName()
+		<< "\n";
+		
+	std::string msg = oss.str();
+	
+	for (size_t i = 0; i < fds.size(); ++i) {
+		if (fds[i] == client->getFd())
+			continue ;
+		std::cout << "FD  == " << fds[i] << std::endl;
+		send(fds[i], msg.c_str(), msg.size(), 0);
+	}
+}
+
+void	Channel::RPLTOPIC(Client *client) {
+	std::ostringstream oss;
+	
+	oss << ":" << Server::getServerName() << " " << ((this->_topic.empty()) ? 331 : 332)
+		<< " " << client->getNickname() << " " << this->getName() << " :"
+		<< ((this->_topic.empty()) ? "No topic is set" : this->_topic)
+		<< "\n";
+	std::string msg = oss.str();
+    send(client->getFd(), msg.c_str(), msg.size(), 0);
+}
+
+void	Channel::RPL_NAMREPLY(Client *client) {
+	std::string	list = this->getUserList();
+
+	//:<servidor> 353 <cliente> = <canal> :<nicks>
+	std::ostringstream oss;
+
+	oss << ":" << Server::getServerName() << " " << 353 << " "
+		<< client->getNickname() << " = " << this->getName()
+		<< " :" << list << "\n";
+	std::string msg = oss.str();
+    send(client->getFd(), msg.c_str(), msg.size(), 0);
+
+	// :<servidor> 366 <cliente> <canal> :End of NAMES list.
+	oss.str("");
+	oss.clear();
+	oss << ":" << Server::getServerName() << " " << 366 << " "
+		<< client->getNickname() << " " << this->getName()
+		<< " :End of NAMES list." << "\n";
+	msg = oss.str();
+    send(client->getFd(), msg.c_str(), msg.size(), 0);
 }

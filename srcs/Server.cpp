@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:24:51 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/11 15:02:53 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/12 13:18:54 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ int	Server::start()
 						continue;
 					}
 					std::cout << "New connection established" << std::endl;
-					Client *newClient = new Client("Asier", "epale", clientSocket);
+					Client *newClient = new Client("asier", "asier", clientSocket);
 					newClient->setLogged(true);
 					_clients.push_back(newClient);
 

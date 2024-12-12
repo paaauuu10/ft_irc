@@ -27,8 +27,9 @@ void sendError(Client* client, int errorCode, const std::string& errorMessage, c
     std::ostringstream oss;
     oss << ":" << serverName << " " << errorCode << " " 
         << (target.empty() ? "*" : target) // Usa "*" si el target no está definido.
-        << " :" << errorMessage;
-    //client->SendMessage(oss.str());
+        << " :" << errorMessage << "\r\n";
+	std::string msg = oss.str();
+    send(client->getFd(), msg.c_str(), msg.size(), 0);
 }
 
 std::vector<std::string> split(const std::string& input, char delimiter) {
