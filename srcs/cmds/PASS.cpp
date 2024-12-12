@@ -6,7 +6,7 @@
 /*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:57:43 by pbotargu          #+#    #+#             */
-/*   Updated: 2024/12/11 15:12:32 by pbotargu         ###   ########.fr       */
+/*   Updated: 2024/12/12 11:40:48 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,26 +23,19 @@ void	PASS( Client *client, std::string pass)
    
 	if (pass.empty())
     {
-		std::string response = "Empty password!\r\n";
-        send(client->getFd(), response.c_str(), response.size(), 0);
+        sendError(client, 461, "Not enough parameters", pass); //ERR_NEEDMOREPARAMS
         return ;
     }
     if (client->getLogged() == true)
     {
-		std::string response = "Already registered\r\n";
-		send(client->getFd(), response.c_str(), response.size(), 0);
+	    sendError(client, 462, "Unauthorized command (already registered)"); //ERR_ALREADYREGISTRED
         return ;
     }
 
     if (clean_pass != password)
     {
-        //std::cout << "Wrong Password" << std::endl; // EL MISSATGE HA DE SER EL CLIENT 
-        
-		std::string response = "Error: Wrong password\r\n";
-		send(client->getFd(), response.c_str(), response.size(), 0);
-        // CALDRA VEURE COM ES GESTIONA EL CLIENT 
-        
-        return ;
+        sendError(client, 464, "Password incorrect"); //ERR_PASSWDMISMATCH
+        return ; 
     }
 	std::string response = "Correct Password! Welcome to ft_irc!\r\n";
     send(client->getFd(), response.c_str(), response.size(), 0);
