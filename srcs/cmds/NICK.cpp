@@ -6,7 +6,7 @@
 /*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 11:47:10 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/11 15:12:07 by pbotargu         ###   ########.fr       */
+/*   Updated: 2024/12/12 12:44:53 by pborrull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ static int validateNick(std::string &nick)
 
 void	NICK(Client *client, std::string &nickname)
 {
+//	if (!client->getLogged())
+//		return ;
 	while(nickname[0] == ' ')
 		nickname.erase(0, 1);
 	if (nickname.empty())	

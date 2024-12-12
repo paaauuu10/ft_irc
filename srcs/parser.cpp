@@ -6,7 +6,7 @@
 /*   By: pbotargu <pbotargu@student.42.fr>		  +#+  +:+	   +#+		*/
 /*												+#+#+#+#+#+   +#+		   */
 /*   Created: 2024/11/25 10:31:53 by pbotargu		  #+#	#+#			 */
-/*   Updated: 2024/12/12 10:38:47 by pborrull         ###   ########.fr       */
+/*   Updated: 2024/12/12 13:10:18 by pborrull         ###   ########.fr       */
 /*																			*/
 /* ************************************************************************** */
 
@@ -14,13 +14,22 @@
 
 bool validCommand(Client *client, std::string str)
 {
-	(void)client;
 	int index = 0;
 	std::string commands[17] = { "PASS", "NICK", "USER", "SERVER", "OPER", "QUIT", "SQUIT", "JOIN", "PART", "MODE", "TOPIC", "NAMES", "LIST", "INVITE", "KICK", "VERSION", "PRIVMSG"};
 	std::string cmd = str.substr(0, str.find(' '));
   /*  std::transform(cmd.begin(), cmd.end(), cmd.begin(), [](unsigned char c) {
 		cmd = std::toupper(c);
 	});*/ // Convert str into capital letters
+
+	if (!client->getLogged() && cmd != "PASS")
+	{	
+		sendError(client, 1, "No logged, put the password PASS <password>");
+		return 0;
+	}
+//	if (!client->getRegistered() && cmd != "USER" && cmd != "NICK")
+//		sendError(client, 1, "No registered");
+
+
 	std::string	value = str.substr(cmd.size(), str.size() - cmd.size());
 	while (!value.empty() && ((value[value.size() - 1]) == '\n' || (value[value.size() - 1]) == '\r'))
 	{
@@ -107,5 +116,8 @@ void parsingbuffer(char *buffer, Client *client)
 	std::string line;
 
 	while (std::getline(stream, line))
-		parser(client, line);
+	{
+		if (line != "CAP LS 302\r")
+			parser(client, line);
+	}
 }

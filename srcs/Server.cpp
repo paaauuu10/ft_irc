@@ -6,7 +6,7 @@
 /*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:24:51 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/12 10:56:00 by pborrull         ###   ########.fr       */
+/*   Updated: 2024/12/12 13:03:30 by pborrull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,7 @@ int	Server::start()
 						if (client) {
 							std::string message(buffer);
 							parsingbuffer(buffer, client);
-							//parser(client, message);
+						//	parser(client, message);
 						}
 						//std::string response = "Message received: " + std::string(buffer) + "\r\n";
 						//send(pollfds[i].fd, response.c_str(), response.size(), 0);
