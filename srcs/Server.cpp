@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:24:51 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/12 13:18:54 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/12 15:53:19 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ Client	*Server::getClientBySocket(int fd) {
 	}
 	return (NULL);
 }
+
+std::vector<Client *> Server::getClients(void){ return _clients; }
 
 void	Server::cleanServer() {
 	for (size_t i = 0; i < _clients.size(); ++i)
@@ -108,22 +110,6 @@ int	Server::start()
 			std::cerr << "Error doing poll" << std::endl;
 			break ;
 		}
-
-	/*	sockaddr_in client;
-		socklen_t clientSize = sizeof(client);
-		int clientSocket = accept(listening, (struct sockaddr *)&client, &clientSize);
-		int clientSocket = accept(listening, NULL, NULL);
-		if (clientSocket == -1)
-		{
-			std::cerr << "Error connecting with client" << std::endl;
-			return 1;
-		}
-		char host[1024] = {0};
-		int	received = recv(clientSocket, host, sizeof(host) - 1, 0);
-		if (received > 0)
-			host[received] = '\0';
-		std::cout << "Message from client: " << host << std::endl;
-	}*/
 	for (size_t i = 0; i < pollfds.size(); ++i)
 	{
 			if (pollfds[i].revents & POLLIN)
@@ -140,8 +126,7 @@ int	Server::start()
 						continue;
 					}
 					std::cout << "New connection established" << std::endl;
-					Client *newClient = new Client("asier", "asier", clientSocket);
-					newClient->setLogged(true);
+					Client *newClient = new Client("", "", clientSocket);
 					_clients.push_back(newClient);
 
 					pollfd clientPoll;
@@ -165,12 +150,11 @@ int	Server::start()
 					else
 					{
 						buffer[received] = '\0';
-						std::cout << "Message from client: " << buffer << std::endl;
 						Client *client = getClientBySocket(pollfds[i].fd); // Implementar esta función según tu diseño
 						if (client) {
 							std::string message(buffer);
-							// parsing buffer
-							parser(client, buffer);
+							parsingbuffer(buffer, client);
+						//	parser(client, message);
 						}
 						//std::string response = "Message received: " + std::string(buffer) + "\r\n";
 						//send(pollfds[i].fd, response.c_str(), response.size(), 0);

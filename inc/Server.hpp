@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:20:37 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/11 12:39:54 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/12 15:48:42 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,15 +76,17 @@ class Server
 		void				addChannel(Channel *channel);
 		Client 				*getClientBySocket(int fd);
 		Channel				*getCheckChannel(const std::string &name);
-		
+		std::vector<Client *>	getClients(void);	
 		static std::string	getServerName() {
 			return _srvName;
 		}
 };
 
-bool validCommand(Client *client, std::string str);
-void parser(Client *client, std::string str);
-void	JOIN(Client *client, std::string& args);
-void 	PASS(std::string pass, Client *client);
+void 	parser(Client *client, std::string str);
+void parsingbuffer(char *buffer, Client *client);
+void	JOIN(Client *client, const std::string& args);
+void	PASS(Client *client, std::string pass);
+void	USER(Client *client, std::string pass);
+void	NICK(Client *client, std::string &nickname);
 
 #endif

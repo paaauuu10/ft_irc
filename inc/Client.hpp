@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:31:40 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/11 12:14:42 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/12 15:48:22 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ class Client {
 		// See the protocol grammar rules for what may and may not be used in a nickname. 
 		std::string					_hostname;
 		std::string					_realname;
+		std::string					_servername;
 		bool						_logged;
 		bool						_isRegistered;
 		std::string					_buffer;
@@ -49,12 +50,13 @@ class Client {
 		int			getFd(void) const;
 		std::string	getUsername(void) const;
 		std::string	getNickname(void);
-		std::string	getRealname(void) const;
-		std::string	getHostname(void) const;
-		bool		getLogged(void) const;
-		std::string	getBuffer(void) const;
-		bool		getRegistered(void) const;
-		Channel		*getChannel(Channel *channel) ;
+		std::string	getRealname(void);
+		std::string	getHostname(void);
+		std::string	getServername(void);
+		bool		getLogged(void);
+		std::string	getBuffer(void);
+		bool		getRegistered(void);
+		Channel		*getChannel(Channel *channel);
 		
 		// Setters
 		void	setNickname(std::string &nickname);
@@ -65,6 +67,7 @@ class Client {
 		void	setRegistered(bool value);
 		void	setRealName(std::string str);
 		void	setHostname(std::string str);
+		void	setServername(std::string str);
 
 		// Checkers
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 12:00:38 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/11 12:14:58 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/12 15:51:55 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ Client::Client(void)
 }
 
 Client::Client(std::string username, std::string nickname, int fd)
-	: _fd(fd), _username(username), _nickname(nickname) {
+	: _fd(fd), _username(username), _nickname(nickname), _logged(false), _isRegistered(false) {
 	
 }
 
@@ -49,11 +49,12 @@ Client::~Client(void) {
 int			Client::getFd(void) const { return this->_fd; }
 std::string	Client::getUsername(void) const { return this->_username; }
 std::string	Client::getNickname(void) { return this->_nickname; }
-std::string	Client::getRealname(void) const { return this->_realname; }
-std::string	Client::getHostname(void) const { return this->_hostname; }
-bool		Client::getLogged(void) const { return this->_logged; }
-std::string	Client::getBuffer(void) const { return this->_buffer; }
-bool		Client::getRegistered(void) const { return this->_isRegistered; }
+std::string	Client::getRealname(void) { return this->_realname; }
+std::string	Client::getHostname(void) { return this->_hostname; }
+std::string	Client::getServername(void) { return this->_servername; }
+bool		Client::getLogged(void) { return this->_logged; }
+std::string	Client::getBuffer(void) { return this->_buffer; }
+bool		Client::getRegistered(void) { return this->_isRegistered; }
 
 Channel		*Client::getChannel(Channel *channel) {
 	std::vector<Channel *>::iterator it;
@@ -88,6 +89,10 @@ void	Client::setRegistered(bool value) {
 
 void	Client::setRealName(std::string str) {
 		this->_realname = str;
+}
+
+void	Client::setServername(std::string str) {
+		this->_servername = str;
 }
 
 void	Client::setHostname(std::string str) {

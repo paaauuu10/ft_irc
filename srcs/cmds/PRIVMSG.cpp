@@ -12,10 +12,8 @@
 
 #include "Server.hpp"
 #include "Client.hpp"
-#include "Channel.hpp"
-#include "Utils.hpp"
 
-void privMsg(const Client *sender, const std::string &target, const std::string &message)
+void privMsg(Client *sender, const std::string &target, const std::string &message)
 {
 	if (target.empty())
 	{
@@ -32,7 +30,7 @@ void privMsg(const Client *sender, const std::string &target, const std::string 
 		return;
 	}
 	
-	std::string fullMessage = ":" + sender + " PRIVMSG " + target + " :" + message + "\r\n";
+	std::string fullMessage = ":" + sender->getNickname() + " PRIVMSG " + target + " :" + message + "\r\n";
 
 	// For clients
 	if (clients.find(target) != clients.end())

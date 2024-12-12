@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Utils.cpp                                         :+:      :+:    :+:   */
+/*   Utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 12:00:21 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/03 12:00:22 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/12 15:55:51 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,24 +35,33 @@ void sendError(Client* client, int errorCode, const std::string& errorMessage, c
 std::vector<std::string> split(const std::string& input, char delimiter) {
     std::vector<std::string> tokens;
     std::string token;
+    for (std::string::size_type i = 0; i < input.size(); i++) {
+        if (input[i] == delimiter) {
+            if (!token.empty()) {
+                tokens.push_back(token);
+                token.clear();
+            }
+        }
+        else {
+            token += input[i];
+            if (input[i] == delimiter)
+                ++i;
+        }
+    }
+    if (!token.empty())
+        tokens.push_back(token);
+    return (tokens);
+}
 
-	for (std::string::size_type i = 0; i < input.size(); i++) {
-		if (input[i] == delimiter) {
-			if (!token.empty()) {
-				tokens.push_back(token);
-				token.clear();
-			}
-		}
-		else {
-			token += input[i];
-			// Testear
-			//if (input[i] == delimiter)
-			//	++i;
-		}
-	}
-	if (!token.empty())
-		tokens.push_back(token);
-	return (tokens);
+bool    checkerIsLogged(Client *client)
+{
+    if (client->getLogged() == false)
+    {
+        // el missatge s'ha d'enviar al Client!!!
+        std::cout << "First you have to enter the password" << std::endl;
+        return false;
+    }
+    return true;
 }
 
 bool    checkerIsLogged(Client *client)

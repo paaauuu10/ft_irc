@@ -6,32 +6,30 @@
 /*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:57:43 by pbotargu          #+#    #+#             */
-/*   Updated: 2024/12/10 17:14:56 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/12 15:57:46 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-void PASS(std::string pass, Client *client)
+void	PASS( Client *client, std::string pass)
 {
-   	std::cout << "PASS: " << pass << std::endl; 
-   	std::cout << "_pass: " << this->_pass << std::endl; 
-	if (client->getLogged() == true)
-    {
-        std::cout << "Already registered" << std::endl; // EL MISSATGE HA DE SER EL CLIENT
-		std::string response = "Already registered\r\n";
-	//	send(client->getFd(), response.c_str(), response.size(), 0);
-        return ;
+   	std::string password = Server::getInstance().getPass(); // We get PASS from Server
+    std::string clean_pass = pass.substr(pass.find(' ') + 1); // Delete initial space
+    
+	while (!clean_pass.empty() && ((clean_pass[clean_pass.size() - 1]) == '\n'
+		|| (clean_pass[clean_pass.size() - 1]) == '\r'))
+		clean_pass.erase(clean_pass.size() -1);
+
+	if (pass.empty())
+        sendError(client, 461, "Not enough parameters", pass); //ERR_NEEDMOREPARAMS
+    else if (client->getLogged() == true)
+	    sendError(client, 462, "Unauthorized command (already registered)"); //ERR_ALREADYREGISTRED
+    else if (clean_pass != password)
+        sendError(client, 464, "Password incorrect"); //ERR_PASSWDMISMATCH
+	else if (clean_pass == password) {
+        std::string response = "Correct Password! Welcome to ft_irc!\r\n";
+        send(client->getFd(), response.c_str(), response.size(), 0);
+        client->setLogged(true);
     }
-    if (pass != this->_pass)
-    {
-       // std::cout << "Wrong Password" << std::endl; // EL MISSATGE HA DE SER EL CLIENT 
-        
-		std::string response = "Error: Wrong password\r\n";
-		send(client->getFd(), response.c_str(), response.size(), 0);
-        // CALDRA VEURE COM ES GESTIONA EL CLIENT 
-        
-        return ;
-    }
-    client->setLogged(true);
 }
