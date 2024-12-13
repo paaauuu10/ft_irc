@@ -6,7 +6,7 @@
 /*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:20:37 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/12 10:34:17 by pborrull         ###   ########.fr       */
+/*   Updated: 2024/12/13 12:15:23 by pborrull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ class Server
 		std::vector<Channel *>			_channels;
 		std::vector<Client *>			_clients;
 		
+	public:
 		Server() : _port(6667), _pass("default") {}
 		// Server(int port, const std::string &pass)
 		// 	: _port(port), _pass(pass) {
@@ -61,7 +62,6 @@ class Server
 		Server(const Server &src);
 		Server	&operator=(const Server *src);
 
-	public:
 		static Server	&getInstance() {
 			return (instance);
 		}
