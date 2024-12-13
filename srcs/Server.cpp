@@ -6,7 +6,7 @@
 /*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:24:51 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/12 13:19:46 by pbotargu         ###   ########.fr       */
+/*   Updated: 2024/12/13 11:31:01 by pborrull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ int	Server::start()
 	pollfd listeningPoll;
 	listeningPoll.fd = this->_listeningSocket;
 	listeningPoll.events = POLLIN;
+	listeningPoll.revents = 0;
 	pollfds.push_back(listeningPoll);
 
 	while(42)
@@ -132,6 +133,7 @@ int	Server::start()
 					pollfd clientPoll;
 					clientPoll.fd = clientSocket;
 					clientPoll.events = POLLIN;
+					clientPoll.revents = 0;
 					pollfds.push_back(clientPoll);
 				}
 				else
