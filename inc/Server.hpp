@@ -6,7 +6,7 @@
 /*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:20:37 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/13 12:15:56 by pbotargu         ###   ########.fr       */
+/*   Updated: 2024/12/13 12:28:17 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ void	PASS(Client *client, std::string pass);
 void	USER(Client *client, std::string pass);
 void	NICK(Client *client, std::string &nickname);
 void	INVITE(Client *client, std::string &invitation);
+void	MODE(Client *client, std::string str);
 
 
 #endif

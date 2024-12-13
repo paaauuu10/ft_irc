@@ -76,7 +76,7 @@ bool validCommand(Client *client, std::string str, std::string cmd)
 			std::cout << commands[index - 1] << std::endl;
 			break;
 		case 10:
-			std::cout << commands[index - 1] << std::endl;
+			MODE(client, value);
 			break;
 		case 11:
 			std::cout << commands[index - 1] << std::endl;
