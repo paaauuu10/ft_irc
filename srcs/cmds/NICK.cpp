@@ -6,7 +6,7 @@
 /*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 11:47:10 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/12 13:50:37 by pbotargu         ###   ########.fr       */
+/*   Updated: 2024/12/13 10:28:59 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include <iostream>
 #include <set>
 
-static int checkNickname(std::string &nickname)
+int checkNickname(std::string &nickname)
 {
 	
 	std::vector<Client *>	vclient = Server::getInstance().getClients();

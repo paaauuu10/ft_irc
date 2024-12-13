@@ -88,8 +88,7 @@ bool validCommand(Client *client, std::string str, std::string cmd)
 			std::cout << commands[index - 1] << std::endl;
 			break;
 		case 14:
-			//std::cout << commands[index - 1] << std::endl;
-			//invite(client, value);
+			INVITE(client, value);
 			break;
 		case 15:
 			std::cout << commands[index - 1] << std::endl;
@@ -110,7 +109,6 @@ void parser(Client *client, std::string str)
 		str.erase(str.size() -1);
 	}
     std::string cmd = str.substr(0, str.find(' '));
-    std::cout << "FLAG PARSER INIT\n";
     if (str == "\r\n") // revisar aquesta guarrada: Si treiem aixo mostra :UNKNOWN COMMAND!
         return ;
     if  (str.size() > 0)// && str[0] == '/')

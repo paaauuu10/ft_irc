@@ -6,7 +6,7 @@
 #    By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/21 14:36:31 by pbotargu          #+#    #+#              #
-#    Updated: 2024/12/11 15:05:09 by pbotargu         ###   ########.fr        #
+#    Updated: 2024/12/13 11:47:44 by pbotargu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,8 @@ SRC		= $(SRC_DIR)Server.cpp \
 		  $(SRC_DIR)Client.cpp \
 		  $(SRC_DIR)Channel.cpp \
 		  $(SRC_DIR)Utils.cpp \
+		  $(SRC_DIR)signals.cpp \
+		  $(SRC_DIR)cmds/INVITE.cpp \
 		  $(SRC_DIR)cmds/JOIN.cpp \
 		  $(SRC_DIR)cmds/PASS.cpp \
 		  $(SRC_DIR)cmds/USER.cpp \
@@ -34,7 +36,6 @@ SRC		= $(SRC_DIR)Server.cpp \
 
 #$ \
 		  $(SRC_DIR)cmds/PRIVMSG.cpp \
-		  $(SRC_DIR)cmds/INVITE.cpp \
 
 OBJ = $(SRC:$(SRC_DIR)%.cpp=$(OBJ_DIR)%.o)
 DEP = $(OBJ:.o=.d)

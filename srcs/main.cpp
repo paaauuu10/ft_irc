@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:18:08 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/09 14:09:39 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/13 12:04:42 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
 	try {
 		Server::init(atoi(argv[1]), argv[2]);
 		Server	&server = Server::getInstance();
-		
+		signals();
 		// Init the server
 		if (server.start() != 0) {
 			std::cerr << "Failed to start the server." << std::endl;
