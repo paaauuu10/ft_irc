@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PASS.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pbotargu <pbotargu@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:57:43 by pbotargu          #+#    #+#             */
-/*   Updated: 2024/12/12 11:54:38 by pbotargu         ###   ########.fr       */
+/*   Updated: 2024/12/13 17:51:37 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	PASS( Client *client, std::string pass)
 	else if (clean_pass == password)
     {
         std::string response = "Correct Password! Welcome to ft_irc!\r\n";
+        std::cout << "Client's FD --> " << client->getFd() << std::endl;
         send(client->getFd(), response.c_str(), response.size(), 0);
         client->setLogged(true);
     }

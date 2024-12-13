@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   NICK.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pbotargu <pbotargu@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 11:47:10 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/13 10:28:59 by pbotargu         ###   ########.fr       */
+/*   Updated: 2024/12/13 17:49:53 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ void	NICK(Client *client, std::string &nickname)
 			"                                   `:.:' \n";
 
 			send(client->getFd(), response.c_str(), response.size(), 0);
-			send(client->getFd(), pikachu_art.c_str(), pikachu_art.size(), 0);
+			//send(client->getFd(), pikachu_art.c_str(), pikachu_art.size(), 0);
 
 		}
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   USER.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pbotargu <pbotargu@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 11:12:30 by pbotargu          #+#    #+#             */
-/*   Updated: 2024/12/13 10:59:36 by pbotargu         ###   ########.fr       */
+/*   Updated: 2024/12/13 17:50:01 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void	USER(Client *client, std::string pass)
 "                                   `:.:' \n";
 
         send(client->getFd(), response.c_str(), response.size(), 0);
-        send(client->getFd(), pikachu_art.c_str(), pikachu_art.size(), 0);
+        //send(client->getFd(), pikachu_art.c_str(), pikachu_art.size(), 0);
 
     }
 }
