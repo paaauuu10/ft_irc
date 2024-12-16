@@ -6,7 +6,7 @@
 /*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 10:31:53 by pbotargu          #+#    #+#             */
-/*   Updated: 2024/12/11 15:54:18 by pbotargu         ###   ########.fr       */
+/*   Updated: 2024/12/16 09:58:18 by pborrull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,7 @@ bool validCommand(Client *client, std::string str, std::string cmd)
 {
     int index = 0;
     std::string commands[17] = { "PASS", "NICK", "USER", "SERVER", "OPER", "QUIT", "SQUIT", "JOIN", "PART", "MODE", "TOPIC", "NAMES", "LIST", "INVITE", "KICK", "VERSION", "PRIVMSG"};
-  /*  std::transform(cmd.begin(), cmd.end(), cmd.begin(), [](unsigned char c) {
-		cmd = std::toupper(c);
-	});*/ // Convert str into capital letters
-
-	if (!client->getLogged() && cmd != "PASS")
+   	if (!client->getLogged() && cmd != "PASS")
 	{	
 		sendError(client, 1, "No logged, put the password PASS <password>");
 		return true;
@@ -94,6 +90,7 @@ bool validCommand(Client *client, std::string str, std::string cmd)
 			std::cout << commands[index - 1] << std::endl;
 			break;
 		case 17:
+			PRIVMSG(client, value);
 			std::cout << commands[index - 1] << std::endl;
 			break;
 	}
@@ -102,15 +99,18 @@ bool validCommand(Client *client, std::string str, std::string cmd)
 void parser(Client *client, std::string str)
 {
 	while (!str.empty() && ((str[str.size() - 1]) == '\n' || (str[str.size() - 1]) == '\r'))
-    {
 		str.erase(str.size() -1);
-	}
+
     std::string cmd = str.substr(0, str.find(' '));
+	std::string cmdUpper = cmd;
+	
+	for (size_t i = 0; i < cmd.length(); ++i)
+		cmdUpper[i] = std::toupper(cmd[i]);
     if (str == "\r\n") // revisar aquesta guarrada: Si treiem aixo mostra :UNKNOWN COMMAND!
         return ;
     if  (str.size() > 0)// && str[0] == '/')
     {
-        if (!validCommand(client, str, cmd))
+        if (!validCommand(client, str, cmdUpper))
         {
             std::string response = cmd + " :Unknown command\r\n";
             send(client->getFd(), response.c_str(), response.size(), 0);
@@ -120,12 +120,21 @@ void parser(Client *client, std::string str)
 
 void parsingbuffer(char *buffer, Client *client)
 {
-	std::istringstream stream(buffer);
-	std::string line;
+	std::istringstream	stream(buffer);
+	static std::string line;
+	std::string	temp;
 
-	while (std::getline(stream, line))
+	while (std::getline(stream, temp))
 	{
+		line += temp;
+		temp.clear();
+		if (stream.eof() && temp.empty())
+			return ;
+		if (line.find('\0') != std::string::npos)
+			return ;
+
 		if (line != "CAP LS 302\r")
 			parser(client, line);
+		line.clear();
 	}
 }

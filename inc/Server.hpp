@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:20:37 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/16 12:16:36 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/16 12:26:46 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,15 +51,6 @@ class Server
 		std::vector<Channel *>			_channels;
 		std::vector<Client *>			_clients;
 		
-		// Server(int port, const std::string &pass)
-		// 	: _port(port), _pass(pass) {
-		// 		if (port < 1024 || port > 49151)
-		// 			throw std::invalid_argument("Invalid port number");
-		// 	};
-		
-
-		// !!!!!  HACER PARA EVITAR LA COPIA!!!!!
-
 	public:
 		Server() : _port(6667), _pass("default") {}
 		Server(const Server &src);
@@ -96,5 +87,6 @@ void	NICK(Client *client, std::string &nickname);
 void	INVITE(Client *client, std::string &invitation);
 void	MODE(Client *client, std::string str);
 
+void 	PRIVMSG(Client *sender, std::string &value);
 
 #endif

@@ -6,7 +6,7 @@
 #    By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/21 14:36:31 by pbotargu          #+#    #+#              #
-#    Updated: 2024/12/16 12:16:04 by anovio-c         ###   ########.fr        #
+#    Updated: 2024/12/16 12:23:41 by anovio-c         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,7 @@ SRC		= $(SRC_DIR)Server.cpp \
 		  $(SRC_DIR)cmds/INVITE.cpp \
 		  $(SRC_DIR)cmds/JOIN.cpp \
 		  $(SRC_DIR)cmds/PASS.cpp \
+		  $(SRC_DIR)cmds/PRIVMSG.cpp \
 		  $(SRC_DIR)cmds/USER.cpp \
 		  $(SRC_DIR)cmds/NICK.cpp \
 		  $(SRC_DIR)cmds/MODE.cpp \
@@ -36,7 +37,7 @@ SRC		= $(SRC_DIR)Server.cpp \
 		  $(SRC_DIR)main.cpp 
 
 #$ \
-		  $(SRC_DIR)cmds/PRIVMSG.cpp \
+		  $(SRC_DIR)cmds/INVITE.cpp \
 
 OBJ = $(SRC:$(SRC_DIR)%.cpp=$(OBJ_DIR)%.o)
 DEP = $(OBJ:.o=.d)
