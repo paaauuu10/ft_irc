@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:58:33 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/16 11:54:52 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/16 15:22:23 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,22 @@ bool	Channel::checkKey(const std::string &str) const {
 	return (_key == str);
 }
 
+bool	Channel::checkOperatorClient(Client *client) {
+	for (size_t i = 0; this->_operatorClients.size(); ++i) {
+		if (this->_operatorClients[i]->getNickname() == client->getNickname())
+			return true;
+	}
+	return false;
+}
+
+Client	*Channel::checkClient(std::string &nickname) {
+	for (size_t i = 0; this->_clients.size(); ++i) {
+		if (this->_clients[i]->getNickname() == nickname)
+			return this->_clients[i];
+	}
+	return NULL;
+}
+
 bool	Channel::isEmtpy() { return this->_clients.empty() ; }
 
 bool	Channel::isFull() { 
@@ -118,16 +134,19 @@ std::vector<int>	Channel::listFdClients() {
 	return (list);
 }
 
-void Channel::broadcast(Client *client) {
+void Channel::broadcast(Client *client, std::string &msg) {
     std::vector<int> fds = listFdClients();
-    std::ostringstream oss;
+
+    //std::ostringstream oss;
 
     // Mensaje JOIN con el prefijo correcto
-    oss << ":" << client->getNickname() << "!" 
-        << client->getUsername() << "@127.0.0.1 JOIN :" 
-        << this->getName() << "\r\n";
+	// :<nickname>!<username>@<hostname> JOIN :<channelName>\r\n
+	
+    //oss << ":" << client->getNickname() << "!" 
+    //    << client->getUsername() << "@127.0.0.1 JOIN :" 
+     //   << this->getName() << "\r\n";
 
-    std::string msg = oss.str();
+    //std::string msg = oss.str();
 
     // Enviar a todos los clientes del canal
     for (size_t i = 0; i < fds.size(); ++i) {

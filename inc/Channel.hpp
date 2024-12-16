@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 12:08:38 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/13 10:51:20 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/16 15:22:29 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,13 +55,15 @@ class Channel {
 		
 		bool	isKeyProtected();
 		bool	checkKey(const std::string &key) const;
+		bool	checkOperatorClient(Client *client);
+		Client	*checkClient(std::string &nickname);
 		bool	isEmtpy();
 		bool	isFull();
 		void	addOperatorClient(Client *client);
 		void	addClient(Client *client);
 		void	rmClient(Client *client);
 		std::vector<int>	listFdClients();
-		void	broadcast(Client *client);
+		void	broadcast(Client *client, std::string &msg);
 		void	RPLTOPIC(Client *client);
 		void	RPL_NAMREPLY(Client *client);
 
