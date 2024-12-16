@@ -15,7 +15,7 @@
 #include "Channel.hpp"
 //void PRIVMSG(const Client *sender, const std::string &target, const std::string &message)
 
-static Channel	*checkChannel(std::string &nickname)
+/*static Channel	*checkChannel(std::string &nickname)
 {
 
 	std::vector<Channel *>	vchannel = Server::getInstance().getChannels();
@@ -25,7 +25,7 @@ static Channel	*checkChannel(std::string &nickname)
 			return vchannel[i];
 	}
 	return NULL;
-}
+}*/
 static Client	*checkClient(std::string &nickname)
 {
 

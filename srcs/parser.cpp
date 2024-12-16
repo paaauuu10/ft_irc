@@ -12,7 +12,7 @@
 
 #include "Server.hpp"
 
-bool validCommand(Client *client, std::string str, std::string cmd)
+static bool validCommand(Client *client, std::string str, std::string cmd)
 {
     int index = 0;
     std::string commands[17] = { "PASS", "NICK", "USER", "SERVER", "OPER", "QUIT", "SQUIT", "JOIN", "PART", "MODE", "TOPIC", "NAMES", "LIST", "INVITE", "KICK", "VERSION", "PRIVMSG"};
