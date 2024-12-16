@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:58:33 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/16 15:22:23 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/16 17:19:20 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,7 @@ std::vector<int>	Channel::listFdClients() {
 
 void Channel::broadcast(Client *client, std::string &msg) {
     std::vector<int> fds = listFdClients();
+	(void)client;
 
     //std::ostringstream oss;
 

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+         #
+#    By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/21 14:36:31 by pbotargu          #+#    #+#              #
-#    Updated: 2024/12/16 12:23:41 by anovio-c         ###   ########.fr        #
+#    Updated: 2024/12/16 17:17:12 by anovio-c         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,6 +28,7 @@ SRC		= $(SRC_DIR)Server.cpp \
 		  $(SRC_DIR)signals.cpp \
 		  $(SRC_DIR)cmds/INVITE.cpp \
 		  $(SRC_DIR)cmds/JOIN.cpp \
+		  $(SRC_DIR)cmds/KICK.cpp \
 		  $(SRC_DIR)cmds/PASS.cpp \
 		  $(SRC_DIR)cmds/PRIVMSG.cpp \
 		  $(SRC_DIR)cmds/USER.cpp \

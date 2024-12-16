@@ -85,6 +85,7 @@ static bool validCommand(Client *client, std::string str, std::string cmd)
 			break;
 		case 15:
 			std::cout << commands[index - 1] << std::endl;
+			KICK(client, value);
 			break;
 		case 16:
 			std::cout << commands[index - 1] << std::endl;
