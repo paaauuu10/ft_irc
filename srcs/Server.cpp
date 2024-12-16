@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:24:51 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/16 11:07:52 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/16 12:14:09 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,7 +180,6 @@ void Server::handleMode(Client *client, const std::string &channelName) {
     std::string msg = oss.str();
     send(client->getFd(), msg.c_str(), msg.size(), 0);
 
-    // Limpiar y reutilizar el flujo para el mensaje 329
     oss.str("");
     oss.clear();
 
@@ -191,14 +190,13 @@ void Server::handleMode(Client *client, const std::string &channelName) {
 }
 
 void Server::handleWho(Client *client, const std::string &channelName) {
-    // Obtener el canal
+
     Channel *channel = this->getCheckChannel(channelName);
     if (!channel) {
         sendError(client, 403, "ERR_NOSUCHCHANNEL");
         return;
     }
 
-    // Iterar por los clientes del canal y enviar información 352
     std::vector<Client*> clients = getClients();
     for (std::vector<Client*>::iterator it = clients.begin(); it != clients.end(); ++it) {
         Client *c = *it;
