@@ -6,11 +6,12 @@
 /*   By: pbotargu <pbotargu@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 12:22:51 by pbotargu          #+#    #+#             */
-/*   Updated: 2024/12/13 17:47:00 by pbotargu         ###   ########.fr       */
+/*   Updated: 2024/12/16 18:52:08 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
+#include "Channel.hpp"
 #include <vector>
 #include <string>
 #include <iostream>
@@ -19,12 +20,13 @@ void	MODE(Client *client, std::string str)
 {
     //S'ha de mirar si es un operador abans de continuar. Si no return ; i ciao! NO borrar comentari!
     std::vector<std::string> words = split(str, ' ');
-    //Channel *channel = Server::getInstance().getCheckChannel(words[0]);
+    Channel *channel = Server::getInstance().getCheckChannel(words[0]);
     if (words.size() < 2)
     {
         sendError(client, 461, "Not enough parameters\n"); //ERR_NEEDMOREPARAMS
 		return ;
     }
+    //revisar si es un operador del canal el client!
     char s = '+';
     for(long unsigned int i = 0; i < words[1].size(); i++)
     {
@@ -44,8 +46,8 @@ void	MODE(Client *client, std::string str)
                 }
                 if (words[1][i] == 'k')
                 {
-                    //channel->setMode(words[1][i], false, 0);
-                    //channel->setPassword(words[2]);
+                    channel->setMode(words[1][i], false, 0);
+                    channel->setKey("");
                     std::cout << "El canal ahora NO tiene contraseña!" << std::endl;   
                 }
                 if (words[1][i] == 'o')
@@ -85,8 +87,8 @@ void	MODE(Client *client, std::string str)
                 }
                 if (words[1][i] == 'k')
                 {
-                    //channel->setMode(words[1][i], true, 0);
-                    //channel->setPassword(words[2]);
+                    channel->setMode(words[1][i], true, 0);
+                    channel->setKey(words[2]);
                     std::cout << "El canal ahora tiene contraseña!" << std::endl;   
                 }
                 if (words[1][i] == 'o')
