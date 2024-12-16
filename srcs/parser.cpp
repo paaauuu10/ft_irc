@@ -14,7 +14,6 @@
 
 bool validCommand(Client *client, std::string str, std::string cmd)
 {
-
     int index = 0;
     std::string commands[17] = { "PASS", "NICK", "USER", "SERVER", "OPER", "QUIT", "SQUIT", "JOIN", "PART", "MODE", "TOPIC", "NAMES", "LIST", "INVITE", "KICK", "VERSION", "PRIVMSG"};
   /*  std::transform(cmd.begin(), cmd.end(), cmd.begin(), [](unsigned char c) {

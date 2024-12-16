@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:24:51 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/12 15:53:19 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/16 11:07:52 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,4 +169,53 @@ int	Server::start()
 
 int			Server::getPort(void) {return this->_port;}
 std::string	Server::getPass(void) {return this->_pass;}
+
+
+void Server::handleMode(Client *client, const std::string &channelName) {
+    std::ostringstream oss;
+
+    // Enviar respuesta 324: modos del canal
+    oss << ":" << this->_srvName << " 324 " << client->getNickname()
+        << " " << channelName << " +nt" << "\r\n";
+    std::string msg = oss.str();
+    send(client->getFd(), msg.c_str(), msg.size(), 0);
+
+    // Limpiar y reutilizar el flujo para el mensaje 329
+    oss.str("");
+    oss.clear();
+
+    oss << ":" << this->_srvName << " 329 " << client->getNickname()
+        << " " << channelName << " " << std::time(0) << "\r\n";
+    msg = oss.str();
+    send(client->getFd(), msg.c_str(), msg.size(), 0);
+}
+
+void Server::handleWho(Client *client, const std::string &channelName) {
+    // Obtener el canal
+    Channel *channel = this->getCheckChannel(channelName);
+    if (!channel) {
+        sendError(client, 403, "ERR_NOSUCHCHANNEL");
+        return;
+    }
+
+    // Iterar por los clientes del canal y enviar información 352
+    std::vector<Client*> clients = getClients();
+    for (std::vector<Client*>::iterator it = clients.begin(); it != clients.end(); ++it) {
+        Client *c = *it;
+        std::ostringstream oss;
+        oss << ":" << this->_srvName << " 352 " << client->getNickname()
+            << " " << channelName << " " << c->getUsername() << " "
+            << "127.0.0.1" << " " << this->_srvName << " "
+            << c->getNickname() << " H :0 " << c->getRealname() << "\r\n";
+        std::string msg = oss.str();
+        send(client->getFd(), msg.c_str(), msg.size(), 0);
+    }
+
+    // Enviar mensaje 315: End of WHO list
+    std::ostringstream oss;
+    oss << ":" << this->_srvName << " 315 " << client->getNickname()
+        << " " << channelName << " :End of WHO list" << "\r\n";
+    std::string msg = oss.str();
+    send(client->getFd(), msg.c_str(), msg.size(), 0);
+}
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   JOIN.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 09:55:32 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/12 16:32:21 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/16 10:35:54 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	JOIN(Client *client, std::string& args) {
 		std::string channelName = channels[i];
 		std::string key = (i < keys.size()) ? keys[i] : "";
 		
+		std::cout << "KEY VALUE == '" << "'.\n";
 		if (!isValidChannelName(channelName)) {
 			sendError(client, 403, "ERR_NOSUCHCHANNEL");
 			continue ;
@@ -50,13 +51,17 @@ void	JOIN(Client *client, std::string& args) {
 			// channel constructor puts the creator client to operator client;
 			channel = new Channel(channelName, key, client);
 			Server::getInstance().addChannel(channel);
+		} else {
+			if (channel->isKeyProtected() && !channel->checkKey(key)) {
+				sendError(client, 475, "ERR_BADCHANNELKEY"); // channelName
+				continue ;
 			}
-		else
+			if (channel->isFull()) {
+				sendError(client, 471, "ERR_CHANNELISFULL"); // channelName
+				continue ;
+			}
 			channel->addClient(client);
-		if (channel->isKeyProtected() && !channel->checkKey(key))
-			sendError(client, 475, "ERR_BADCHANNELKEY"); // channelName
-		if (channel->isFull())
-			sendError(client, 471, "ERR_CHANNELISFULL"); // channelName
+		}
         channel->broadcast(client);
 		channel->RPLTOPIC(client);
 		channel->RPL_NAMREPLY(client);

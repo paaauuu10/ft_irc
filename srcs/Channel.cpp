@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:58:33 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/12 15:51:37 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/16 11:54:52 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ std::string	Channel::getUserList() {
             names += " ";
         }
 	}
+	if (_clients.size() >= 1)
+		names += " ";
 	for (size_t i = 0; i < _clients.size(); ++i) {
 		names += _clients[i]->getNickname();
 		if (i != _clients.size() - 1) {
@@ -74,19 +76,19 @@ void	Channel::setMode(char mode, bool status, int value) {
 	std::cout << "Channel " << _name << " mode " << mode << " set to " << (status ? "ON" : "OFF") << ".\n";
 }
 
-bool	Channel::isKeyProtected() { 
+bool	Channel::isKeyProtected() {
 	return (getMode('k'));
-	}
+}
 
 bool	Channel::checkKey(const std::string &str) const {
-	return ((str.compare(_key)));
+	return (_key == str);
 }
 
 bool	Channel::isEmtpy() { return this->_clients.empty() ; }
 
 bool	Channel::isFull() { 
 	return ((this->_clients.size() + this->_operatorClients.size()) == static_cast<u_long>(this->_limit) ? true : false );
-	}
+}
 
 void	Channel::addClient(Client *client) { this->_clients.push_back(client); }
 
@@ -116,25 +118,52 @@ std::vector<int>	Channel::listFdClients() {
 	return (list);
 }
 
+void Channel::broadcast(Client *client) {
+    std::vector<int> fds = listFdClients();
+    std::ostringstream oss;
+
+    // Mensaje JOIN con el prefijo correcto
+    oss << ":" << client->getNickname() << "!" 
+        << client->getUsername() << "@127.0.0.1 JOIN :" 
+        << this->getName() << "\r\n";
+
+    std::string msg = oss.str();
+
+    // Enviar a todos los clientes del canal
+    for (size_t i = 0; i < fds.size(); ++i) {
+        send(fds[i], msg.c_str(), msg.size(), 0);
+    }
+}
+
+
+/*
 void	Channel::broadcast(Client *client) {
 	//:<servidor> JOIN <cliente> <canal>
 	
 	std::vector<int> fds = listFdClients();
 	std::ostringstream oss;
 
-	oss << ":" << Server::getServerName() << " JOIN "
+	oss << ":" << Server::getServerName() << " JOIN :"
 		<< client->getNickname() << " " << this->getName()
-		<< "\n";
+		<< "\r\n";
 		
 	std::string msg = oss.str();
-	
+	//:<server_name> JOIN :#canal1
+	std::ostringstream ossOwn;
+
+	ossOwn << ":" << Server::getServerName() << " JOIN :"
+		<< this->getName() << "\r\n";
+	std::string msgOwn = ossOwn.str();
+
 	for (size_t i = 0; i < fds.size(); ++i) {
-		if (fds[i] == client->getFd())
+		if (fds[i] == client->getFd()) {
+			send(fds[i], msgOwn.c_str(), msgOwn.size(), 0);
 			continue ;
+		}
 		std::cout << "FD  == " << fds[i] << std::endl;
 		send(fds[i], msg.c_str(), msg.size(), 0);
 	}
-}
+}*/
 
 void	Channel::RPLTOPIC(Client *client) {
 	std::ostringstream oss;
@@ -164,7 +193,7 @@ void	Channel::RPL_NAMREPLY(Client *client) {
 	oss.clear();
 	oss << ":" << Server::getServerName() << " " << 366 << " "
 		<< client->getNickname() << " " << this->getName()
-		<< " :End of NAMES list." << "\n";
+		<< " :End of NAMES list." << "\r\n";
 	msg = oss.str();
     send(client->getFd(), msg.c_str(), msg.size(), 0);
 }

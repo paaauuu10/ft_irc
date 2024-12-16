@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 12:00:38 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/12 15:51:55 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/16 10:54:11 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "Channel.hpp"
 
 Client::Client(void)
-	: _fd(-1), _username(""), _nickname(""), _logged(false),
+	: _fd(-1), _username(""), _nickname(""), _hostname(""), _logged(false),
 	_isRegistered(false), _buffer("") {
 	
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:20:37 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/12 16:36:29 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/16 11:08:23 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,10 @@
 #include <poll.h>
 #include <cstdlib>
 #include <algorithm>
+#include <ctime>
 #include <limits.h>
 #include "Utils.hpp"
+
 
 class Client;
 class Channel;
@@ -76,7 +78,9 @@ class Server
 		void				addChannel(Channel *channel);
 		Client 				*getClientBySocket(int fd);
 		Channel				*getCheckChannel(const std::string &name);
-		std::vector<Client *>	getClients(void);	
+		std::vector<Client *>	getClients(void);
+		void				handleMode(Client *client, const std::string &channelName);
+		void				handleWho(Client *client, const std::string &channelName);
 		static std::string	getServerName() {
 			return _srvName;
 		}
