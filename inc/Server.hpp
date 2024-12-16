@@ -6,7 +6,7 @@
 /*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:20:37 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/13 12:15:23 by pborrull         ###   ########.fr       */
+/*   Updated: 2024/12/16 10:21:19 by pborrull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,10 +83,11 @@ class Server
 };
 
 void 	parser(Client *client, std::string str);
-void parsingbuffer(char *buffer, Client *client);
+void	parsingbuffer(char *buffer, Client *client);
 void	JOIN(Client *client, const std::string& args);
 void	PASS(Client *client, std::string pass);
 void	USER(Client *client, std::string pass);
 void	NICK(Client *client, std::string &nickname);
+void 	PRIVMSG(Client *sender, std::string &value);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 10:31:53 by pbotargu          #+#    #+#             */
-/*   Updated: 2024/12/13 11:04:59 by pborrull         ###   ########.fr       */
+/*   Updated: 2024/12/16 09:58:18 by pborrull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ bool validCommand(Client *client, std::string str, std::string cmd)
 			std::cout << commands[index - 1] << std::endl;
 			break;
 		case 17:
+			PRIVMSG(client, value);
 			std::cout << commands[index - 1] << std::endl;
 			break;
 	}
