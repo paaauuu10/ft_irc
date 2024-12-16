@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 11:12:30 by pbotargu          #+#    #+#             */
-/*   Updated: 2024/12/16 11:19:52 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/16 12:18:24 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	USER(Client *client, std::string pass)
     std::vector<std::string> words = split(pass, ' ');
     if (words.size() < 4)
     {
-        std::cout << "No hay los parametros necesarios" << std::endl;
+        std::cout << "No hay los parametros necesarios" << std::endl; //revisar el missatge error!!!
         return ;
         //send error
     }
@@ -99,7 +99,7 @@ void	USER(Client *client, std::string pass)
 "                                   `:.:' \n";
 
         send(client->getFd(), response.c_str(), response.size(), 0);
-        send(client->getFd(), pikachu_art.c_str(), pikachu_art.size(), 0);
+        //send(client->getFd(), pikachu_art.c_str(), pikachu_art.size(), 0);
 
     }
 }

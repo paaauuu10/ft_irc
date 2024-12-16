@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   NICK.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 11:47:10 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/12 15:57:09 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/16 12:18:08 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include <iostream>
 #include <set>
 
-static int checkNickname(std::string &nickname)
+int checkNickname(std::string &nickname)
 {
 	
 	std::vector<Client *>	vclient = Server::getInstance().getClients();
@@ -120,7 +120,7 @@ void	NICK(Client *client, std::string &nickname)
 			"                                   `:.:' \n";
 
 			send(client->getFd(), response.c_str(), response.size(), 0);
-			send(client->getFd(), pikachu_art.c_str(), pikachu_art.size(), 0);
+			//send(client->getFd(), pikachu_art.c_str(), pikachu_art.size(), 0);
 
 		}
 	}

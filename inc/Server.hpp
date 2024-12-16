@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:20:37 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/16 11:08:23 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/16 12:16:36 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,19 +51,20 @@ class Server
 		std::vector<Channel *>			_channels;
 		std::vector<Client *>			_clients;
 		
-		Server() : _port(6667), _pass("default") {}
 		// Server(int port, const std::string &pass)
 		// 	: _port(port), _pass(pass) {
 		// 		if (port < 1024 || port > 49151)
 		// 			throw std::invalid_argument("Invalid port number");
 		// 	};
-		~Server();
+		
 
 		// !!!!!  HACER PARA EVITAR LA COPIA!!!!!
-		Server(const Server &src);
-		Server	&operator=(const Server *src);
 
 	public:
+		Server() : _port(6667), _pass("default") {}
+		Server(const Server &src);
+		Server	&operator=(const Server *src);
+		~Server();
 		static Server	&getInstance() {
 			return (instance);
 		}
@@ -87,10 +88,13 @@ class Server
 };
 
 void 	parser(Client *client, std::string str);
-void parsingbuffer(char *buffer, Client *client);
+void 	parsingbuffer(char *buffer, Client *client);
+void	JOIN(Client *client, const std::string& args);
 void	PASS(Client *client, std::string pass);
 void	USER(Client *client, std::string pass);
 void	NICK(Client *client, std::string &nickname);
-void	JOIN(Client *client, std::string& args);
+void	INVITE(Client *client, std::string &invitation);
+void	MODE(Client *client, std::string str);
+
 
 #endif

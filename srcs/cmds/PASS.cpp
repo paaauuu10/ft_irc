@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PASS.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:57:43 by pbotargu          #+#    #+#             */
-/*   Updated: 2024/12/12 15:57:46 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/16 12:18:16 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	PASS( Client *client, std::string pass)
         sendError(client, 464, "Password incorrect"); //ERR_PASSWDMISMATCH
 	else if (clean_pass == password) {
         std::string response = "Correct Password! Welcome to ft_irc!\r\n";
+        std::cout << "Client's FD --> " << client->getFd() << std::endl;
         send(client->getFd(), response.c_str(), response.size(), 0);
         client->setLogged(true);
     }
