@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 19:44:07 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/17 14:12:33 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/17 16:43:42 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static void	reviewChannels(std::vector<std::string> &old) {
 		std::cout << "STR ==> " << filtered[i] << std::endl;
 }
 
-static std::vector<std::string>	extractUsers(std::vector<std::string> &tokens) {
+/*static std::vector<std::string>	extractUsers(std::vector<std::string> &tokens) {
 	std::vector<std::string>	filteredTokens;
 	std::string					users;
 	
@@ -73,7 +73,19 @@ static std::vector<std::string>	extractUsers(std::vector<std::string> &tokens) {
 	if (users.empty())
 		return std::vector<std::string> ();
 	return split(users, ',');
-	
+}*/
+
+static std::vector<std::string> extractUsers(std::vector<std::string> &tokens) {
+    std::vector<std::string> users;
+
+    for (size_t i = 0; i < tokens.size(); ++i) {
+        if (tokens[i][0] != '#' && tokens[i][0] != '&' && tokens[i][0] == ':') {
+        	users = split(tokens[i], ',');
+            break;
+        }
+    }
+
+    return users;
 }
 
 static std::string extractReason(std::vector<std::string> &tokens) {
@@ -91,6 +103,16 @@ static std::string extractReason(std::vector<std::string> &tokens) {
 
     tokens = filteredTokens;
     return (reason.empty() ? "No reason specified" : reason) ;
+	/*std::string reason;
+
+    for (size_t i = 0; i < tokens.size(); ++i) {
+        if (tokens[i][0] != '#' && tokens[i][0] != '&' && tokens[i].find(',') == std::string::npos) {
+            reason = tokens[i];
+            break;
+        }
+    }
+
+    return (reason.empty() ? "No reason specified" : reason);*/
 }
 
 
@@ -106,7 +128,7 @@ static std::string	makeBroadcastMessage(Client *client, std::string &channelName
 	return (oss.str());
 }
 
-	// <channel>{,<channel>} <user>{,<user>} [<comment>]
+// KICK <channel>{,<channel>}  <user>{,<user>} [<comment>]
 
 
 void	KICK(Client *client, std::string &args) {
@@ -128,9 +150,6 @@ void	KICK(Client *client, std::string &args) {
 	} else 
 		channels = split(tokens[0], ',');
 	reviewChannels(channels);
-	//std::vector<std::string>	users = (tokens.size() > 1)
-	//	? split(tokens[1], ',')
-	//	: std::vector<std::string>();
 	
 	for (size_t i = 0; i < channels.size(); ++i) {
 		std::string channelName = channels[i];
@@ -146,13 +165,16 @@ void	KICK(Client *client, std::string &args) {
 			sendError(client, 482, "ERR_CHANOPRIVSNEEDED");
 			continue ;
 		}
+		if (userToKick.empty()) {
+			sendError(client, 482, "ERR_NEEDMOREPARAMS - No user specified for channel " + channelName);
+			continue ;
+		}
 		// checkear si han introducido user o si el user to kick no se encuentra en el canal
 		Client *toKick = channel->checkClient(userToKick);
 		if (!toKick) {
 			sendError(client, 442, "ERR_NOTONCHANNEL");
 			continue ;
 		}
-		
 		// sends message priv
 		        // Notify the channel about the kick
         std::string msg = makeBroadcastMessage(client, channelName, userToKick, reason);
@@ -160,9 +182,6 @@ void	KICK(Client *client, std::string &args) {
         channel->broadcast(client, msg); // Sends message to all clients in the channel
 		// rm client of channel
         channel->rmClient(toKick);
-
-		// OJITO CUIDAO
-		// HEXCHAT MANDA ==> KICK #canal1 #canal2 :asier2
 	}
 }
 
