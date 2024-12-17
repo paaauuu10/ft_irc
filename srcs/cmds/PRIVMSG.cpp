@@ -6,7 +6,7 @@
 /*   By: pborrull <marvin@42.fr>					+#+  +:+	   +#+		*/
 /*												+#+#+#+#+#+   +#+		   */
 /*   Created: 2024/12/09 12:22:54 by pborrull		  #+#	#+#			 */
-/*   Updated: 2024/12/17 10:21:35 by pborrull         ###   ########.fr       */
+/*   Updated: 2024/12/17 10:45:06 by pborrull         ###   ########.fr       */
 /*																			*/
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void PRIVMSG(Client *sender, std::string &value)
 		if (target == NULL && ctarget == NULL)
 		{
 			std::string errorMsg = targets[0] + " :No such nick/channel\r\n";
-			sendError(sender, 401, errorMsg.c_str(), 0);
+			sendError(sender, 401, errorMsg.c_str());
 		}
 	}
 }
