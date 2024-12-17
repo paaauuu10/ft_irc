@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 11:47:10 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/16 12:27:59 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/17 10:57:04 by pborrull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	NICK(Client *client, std::string &nickname)
 		}
 		else
 		{
-			str = client->getNickname() + " changed his nickname to " + nick + ".\n";	
+			str = ":" + client->getNickname() + " NICK :" + nick + "\n";	
 			send(client->getFd(), str.c_str(), str.size(), 0);
 		}
 		client->setNickname(nick);
