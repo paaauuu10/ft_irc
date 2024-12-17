@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 09:55:32 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/16 10:35:54 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/17 10:27:33 by pborrull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ void	JOIN(Client *client, std::string& args) {
 		std::string channelName = channels[i];
 		std::string key = (i < keys.size()) ? keys[i] : "";
 		
-		std::cout << "KEY VALUE == '" << "'.\n";
 		if (!isValidChannelName(channelName)) {
 			sendError(client, 403, "ERR_NOSUCHCHANNEL");
 			continue ;
