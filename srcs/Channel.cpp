@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:58:33 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/16 17:19:20 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/17 13:51:52 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,6 +188,7 @@ void	Channel::broadcast(Client *client) {
 void	Channel::RPLTOPIC(Client *client) {
 	std::ostringstream oss;
 	
+	// :<servername> 331/332 <nickname> <username> : <topic or no topic is set>
 	oss << ":" << Server::getServerName() << " " << ((this->_topic.empty()) ? 331 : 332)
 		<< " " << client->getNickname() << " " << this->getName() << " :"
 		<< ((this->_topic.empty()) ? "No topic is set" : this->_topic)
@@ -199,7 +200,7 @@ void	Channel::RPLTOPIC(Client *client) {
 void	Channel::RPL_NAMREPLY(Client *client) {
 	std::string	list = this->getUserList();
 
-	//:<servidor> 353 <cliente> = <canal> :<nicks>
+	//:<servidor> 353 <cliente> = <canal> :<nicks>,{<nick>}
 	std::ostringstream oss;
 
 	oss << ":" << Server::getServerName() << " " << 353 << " "

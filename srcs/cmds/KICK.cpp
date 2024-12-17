@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   KICK.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 19:44:07 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/16 17:19:52 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/17 14:12:33 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,68 @@
            ERR_BADCHANMASK                 ERR_CHANOPRIVSNEEDED
            ERR_NOTONCHANNEL*/
 
-static std::string	makeBroadcastMessage(Client *client, std::string &channelName, std::string &userToKick, std::string &reason) {
-	std::ostringstream oss;
+static void	reviewChannels(std::vector<std::string> &old) {
+	std::vector<std::string> filtered;
 
-    // Mensaje JOIN con el prefijo correcto
+	for (size_t i = 0; i < old.size(); ++i) {
+        bool isDuplicate = false;
+
+        for (size_t j = 0; j < filtered.size(); ++j) {
+            if (filtered[j] == old[i]) {
+                isDuplicate = true;
+                break;
+            }
+        }
+
+        if (!isDuplicate) {
+            filtered.push_back(old[i]);
+        }
+    }
+	old = filtered;
+	for (size_t i = 0; i < filtered.size(); ++i)
+		std::cout << "STR ==> " << filtered[i] << std::endl;
+}
+
+static std::vector<std::string>	extractUsers(std::vector<std::string> &tokens) {
+	std::vector<std::string>	filteredTokens;
+	std::string					users;
+	
+	for (size_t i= 0; i < tokens.size(); ++i) {
+		if (tokens[i][0] == '#' || tokens[i][0] == '&')
+			filteredTokens.push_back(tokens[i]);
+		else {
+			if (users.empty())
+				users = tokens[i];
+		}
+	}
+	if (users.empty())
+		return std::vector<std::string> ();
+	return split(users, ',');
+	
+}
+
+static std::string extractReason(std::vector<std::string> &tokens) {
+    std::string reason;
+    std::vector<std::string> filteredTokens;
+
+    for (size_t i = 0; i < tokens.size(); ++i) {
+        if (tokens[i][0] == '#' || tokens[i][0] == '&' || tokens[i].find_first_not_of(",") == 0) {
+            filteredTokens.push_back(tokens[i]);
+        } else {
+            if (reason.empty())
+                reason = tokens[i];
+        }
+    }
+
+    tokens = filteredTokens;
+    return (reason.empty() ? "No reason specified" : reason) ;
+}
+
+
+static std::string	makeBroadcastMessage(Client *client, std::string &channelName, std::string &userToKick, std::string &reason) {
+	
+	std::ostringstream oss;
+	
 	// :<nickname>!<username>@<hostname> JOIN :<channelName>\r\n
     oss << ":" << client->getNickname() << "!" << client->getUsername()
         << "@" << "127.0.0.1" << " KICK " << channelName << " "
@@ -48,24 +106,35 @@ static std::string	makeBroadcastMessage(Client *client, std::string &channelName
 	return (oss.str());
 }
 
+	// <channel>{,<channel>} <user>{,<user>} [<comment>]
+
+
 void	KICK(Client *client, std::string &args) {
 	if (args.empty())
 		sendError(client, 461, "ERR_NEEDMOREPARAMS");
-	// <channel>{,<channel>} <user>{,<user>} [<comment>]
+		
 	std::vector<std::string>	tokens = split(args, ' ');
+	
 	if (tokens.size() < 2) // for check channels and users minim
 		sendError(client, 461, "ERR_NEEDMOREPARAMS");
-		
-	std::vector<std::string>	channels = split(tokens[0], ',');
-	std::vector<std::string>	users = (tokens.size() > 1)
-		? split(tokens[1], ',')
-		: std::vector<std::string>();
-		
-	std::string reason = (tokens.size() > 2) ? tokens[2] : "No reason specified";
+	
+	std::string reason = extractReason(tokens);
+	std::vector<std::string> users = extractUsers(tokens);
+	
+	std::vector<std::string> channels;
+	if (tokens.size() > 1) { // hay doble str de canales, uno del cliente y otro de hexchat
+		std::string channelsJoin = tokens[0] + ',' + tokens[1];
+		channels = split(channelsJoin, ',');
+	} else 
+		channels = split(tokens[0], ',');
+	reviewChannels(channels);
+	//std::vector<std::string>	users = (tokens.size() > 1)
+	//	? split(tokens[1], ',')
+	//	: std::vector<std::string>();
 	
 	for (size_t i = 0; i < channels.size(); ++i) {
 		std::string channelName = channels[i];
-		std::string userToKick = (i < users.size()) ? users[i] : "";
+		std::string userToKick = (i < users.size() && !users[i].empty()) ? users[i] : "";
 		
 		Channel *channel = Server::getInstance().getCheckChannel(channelName);
 
@@ -91,6 +160,63 @@ void	KICK(Client *client, std::string &args) {
         channel->broadcast(client, msg); // Sends message to all clients in the channel
 		// rm client of channel
         channel->rmClient(toKick);
+
+		// OJITO CUIDAO
+		// HEXCHAT MANDA ==> KICK #canal1 #canal2 :asier2
 	}
 }
+
+/* void	KICK(Client *client, std::string &args) {
+	if (args.empty())
+		sendError(client, 461, "ERR_NEEDMOREPARAMS");
+		
+	// <channel>{,<channel>} <user>{,<user>} [<comment>]
+	std::vector<std::string>	tokens = split(args, ' ');
+	
+	if (tokens.size() < 2) // for check channels and users minim
+		sendError(client, 461, "ERR_NEEDMOREPARAMS");
+	
+	
+		
+	std::vector<std::string>	channels = split(tokens[0], ',');
+	reviewChannels(channels);
+	std::vector<std::string>	users = (tokens.size() > 1)
+		? split(tokens[1], ',')
+		: std::vector<std::string>();
+		
+	std::string reason = (tokens.size() > 2) ? tokens[2] : "No reason specified";
+	
+	for (size_t i = 0; i < channels.size(); ++i) {
+		std::string channelName = channels[i];
+		std::string userToKick = (i < users.size() && !users[i].empty()) ? users[i] : "";
+		
+		Channel *channel = Server::getInstance().getCheckChannel(channelName);
+
+		if (!channel) {
+			sendError(client, 403, "ERR_NOSUCHCHANNEL");
+			continue ;
+		}
+		if (!channel->checkOperatorClient(client)) {
+			sendError(client, 482, "ERR_CHANOPRIVSNEEDED");
+			continue ;
+		}
+		// checkear si han introducido user o si el user to kick no se encuentra en el canal
+		Client *toKick = channel->checkClient(userToKick);
+		if (!toKick) {
+			sendError(client, 442, "ERR_NOTONCHANNEL");
+			continue ;
+		}
+		
+		// sends message priv
+		        // Notify the channel about the kick
+        std::string msg = makeBroadcastMessage(client, channelName, userToKick, reason);
+
+        channel->broadcast(client, msg); // Sends message to all clients in the channel
+		// rm client of channel
+        channel->rmClient(toKick);
+
+		// OJITO CUIDAO
+		// HEXCHAT MANDA ==> KICK #canal1 #canal2 :asier2
+	}
+} */
 

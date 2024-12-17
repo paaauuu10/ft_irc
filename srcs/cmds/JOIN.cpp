@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 09:55:32 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/16 15:21:34 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/17 13:00:10 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "Client.hpp"
 #include "Channel.hpp"
 
-//JOIN <channel1>{,<channel2>} [<key1>{,<key2>}]
+//JOIN  <channel1>{,<channel2>} [<key1>{,<key2>}]
 
 static bool isValidChannelName(std::string &name) {
 	if (name[0] == '#' || name[0] == '&')
