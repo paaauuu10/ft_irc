@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 11:47:10 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/17 10:57:04 by pborrull         ###   ########.fr       */
+/*   Updated: 2024/12/17 11:32:38 by pborrull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,12 @@ void	NICK(Client *client, std::string &nickname)
 	if (nick.empty())	
 		sendError(client, 431, "No nickname given", client->getNickname()); //ERR_NONICKNAMEGIVEN
 	else if (validateNick(nick))
-		sendError(client, 432, "Erroneous nickname", client->getNickname()); //ERR_ERRONEUSNICKNAME
+		sendError(client, 432, "Erroneous nickname", client->getNickname() + " " + nick); //ERR_ERRONEUSNICKNAME
+		//sendError(client, 432, "Erroneous nickname", client->getNickname()); //ERR_ERRONEUSNICKNAME
 	else if (!client->getNickname().empty() && nick == client->getNickname())
-		sendError(client, 436, "Nickname collision KILL", client->getNickname()); //ERR_NICKCOLLISION
+		sendError(client, 436, "Nickname collision KILL", client->getNickname() + " " + nick); //ERR_NICKCOLLISION
 	else if (checkNickname(nick))
-		sendError(client, 433, "Nickname is already in use", client->getNickname()); //ERR_NICKNAMEINUSE
+		sendError(client, 433, "Nickname is already in use", client->getNickname() + " " + nick); //ERR_NICKNAMEINUSE
 	else
 	{
 		std::string str = "";
