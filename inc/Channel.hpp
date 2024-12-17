@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbotargu <pbotargu@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 12:08:38 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/16 18:37:22 by pbotargu         ###   ########.fr       */
+/*   Updated: 2024/12/17 11:43:36 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,14 @@ class Channel {
 		std::string	getName();
 		bool		getMode(char key);
 		std::string	getUserList();
+		bool		getOperatorList(std::string nickname);
 
 		// Setters
 
 		// Of course is not the definitive function
 		void	setMode(char mode, bool status, int value);
 		void	setKey(std::string str);
+		void	setLimit(int limit);
 
 		
 		// Methods

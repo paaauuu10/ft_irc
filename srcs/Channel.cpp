@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbotargu <pbotargu@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:58:33 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/16 18:37:49 by pbotargu         ###   ########.fr       */
+/*   Updated: 2024/12/17 11:44:27 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,18 @@ bool		Channel::getMode(char key) {
     return false;
 }
 
+bool	Channel::getOperatorList(std::string nickname) {
+	std::string	names;
+	for (size_t i = 0; i < _operatorClients.size(); ++i) {
+		names += _operatorClients[i]->getNickname();
+		if (i != _operatorClients.size() - 1) {
+            names += " ";
+        }
+	}
+	if (names.find(nickname))
+		return false;
+	return true;	
+}
 std::string	Channel::getUserList() {
 	std::string	names;
 	for (size_t i = 0; i < _operatorClients.size(); ++i) {
@@ -78,6 +90,10 @@ void	Channel::setMode(char mode, bool status, int value) {
 
 void	Channel::setKey(std::string str){
 	this->_key = str;
+}
+
+void	Channel::setLimit(int limit){
+	this->_limit = limit;
 }
 
 
