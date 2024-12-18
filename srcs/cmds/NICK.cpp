@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 11:47:10 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/16 12:27:59 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/18 16:07:32 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,10 @@ static int validateNick(std::string &nick)
 
 void	NICK(Client *client, std::string &nickname)
 {
+	std::cout << "--> " << nickname << std::endl;
 	std::vector<std::string> words = split(nickname, ' ');
 	std::string nick = words[0];
-	while(nick[0] == ' ')
+	while (nick[0] == ' ')
 		nick.erase(0, 1);
 	if (nick.empty())	
 		sendError(client, 431, "No nickname given", client->getNickname()); //ERR_NONICKNAMEGIVEN

@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:58:33 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/17 13:51:52 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/18 15:30:13 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,8 +116,8 @@ void	Channel::rmClient(Client *client) {
 		if (_clients[i]->getUsername() == client->getUsername())
 			delete _clients[i];
 	}
-	if (_clients.empty())
-		delete this;
+	//if (_clients.empty())
+	//	delete this;
 }
 
 std::vector<int>	Channel::listFdClients() {
