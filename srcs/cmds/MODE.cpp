@@ -6,7 +6,7 @@
 /*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 12:22:51 by pbotargu          #+#    #+#             */
-/*   Updated: 2024/12/17 12:02:28 by pbotargu         ###   ########.fr       */
+/*   Updated: 2024/12/17 14:30:02 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,9 @@ void	MODE(Client *client, std::string str)
                 }
                 if (words[1][i] == 'o')
                 {
-                    //Give chanel operator
-                    //channel->setMode(words[1][i], false, 0);
-                    //channel->_operatorClients->deleteClientOperator(words[2]);
+                    //Delete chanel operator
+                    Client *clientO = Server::getInstance().getClientByNickname(words[2]);
+                    channel->removeOperatorClient(clientO);
                     if (words.size() < 3)
                     {
                         sendError(client, 461, "Not enough parameters\n"); //ERR_NEEDMOREPARAMS
@@ -94,7 +94,8 @@ void	MODE(Client *client, std::string str)
                 if (words[1][i] == 'o')
                 {
                     //Give chanel operator
-                    //channel->addOperatorClient(getClient(words[2]));
+                    Client *clientO = Server::getInstance().getClientByNickname(words[2]);
+                    channel->addOperatorClient(clientO);
                     std::cout << "El cliente " << words[2] << " ha sido asigando como operador del canal!" << std::endl;
                 }
                 if (words[1][i] == 'l')
