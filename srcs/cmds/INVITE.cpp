@@ -6,7 +6,7 @@
 /*   By: pbotargu <pbotargu@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 13:51:35 by pborrull          #+#    #+#             */
-/*   Updated: 2024/12/19 12:22:37 by pborrull         ###   ########.fr       */
+/*   Updated: 2024/12/19 12:41:58 by pborrull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,16 +55,17 @@ void		INVITE(Client *client, std::string &invitation)
 	else if (!channel)
 		sendError(client, 403, "No such channel"); //ERR_NOSUCHCHANNEL
 	else if (channel->getClientList(words[0])) //Falta fer-la
-		std::cout << "is already on channel" << channel->getName() << std::endl;
-		//sendError(client, 443, "is already on channel <channel name>"); //ERR_USERONCHANNEL
+		sendError(client, 443, "is already on channel <channel name>"); //ERR_USERONCHANNEL
 	else if (!channel->getOperatorList(client->getNickname()))
-		std::cout << "You don't have channel operator privileges" << std::endl;
-		//sendError(client, 482, "You don't have channel operator privileges"); //ERR_CHANOPRIVSNEEDED
+		sendError(client, 482, "You don't have channel operator privileges"); //ERR_CHANOPRIVSNEEDED
 	else
 	{
 		channel->addClientsInvited(words[0]);
 		std::cout << client->getNickname() << " is inviting you to " << channel->getName() << std::endl;
-		//sendError(client, 341, "Client is inviting you to #<channel>"); //
+		//sendError(client, 341, "Client is inviting you to #<channel>");
+	std::ostringstream oss;
+    oss << channel->getName() << " " << words[0] << "\r\n";
+    std::string msg = oss.str();
+    send(client->getFd(), msg.c_str(), msg.size(), 0);
 	}
-		
 }
