@@ -6,7 +6,7 @@
 /*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 10:31:53 by pbotargu          #+#    #+#             */
-/*   Updated: 2024/12/17 10:27:13 by pborrull         ###   ########.fr       */
+/*   Updated: 2024/12/19 13:06:08 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ static bool validCommand(Client *client, std::string str, std::string cmd)
 	//"SERVER", "OPER""QUIT", "SQUIT", "NAMES", "LIST", "VERSION","PART",
     int index = 0;
     std::string commands[10] = { "PASS", "NICK", "USER", "JOIN", "MODE", "TOPIC", "INVITE", "KICK", "PRIVMSG"};
-   	if (!client->getLogged() && cmd != "PASS") {	
+   	if (!client->getLogged() && cmd != "PASS") {
+		std::string server = Server::getInstance().getServerName();
 		std::string response = ":" + server + " 451 :You have not registered\r\n"; //ERR_NOTREGISTERED
 		send(client->getFd(), response.c_str(), response.size(), 0);
 		return true;
