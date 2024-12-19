@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   USER.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 11:12:30 by pbotargu          #+#    #+#             */
-/*   Updated: 2024/12/16 12:18:24 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/19 11:36:09 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,7 @@ void	USER(Client *client, std::string pass)
         return ;
     std::vector<std::string> words = split(pass, ' ');
     if (words.size() < 4)
-    {
-        std::cout << "No hay los parametros necesarios" << std::endl; //revisar el missatge error!!!
-        return ;
-        //send error
-    }
+        return (sendError(client, 461, "Not enought parameters")); //revisar codi d'error  i missatge!!!    
     //username es unic? en cas que si cal revisar si ja existeix o no. Mirar si el client ja esta registrat?
     if (!checkUser(words[0]))
     {    
