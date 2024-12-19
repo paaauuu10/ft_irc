@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:20:37 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/16 12:31:54 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/19 12:24:33 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,11 +81,14 @@ class Server
 void 	parser(Client *client, std::string str);
 void 	parsingbuffer(char *buffer, Client *client);
 void	JOIN(Client *client, std::string& args);
+void	KICK(Client *client, std::string& args);
+void	TOPIC(Client *client, std::string& args);
 void	PASS(Client *client, std::string pass);
 void	USER(Client *client, std::string pass);
 void	NICK(Client *client, std::string &nickname);
 void	INVITE(Client *client, std::string &invitation);
 void	MODE(Client *client, std::string str);
+
 
 void 	PRIVMSG(Client *sender, std::string &value);
 
