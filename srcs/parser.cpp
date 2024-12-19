@@ -18,7 +18,12 @@ static bool validCommand(Client *client, std::string str, std::string cmd)
     std::string commands[17] = { "PASS", "NICK", "USER", "SERVER", "OPER", "QUIT", "SQUIT", "JOIN", "PART", "MODE", "TOPIC", "NAMES", "LIST", "INVITE", "KICK", "VERSION", "PRIVMSG"};
    	if (!client->getLogged() && cmd != "PASS")
 	{	
-		sendError(client, 1, "No logged, put the password PASS <password>");
+		sendError(client, 1, "No logged, put the password PASS <password>"); //revisar aquest error!
+		return true;
+	}
+	if (client->getLogged() && cmd == "PASS")
+	{
+		sendError(client, 462, "You may not reregister"); //ERR_NEEDMOREPARAMS
 		return true;
 	}
 	if (!client->getRegistered() && cmd != "USER" && cmd != "NICK" && client->getLogged())
