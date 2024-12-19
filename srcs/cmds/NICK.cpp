@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   NICK.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 11:47:10 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/19 11:34:18 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/19 10:46:24 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	NICK(Client *client, std::string &nickname)
 	std::cout << "--> " << nickname << std::endl;
 	std::vector<std::string> words = split(nickname, ' ');
 	if (words.empty())
-		return (sendError(client, 431, "No nickname given", client->getNickname()));
+		return (sendError(client, 431, "ERR_NONICKNAMEGIVEN", client->getNickname())); //ERR_NONICKNAMEGIVEN
 	std::string nick = words[0];
 	while (nick[0] == ' ')
 		nick.erase(0, 1);

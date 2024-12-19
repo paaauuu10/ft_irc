@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:20:37 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/19 12:24:33 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/17 12:29:00 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ class Server
 		std::string			getPass(void);
 		void				addChannel(Channel *channel);
 		Client 				*getClientBySocket(int fd);
+		Client				*getClientByNickname(std::string nickname);
 		Channel				*getCheckChannel(const std::string &name);
 		std::vector<Client *>	getClients(void);
 		void				handleMode(Client *client, const std::string &channelName);

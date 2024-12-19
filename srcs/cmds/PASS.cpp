@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PASS.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:57:43 by pbotargu          #+#    #+#             */
-/*   Updated: 2024/12/16 12:18:16 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/19 11:37:01 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,21 +16,21 @@ void	PASS( Client *client, std::string pass)
 {
    	std::string password = Server::getInstance().getPass(); // We get PASS from Server
     std::string clean_pass = pass.substr(pass.find(' ') + 1); // Delete initial space
-    
+    std::string server =  Server::getInstance().getServerName();
+    std::string response;
 	while (!clean_pass.empty() && ((clean_pass[clean_pass.size() - 1]) == '\n'
 		|| (clean_pass[clean_pass.size() - 1]) == '\r'))
 		clean_pass.erase(clean_pass.size() -1);
 
 	if (pass.empty())
-        sendError(client, 461, "Not enough parameters", pass); //ERR_NEEDMOREPARAMS
+        response = ":" + server + " 461 :Not enought parameters\r\n"; //ERR_NEEDMOREPARAMS
     else if (client->getLogged() == true)
-	    sendError(client, 462, "Unauthorized command (already registered)"); //ERR_ALREADYREGISTRED
+        response = ":" + server + " 462 :You may not reregister\r\n"; //ERR_ALREADYREGISTRED 
     else if (clean_pass != password)
-        sendError(client, 464, "Password incorrect"); //ERR_PASSWDMISMATCH
+        response = ":" + server + " 464 :Password incorrect\r\n"; //ERR_PASSWDMISMATCH
 	else if (clean_pass == password) {
-        std::string response = "Correct Password! Welcome to ft_irc!\r\n";
-        std::cout << "Client's FD --> " << client->getFd() << std::endl;
-        send(client->getFd(), response.c_str(), response.size(), 0);
+        response = "Correct Password!\r\n";
         client->setLogged(true);
     }
+    send(client->getFd(), response.c_str(), response.size(), 0);
 }

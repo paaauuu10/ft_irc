@@ -16,10 +16,15 @@ static bool validCommand(Client *client, std::string str, std::string cmd)
 {
 	//"SERVER", "OPER""QUIT", "SQUIT", "NAMES", "LIST", "VERSION","PART",
     int index = 0;
-    std::string commands[17] = { "PASS", "NICK", "USER", "JOIN", "MODE", "TOPIC", "INVITE", "KICK", "PRIVMSG"};
-   	if (!client->getLogged() && cmd != "PASS")
-	{	
-		sendError(client, 1, "No logged, put the password PASS <password>");
+    std::string commands[10] = { "PASS", "NICK", "USER", "JOIN", "MODE", "TOPIC", "INVITE", "KICK", "PRIVMSG"};
+   	if (!client->getLogged() && cmd != "PASS") {	
+		std::string response = ":" + server + " 451 :You have not registered\r\n"; //ERR_NOTREGISTERED
+		send(client->getFd(), response.c_str(), response.size(), 0);
+		return true;
+	}
+	if (client->getLogged() && cmd == "PASS")
+	{
+		sendError(client, 462, "You may not reregister"); //ERR_NEEDMOREPARAMS
 		return true;
 	}
 	if (!client->getRegistered() && cmd != "USER" && cmd != "NICK" && client->getLogged())
