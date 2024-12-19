@@ -18,18 +18,6 @@
 // 461: Parámetros insuficientes.
 // 482: Cliente no es administrador.
 
-// KICK <channel>{,<channel>} <user>{,<user>} [<comment>] 
-// KICK #test1,#test2 Alice,dan :Razón de kick 
-// kick alice de test1 y a dan de test2
-// KICK #test alice :dan
-// For example, if dan, alice, and matthew are on channel #v4, and dan kicks
-// matthew, all three clients will receive a KICK message indicating that dan
-// has removed matthew from the channel.
-
-// fd from poll is for identify the channel and the client in the channel 
-// for expulse, and notificate the others clients in channel
-// Only a channel operator may kick another user out of a  channel.
-
 /*   Numeric Replies:
 
            ERR_NEEDMOREPARAMS              ERR_NOSUCHCHANNEL
@@ -101,7 +89,7 @@ static std::string	makeBroadcastMessage(Client *client, const std::string &chann
 // KICK #canal1 asier2 :hola y adios
 // ERR_NOSUCHNICK (401)
 
-void	KICK(Client *client, std::string &args) {
+void	kick(Client *client, std::string &args) {
 	if (args.empty()) {
 		sendError(client, 461, "ERR_NEEDMOREPARAMS");
 		return ;
@@ -111,7 +99,7 @@ void	KICK(Client *client, std::string &args) {
 	extractReason(args, reason);
 	
 	std::vector<std::string>	tokens = split(args, ' ');
-	if (tokens.size() != 2 || !checkInput(tokens)) { // || tokens.size() > 3) {
+	if (tokens.size() != 2 || !checkInput(tokens)) {
 		sendError(client, 461, "ERR_NEEDMOREPARAMS");
 		return ;
 	}
@@ -149,15 +137,14 @@ void	KICK(Client *client, std::string &args) {
 
             if (userToKick[0] == ':')
                 userToKick = userToKick.substr(1);
-		
-			// checkear si han introducido user o si el user to kick no se encuentra en el canal
+
 			Client *toKick = channel->checkClient(userToKick);
 			
 			if (!toKick) {
 				sendError(client, 442, "ERR_NOTONCHANNEL");
 				continue ;
 			}
-			
+
 			std::string msg = makeBroadcastMessage(client, channelName, userToKick, reason);
 
 			channel->broadcast(client, msg);

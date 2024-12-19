@@ -26,15 +26,15 @@ SRC		= $(SRC_DIR)Server.cpp \
 		  $(SRC_DIR)Channel.cpp \
 		  $(SRC_DIR)Utils.cpp \
 		  $(SRC_DIR)signals.cpp \
-		  $(SRC_DIR)cmds/INVITE.cpp \
-		  $(SRC_DIR)cmds/JOIN.cpp \
-		  $(SRC_DIR)cmds/TOPIC.cpp \
-		  $(SRC_DIR)cmds/KICK.cpp \
-		  $(SRC_DIR)cmds/PASS.cpp \
-		  $(SRC_DIR)cmds/PRIVMSG.cpp \
-		  $(SRC_DIR)cmds/USER.cpp \
-		  $(SRC_DIR)cmds/NICK.cpp \
-		  $(SRC_DIR)cmds/MODE.cpp \
+		  $(SRC_DIR)cmds/Invite.cpp \
+		  $(SRC_DIR)cmds/Join.cpp \
+		  $(SRC_DIR)cmds/Topic.cpp \
+		  $(SRC_DIR)cmds/Kick.cpp \
+		  $(SRC_DIR)cmds/Pass.cpp \
+		  $(SRC_DIR)cmds/PrivMsg.cpp \
+		  $(SRC_DIR)cmds/User.cpp \
+		  $(SRC_DIR)cmds/Nick.cpp \
+		  $(SRC_DIR)cmds/Mode.cpp \
 		  $(SRC_DIR)parser.cpp \
 		  $(SRC_DIR)main.cpp 
 
@@ -72,8 +72,17 @@ fclean: clean
 	@rm -f $(NAME)
 	@echo "$(YELLOW)$(NAME) removed$(END)"
 
+debug:
+	valgrind -s --tool=memcheck --leak-check=full --track-fds=yes --track-origins=yes --show-leak-kinds=all ./$(NAME)
+
+git: fclean
+	@read -p "Enter commit message: " commit_message; \
+	git add *; \
+	git commit -m "$$commit_message"
+	git push
+
 re:	fclean all
 
 -include $(DEP)
 
-.PHONY:		all clean fclean re
+.PHONY:		all clean fclean debug git re

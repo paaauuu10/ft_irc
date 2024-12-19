@@ -12,7 +12,7 @@
 
 #include "Server.hpp"
 
-void	PASS( Client *client, std::string pass)
+void	pass( Client *client, std::string pass)
 {
    	std::string password = Server::getInstance().getPass(); // We get PASS from Server
     std::string clean_pass = pass.substr(pass.find(' ') + 1); // Delete initial space

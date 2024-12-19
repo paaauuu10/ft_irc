@@ -38,7 +38,7 @@ static std::string	makeBroadcastMessage(Client *client, std::string &channelName
 //          ERR_INVITEONLYCHAN
 //		    ERR_TOOMANYCHANNELS
 
-void	JOIN(Client *client, std::string& args) {
+void	join(Client *client, std::string& args) {
 	if (args.empty())
 		sendError(client, 461, "ERR_NEEDMOREPARAMS");
 	std::vector<std::string> tokens = split(args, ' ');

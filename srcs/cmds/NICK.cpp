@@ -19,7 +19,6 @@
 
 int checkNickname(std::string &nickname)
 {
-	
 	std::vector<Client *>	vclient = Server::getInstance().getClients();
 	for (long unsigned int i = 0; i < vclient.size(); i++)
 	{
@@ -46,7 +45,7 @@ static int validateNick(std::string &nick)
 	return 0;
 }
 
-void	NICK(Client *client, std::string &nickname)
+void	nick(Client *client, std::string &nickname)
 {
 	std::cout << "--> " << nickname << std::endl;
 	std::vector<std::string> words = split(nickname, ' ');
@@ -78,10 +77,10 @@ void	NICK(Client *client, std::string &nickname)
 		}
 		client->setNickname(nick);
 		if (!client->getUsername().empty() && !client->getRegistered())
-    	{	
-        	client->setRegistered(true);
-        	std::string response = "Welcome to FT_IRC!!!!\r\n";
-        	std::string pikachu_art = 
+		{	
+			client->setRegistered(true);
+			std::string response = "Welcome to FT_IRC!!!!\r\n";
+			std::string pikachu_art = 
 			"quu..__\n"
 			" $$$b  `---.__\n"
 			"  \"$b        `--.                          ___.---uuudP\n"
@@ -121,10 +120,8 @@ void	NICK(Client *client, std::string &nickname)
 			"              /   .''               >::'  /\n"
 			"              `',:                 :    .'\n"
 			"                                   `:.:' \n";
-
 			send(client->getFd(), response.c_str(), response.size(), 0);
 			//send(client->getFd(), pikachu_art.c_str(), pikachu_art.size(), 0);
-
 		}
 	}
 }

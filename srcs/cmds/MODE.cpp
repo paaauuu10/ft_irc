@@ -16,7 +16,7 @@
 #include <string>
 #include <iostream>
 
-void	MODE(Client *client, std::string str)
+void	mode(Client *client, std::string str)
 {
     //S'ha de mirar si es un operador abans de continuar. Si no return ; i ciao! NO borrar comentari!
     std::vector<std::string> words = split(str, ' ');
@@ -55,7 +55,7 @@ void	MODE(Client *client, std::string str)
                 if (words[1][i] == 'o')
                 {
                     //Delete chanel operator
-                      if (words.size() < 3)
+					if (words.size() < 3)
                     {
                         sendError(client, 461, "Not enough parameters\n"); //ERR_NEEDMOREPARAMS
                         continue;

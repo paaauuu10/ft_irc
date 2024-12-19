@@ -40,7 +40,7 @@ int checkChannel(std::string &nickname)
 }*/
 
 
-void		INVITE(Client *client, std::string &invitation)
+void		invite(Client *client, std::string &invitation)
 {
 	std::vector<std::string> words = split(invitation, ' ');
 	

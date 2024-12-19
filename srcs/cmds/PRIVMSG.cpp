@@ -28,7 +28,7 @@ static Client	*checkClient(std::string &nickname)
 }
 
 
-void PRIVMSG(Client *sender, std::string &value)
+void privMsg(Client *sender, std::string &value)
 {
 	std::vector<std::string> words = split(value, ' ');
 	if (words.empty())

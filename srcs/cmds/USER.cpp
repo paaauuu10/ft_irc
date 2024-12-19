@@ -29,13 +29,13 @@ static bool checkUser(std::string &username)
 	return true;
 }
 
-void	USER(Client *client, std::string pass)
+void	user(Client *client, std::string pass)
 {
     if (checkerIsLogged(client) == false)
         return ;
     std::vector<std::string> words = split(pass, ' ');
     if (words.size() < 4)
-        return (sendError(client, 461, "Not enought parameters")); //revisar codi d'error  i missatge!!!    
+        return (sendError(client, 461, "Not enought parameters. \n/USER <user> <hostname> <serverName> <realname> ")); //revisar codi d'error  i missatge!!!    
     //username es unic? en cas que si cal revisar si ja existeix o no. Mirar si el client ja esta registrat?
     if (!checkUser(words[0]))
     {    

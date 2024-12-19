@@ -16,20 +16,18 @@ static bool validCommand(Client *client, std::string str, std::string cmd)
 {
 	//"SERVER", "OPER""QUIT", "SQUIT", "NAMES", "LIST", "VERSION","PART",
     int index = 0;
-    std::string commands[10] = { "PASS", "NICK", "USER", "JOIN", "MODE", "TOPIC", "INVITE", "KICK", "PRIVMSG"};
-   	if (!client->getLogged() && cmd != "PASS") {
+    std::string commands[9] = { "PASS", "NICK", "USER", "JOIN", "MODE", "TOPIC", "INVITE", "KICK", "PRIVMSG"};
+	if (!client->getLogged() && cmd != "PASS") {
 		std::string server = Server::getInstance().getServerName();
 		std::string response = ":" + server + " 451 :You have not registered\r\n"; //ERR_NOTREGISTERED
 		send(client->getFd(), response.c_str(), response.size(), 0);
 		return true;
 	}
-	if (client->getLogged() && cmd == "PASS")
-	{
+	if (client->getLogged() && cmd == "PASS") {
 		sendError(client, 462, "You may not reregister"); //ERR_NEEDMOREPARAMS
 		return true;
 	}
-	if (!client->getRegistered() && cmd != "USER" && cmd != "NICK" && client->getLogged())
-	{
+	if (!client->getRegistered() && cmd != "USER" && cmd != "NICK" && client->getLogged()) {
 		if (client->getUsername().empty())
 			sendError(client, 1, "You need to use cmd USER <username> <hostname> <servername> <realname>");
 		if (client->getNickname().empty())
@@ -38,45 +36,45 @@ static bool validCommand(Client *client, std::string str, std::string cmd)
 	}
 
 	std::string	value = str.substr(cmd.size(), str.size() - cmd.size());
-	while ((cmd != commands[index]) && cmd != ('/' + commands[index]))
-	{
+	while ((cmd != commands[index]) && cmd != ('/' + commands[index])) {
 		index++;
-		if (index == 17)
+		if (index == 9)
 			return false;
 	}
 	index++;
-	switch(index)
-	{
+	switch(index) {
 		case 1:
-			PASS(client, value);
+			pass(client, value);
 			break;
 		case 2:
-			NICK(client, value);
+			nick(client, value);
 			break;
 		case 3:
-			USER(client, value);
+			user(client, value);
 			break;
 		case 4:
-			JOIN(client, value);
+			join(client, value);
 			break;
 		case 5:
-			MODE(client, value);
+			mode(client, value);
 			break;
 		case 6:
-			TOPIC(client, value);
+			topic(client, value);
 			break;
 		case 7:
-			INVITE(client, value);
+			invite(client, value);
 			break;
 		case 8:
-			KICK(client, value);
+			kick(client, value);
 			break;
 		case 9:
-			PRIVMSG(client, value);
+			privMsg(client, value);
 			break;
 /* 		case 10:
 			MODE(client, value);
 			break; */
+		//default:
+		//	break ;
 	}
 	return true;
 }
