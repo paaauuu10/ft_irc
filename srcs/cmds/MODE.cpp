@@ -6,7 +6,7 @@
 /*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 12:22:51 by pbotargu          #+#    #+#             */
-/*   Updated: 2024/12/17 14:30:02 by pbotargu         ###   ########.fr       */
+/*   Updated: 2024/12/19 12:30:42 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,13 +55,15 @@ void	MODE(Client *client, std::string str)
                 if (words[1][i] == 'o')
                 {
                     //Delete chanel operator
-                    Client *clientO = Server::getInstance().getClientByNickname(words[2]);
-                    channel->removeOperatorClient(clientO);
-                    if (words.size() < 3)
+                      if (words.size() < 3)
                     {
                         sendError(client, 461, "Not enough parameters\n"); //ERR_NEEDMOREPARAMS
                         continue;
                     }
+                    Client *clientO = Server::getInstance().getClientByNickname(words[2]);
+                    if (!clientO /*|| channel->getClientList(clientO->(getNickname()))*/) //descomentar en tenir la funcio en fer merge. Necessitem veure si el client esta al canal!
+                        return (sendError(client, 442, "They aren't on that channel", words[2])); //ERR_NOTONCHANNEL
+                    channel->removeOperatorClient(clientO);
                     std::cout << "El cliente " << words[2] << " ha sido ELIMINADO como operador del canal!" << std::endl;
                 }
                 if (words[1][i] == 'l')
@@ -95,6 +97,8 @@ void	MODE(Client *client, std::string str)
                 {
                     //Give chanel operator
                     Client *clientO = Server::getInstance().getClientByNickname(words[2]);
+                    if (!clientO /*|| channel->getClientList(clientO->(getNickname()))*/) //descomentar en tenir la funcio en fer merge. Necessitem veure si el client esta al canal!
+                        return (sendError(client, 442, "They aren't on that channel", words[2])); //ERR_NOTONCHANNEL
                     channel->addOperatorClient(clientO);
                     std::cout << "El cliente " << words[2] << " ha sido asigando como operador del canal!" << std::endl;
                 }
