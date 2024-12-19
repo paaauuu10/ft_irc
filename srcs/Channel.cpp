@@ -6,7 +6,7 @@
 /*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:58:33 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/17 11:44:27 by pbotargu         ###   ########.fr       */
+/*   Updated: 2024/12/17 14:53:39 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,9 @@ bool	Channel::getOperatorList(std::string nickname) {
             names += " ";
         }
 	}
-	if (names.find(nickname))
-		return false;
-	return true;	
+	if (names.find(nickname) != std::string::npos)
+		return true;
+	return false;	
 }
 std::string	Channel::getUserList() {
 	std::string	names;
@@ -114,6 +114,18 @@ bool	Channel::isFull() {
 void	Channel::addClient(Client *client) { this->_clients.push_back(client); }
 
 void	Channel::addOperatorClient(Client *client) { this->_operatorClients.push_back(client); }
+
+void Channel::removeOperatorClient(Client *client) {
+    // Usamos std::remove para desplazar el elemento al final
+//    	this->_operatorClients.erase(std::remove(this->_operatorClients.begin(), this->_operatorClients.end(), client), this->_operatorClients.end());
+	
+	std::vector<Client *>::iterator it = this->_operatorClients.begin();
+	for (; it != this->_operatorClients.end(); ++it) {
+		if (*it == client)
+			this->_operatorClients.erase(it);
+	}
+}
+
 
 void	Channel::rmClient(Client *client) {
 	for (size_t i = 0; i < _clients.size(); ++i) {

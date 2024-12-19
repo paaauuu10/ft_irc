@@ -6,7 +6,7 @@
 /*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 12:08:38 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/17 11:43:36 by pbotargu         ###   ########.fr       */
+/*   Updated: 2024/12/17 14:27:50 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ class Channel {
 		bool	isEmtpy();
 		bool	isFull();
 		void	addOperatorClient(Client *client);
+		void 	removeOperatorClient(Client *client); 
 		void	addClient(Client *client);
 		void	rmClient(Client *client);
 		std::vector<int>	listFdClients();
