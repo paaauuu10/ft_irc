@@ -16,9 +16,11 @@ static bool validCommand(Client *client, std::string str, std::string cmd)
 {
     int index = 0;
     std::string commands[17] = { "PASS", "NICK", "USER", "SERVER", "OPER", "QUIT", "SQUIT", "JOIN", "PART", "MODE", "TOPIC", "NAMES", "LIST", "INVITE", "KICK", "VERSION", "PRIVMSG"};
-   	if (!client->getLogged() && cmd != "PASS")
+    std::string server =  Server::getInstance().getServerName();
+	if (!client->getLogged() && cmd != "PASS")
 	{	
-		sendError(client, 1, "No logged, put the password PASS <password>"); //revisar aquest error!
+		std::string response = ":" + server + " 451 :You have not registered\r\n"; //ERR_NOTREGISTERED
+		send(client->getFd(), response.c_str(), response.size(), 0);
 		return true;
 	}
 	if (client->getLogged() && cmd == "PASS")
