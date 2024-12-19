@@ -6,7 +6,7 @@
 #    By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/21 14:36:31 by pbotargu          #+#    #+#              #
-#    Updated: 2024/12/16 12:23:41 by anovio-c         ###   ########.fr        #
+#    Updated: 2024/12/19 12:26:05 by pborrull         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,13 +36,10 @@ SRC		= $(SRC_DIR)Server.cpp \
 		  $(SRC_DIR)parser.cpp \
 		  $(SRC_DIR)main.cpp 
 
-#$ \
-		  $(SRC_DIR)cmds/INVITE.cpp \
-
 OBJ = $(SRC:$(SRC_DIR)%.cpp=$(OBJ_DIR)%.o)
 DEP = $(OBJ:.o=.d)
 CC = g++ 
-CFLAGS = -Wall -Wextra -Werror -std=c++98 -pedantic -MMD -MP -g
+CFLAGS = -Wall -Wextra -Werror -std=c++98 -pedantic -MMD -MP -g -fsanitize=address
 
 # Colored output
 ERASE	= \033[2K\r

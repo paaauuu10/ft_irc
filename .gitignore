@@ -3,3 +3,4 @@
 .o
 .d
 .vscode
+./srcs/cmds/INVITE.cpp

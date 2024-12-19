@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:24:51 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/16 12:27:44 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/19 11:17:27 by pborrull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,7 +147,7 @@ int	Server::start()
 						// delete de client aqui??
 						close(pollfds[i].fd);
 						pollfds.erase(pollfds.begin() + i);
-						--i;
+						--i;	
 					}
 					else
 					{
