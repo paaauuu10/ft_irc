@@ -82,11 +82,14 @@ class Server
 void 	parser(Client *client, std::string str);
 void 	parsingbuffer(char *buffer, Client *client);
 void	JOIN(Client *client, std::string& args);
+void	KICK(Client *client, std::string& args);
+void	TOPIC(Client *client, std::string& args);
 void	PASS(Client *client, std::string pass);
 void	USER(Client *client, std::string pass);
 void	NICK(Client *client, std::string &nickname);
 void	INVITE(Client *client, std::string &invitation);
 void	MODE(Client *client, std::string str);
+
 
 void 	PRIVMSG(Client *sender, std::string &value);
 

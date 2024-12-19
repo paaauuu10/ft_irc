@@ -48,13 +48,14 @@ static int validateNick(std::string &nick)
 
 void	NICK(Client *client, std::string &nickname)
 {
+	std::cout << "--> " << nickname << std::endl;
 	std::vector<std::string> words = split(nickname, ' ');
 	if (words.empty())
-		return (sendError(client, 431, "No nickname given", client->getNickname())); //ERR_NONICKNAMEGIVEN
+		return (sendError(client, 431, "ERR_NONICKNAMEGIVEN", client->getNickname())); //ERR_NONICKNAMEGIVEN
 	std::string nick = words[0];
-	while(nick[0] == ' ')
+	while (nick[0] == ' ')
 		nick.erase(0, 1);
-	if (nick.empty())	
+	if (nick.empty())
 		sendError(client, 431, "No nickname given", client->getNickname()); //ERR_NONICKNAMEGIVEN
 	else if (validateNick(nick))
 		sendError(client, 432, "Erroneous nickname", client->getNickname()); //ERR_ERRONEUSNICKNAME

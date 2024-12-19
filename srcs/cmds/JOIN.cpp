@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 09:55:32 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/16 10:35:54 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/19 10:30:09 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,24 @@
 #include "Client.hpp"
 #include "Channel.hpp"
 
-//JOIN <channel1>{,<channel2>} [<key1>{,<key2>}]
+//JOIN  <channel1>{,<channel2>} [<key1>{,<key2>}]
 
 static bool isValidChannelName(std::string &name) {
 	if (name[0] == '#' || name[0] == '&')
 		return (true);
 	return (false);
+}
+
+static std::string	makeBroadcastMessage(Client *client, std::string &channelName) {
+	std::ostringstream oss;
+
+    // Mensaje JOIN con el prefijo correcto
+	// :<nickname>!<username>@<hostname> JOIN :<channelName>\r\n
+    oss << ":" << client->getNickname() << "!" 
+        << client->getUsername() << "@127.0.0.1 JOIN :" 
+        << channelName << "\r\n";
+
+	return (oss.str());
 }
 
 // default password == "default"
@@ -28,7 +40,7 @@ static bool isValidChannelName(std::string &name) {
 
 void	JOIN(Client *client, std::string& args) {
 	if (args.empty())
-		sendError(client, 1, "ERR_NEEDMOREPARAMS");
+		sendError(client, 461, "ERR_NEEDMOREPARAMS");
 	std::vector<std::string> tokens = split(args, ' ');
     std::vector<std::string> channels = split(tokens[0], ',');
     std::vector<std::string> keys = (tokens.size() > 1)
@@ -62,8 +74,10 @@ void	JOIN(Client *client, std::string& args) {
 			}
 			channel->addClient(client);
 		}
-        channel->broadcast(client);
+		std::string message = makeBroadcastMessage(client, channelName);
+        channel->broadcast(client, message);
 		channel->RPLTOPIC(client);
 		channel->RPL_NAMREPLY(client);
+		// enviar lista de comandos
 	}
 }

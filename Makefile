@@ -6,7 +6,7 @@
 #    By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/21 14:36:31 by pbotargu          #+#    #+#              #
-#    Updated: 2024/12/19 10:42:16 by pbotargu         ###   ########.fr        #
+#    Updated: 2024/12/19 12:25:36 by anovio-c         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,6 +28,8 @@ SRC		= $(SRC_DIR)Server.cpp \
 		  $(SRC_DIR)signals.cpp \
 		  $(SRC_DIR)cmds/INVITE.cpp \
 		  $(SRC_DIR)cmds/JOIN.cpp \
+		  $(SRC_DIR)cmds/TOPIC.cpp \
+		  $(SRC_DIR)cmds/KICK.cpp \
 		  $(SRC_DIR)cmds/PASS.cpp \
 		  $(SRC_DIR)cmds/PRIVMSG.cpp \
 		  $(SRC_DIR)cmds/USER.cpp \
@@ -42,7 +44,7 @@ SRC		= $(SRC_DIR)Server.cpp \
 OBJ = $(SRC:$(SRC_DIR)%.cpp=$(OBJ_DIR)%.o)
 DEP = $(OBJ:.o=.d)
 CC = g++ 
-CFLAGS = -Wall -Wextra -Werror -std=c++98 -pedantic -MMD -MP -g -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -std=c++98 -fsanitize=address -pedantic -MMD -MP -g 
 
 # Colored output
 ERASE	= \033[2K\r

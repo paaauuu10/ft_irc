@@ -46,6 +46,7 @@ class Channel {
 		bool		getMode(char key);
 		std::string	getUserList();
 		bool		getOperatorList(std::string nickname);
+		std::string	getTopic();
 
 		// Setters
 
@@ -53,12 +54,14 @@ class Channel {
 		void	setMode(char mode, bool status, int value);
 		void	setKey(std::string str);
 		void	setLimit(int limit);
-
+		void	setTopic(const std::string &topic);
 		
 		// Methods
 		
 		bool	isKeyProtected();
 		bool	checkKey(const std::string &key) const;
+		bool	checkOperatorClient(Client *client);
+		Client	*checkClient(std::string &nickname);
 		bool	isEmtpy();
 		bool	isFull();
 		void	addOperatorClient(Client *client);
@@ -66,7 +69,7 @@ class Channel {
 		void	addClient(Client *client);
 		void	rmClient(Client *client);
 		std::vector<int>	listFdClients();
-		void	broadcast(Client *client);
+		void	broadcast(Client *client, std::string &msg);
 		void	RPLTOPIC(Client *client);
 		void	RPL_NAMREPLY(Client *client);
 
