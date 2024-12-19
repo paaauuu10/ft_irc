@@ -6,7 +6,7 @@
 #    By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/21 14:36:31 by pbotargu          #+#    #+#              #
-#    Updated: 2024/12/19 12:25:36 by anovio-c         ###   ########.fr        #
+#    Updated: 2024/12/19 12:26:05 by pborrull         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,9 +37,6 @@ SRC		= $(SRC_DIR)Server.cpp \
 		  $(SRC_DIR)cmds/MODE.cpp \
 		  $(SRC_DIR)parser.cpp \
 		  $(SRC_DIR)main.cpp 
-
-#$ \
-		  $(SRC_DIR)cmds/INVITE.cpp \
 
 OBJ = $(SRC:$(SRC_DIR)%.cpp=$(OBJ_DIR)%.o)
 DEP = $(OBJ:.o=.d)

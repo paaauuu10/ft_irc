@@ -6,7 +6,7 @@
 /*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 12:00:21 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/19 11:27:30 by pbotargu         ###   ########.fr       */
+/*   Updated: 2024/12/17 11:54:15 by pborrull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ void sendError(Client* client, int errorCode, const std::string& errorMessage, c
 std::vector<std::string> split(const std::string& input, char delimiter) {
     std::vector<std::string> tokens;
     std::string token;
+	if (input.empty())
+		return tokens;
     for (std::string::size_type i = 0; i < input.size(); i++) {
         if (input[i] == delimiter) {
             if (!token.empty()) {

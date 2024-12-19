@@ -6,7 +6,7 @@
 /*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:58:33 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/19 12:09:24 by pbotargu         ###   ########.fr       */
+/*   Updated: 2024/12/19 12:07:24 by pborrull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,18 +46,33 @@ bool		Channel::getMode(char key) {
     return false;
 }
 
-bool	Channel::getOperatorList(std::string nickname) {
-	std::string	names;
-	for (size_t i = 0; i < _operatorClients.size(); ++i) {
-		names += _operatorClients[i]->getNickname();
-		if (i != _operatorClients.size() - 1) {
+bool    Channel::getOperatorList(std::string nickname) {
+    std::string names;
+    for (size_t i = 0; i < _operatorClients.size(); ++i) {
+        names += _operatorClients[i]->getNickname();
+        if (i != _operatorClients.size() - 1) {
             names += " ";
         }
-	}
-	if (names.find(nickname) != std::string::npos)
-		return true;
-	return false;	
+    }
+    if (names.find(nickname) != std::string::npos)
+        return true;
+    return false;
 }
+
+bool    Channel::getClientList(std::string nickname)
+{
+    std::string names;
+    for (size_t i = 0; i < _clients.size(); ++i)
+	{
+        names += _clients[i]->getNickname();
+        if (i != _clients.size() - 1)
+            names += " ";
+    }
+    if (names.find(nickname) != std::string::npos)
+        return true;
+    return false;
+}
+
 std::string	Channel::getUserList() {
 	std::string	names;
 	for (size_t i = 0; i < _operatorClients.size(); ++i) {
@@ -138,6 +153,8 @@ bool	Channel::isFull() {
 }
 
 void	Channel::addClient(Client *client) { this->_clients.push_back(client); }
+
+void	Channel::addClientsInvited(std::string client) { this->_clientsInvited.push_back(client); }
 
 void	Channel::addOperatorClient(Client *client) { this->_operatorClients.push_back(client); }
 
