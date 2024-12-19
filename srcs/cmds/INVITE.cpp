@@ -6,7 +6,7 @@
 /*   By: pbotargu <pbotargu@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 13:51:35 by pborrull          #+#    #+#             */
-/*   Updated: 2024/12/19 12:41:58 by pborrull         ###   ########.fr       */
+/*   Updated: 2024/12/19 12:52:25 by pborrull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void		INVITE(Client *client, std::string &invitation)
 		sendError(client, 403, "No such channel"); //ERR_NOSUCHCHANNEL
 	else if (channel->getClientList(words[0])) //Falta fer-la
 		sendError(client, 443, "is already on channel <channel name>"); //ERR_USERONCHANNEL
-	else if (!channel->getOperatorList(client->getNickname()))
+	else if (!channel->getOperatorList(client->getNickname())) //&& i is true)
 		sendError(client, 482, "You don't have channel operator privileges"); //ERR_CHANOPRIVSNEEDED
 	else
 	{
