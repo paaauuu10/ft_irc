@@ -6,7 +6,7 @@
 /*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:57:43 by pbotargu          #+#    #+#             */
-/*   Updated: 2024/12/19 11:13:40 by pbotargu         ###   ########.fr       */
+/*   Updated: 2024/12/19 11:37:01 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,5 +33,4 @@ void	PASS( Client *client, std::string pass)
         client->setLogged(true);
     }
     send(client->getFd(), response.c_str(), response.size(), 0);
-
 }
