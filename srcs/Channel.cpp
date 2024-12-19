@@ -6,7 +6,7 @@
 /*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:58:33 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/17 14:53:39 by pbotargu         ###   ########.fr       */
+/*   Updated: 2024/12/19 12:09:24 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,13 +117,13 @@ void	Channel::addOperatorClient(Client *client) { this->_operatorClients.push_ba
 
 void Channel::removeOperatorClient(Client *client) {
     // Usamos std::remove para desplazar el elemento al final
-//    	this->_operatorClients.erase(std::remove(this->_operatorClients.begin(), this->_operatorClients.end(), client), this->_operatorClients.end());
+    	this->_operatorClients.erase(std::remove(this->_operatorClients.begin(), this->_operatorClients.end(), client), this->_operatorClients.end());
 	
-	std::vector<Client *>::iterator it = this->_operatorClients.begin();
+	/*std::vector<Client *>::iterator it = this->_operatorClients.begin();
 	for (; it != this->_operatorClients.end(); ++it) {
 		if (*it == client)
-			this->_operatorClients.erase(it);
-	}
+			it = this->_operatorClients.erase(it);
+	}*/
 }
 
 
