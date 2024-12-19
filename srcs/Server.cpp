@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:24:51 by anovio-c          #+#    #+#             */
 /*   Updated: 2024/12/19 11:17:27 by pborrull         ###   ########.fr       */
@@ -33,6 +33,14 @@ void	Server::init(int port, const std::string &pass) {
 Client	*Server::getClientBySocket(int fd) {
 	for (size_t i = 0; i < _clients.size(); ++i) {
 		if (_clients[i]->getFd() == fd)
+			return (_clients[i]);
+	}
+	return (NULL);
+}
+
+Client	*Server::getClientByNickname(std::string nickname) {
+	for (size_t i = 0; i < _clients.size(); ++i) {
+		if (_clients[i]->getNickname() == nickname)
 			return (_clients[i]);
 	}
 	return (NULL);

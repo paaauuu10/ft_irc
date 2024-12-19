@@ -22,6 +22,7 @@ Channel::Channel(const std::string &channelName, const std::string &key, Client 
 	_operatorClients.push_back(creator);
 	// invitation mode, by default is false
 	_modes['i'] = false;
+	_modes['t'] = false;
 	if (key.empty()) {
 		_key = "";
 		_modes['k'] = false;
@@ -44,7 +45,6 @@ bool		Channel::getMode(char key) {
     }
     return false;
 }
-
 
 bool    Channel::getOperatorList(std::string nickname) {
     std::string names;
@@ -92,6 +92,10 @@ std::string	Channel::getUserList() {
 	return names;
 }
 
+std::string	Channel::getTopic() {
+	return this->_topic;
+}
+
 void	Channel::setMode(char mode, bool status, int value) {
 
 // · i: Set/remove Invite-only channel
@@ -104,8 +108,16 @@ void	Channel::setMode(char mode, bool status, int value) {
 	std::cout << "Channel " << _name << " mode " << mode << " set to " << (status ? "ON" : "OFF") << ".\n";
 }
 
-void	Channel::setKey(std::string str) {
-		this->_key = str;
+void	Channel::setKey(std::string str){
+	this->_key = str;
+}
+
+void	Channel::setLimit(int limit){
+	this->_limit = limit;
+}
+
+void	Channel::setTopic(const std::string &topic) {
+	this->_topic = topic;
 }
 
 bool	Channel::isKeyProtected() {
@@ -114,6 +126,24 @@ bool	Channel::isKeyProtected() {
 
 bool	Channel::checkKey(const std::string &str) const {
 	return (_key == str);
+}
+
+bool	Channel::checkOperatorClient(Client *client) {
+	for (size_t i = 0; this->_operatorClients.size(); ++i) {
+		if (this->_operatorClients[i]->getNickname() == client->getNickname())
+			return true;
+	}
+	return false;
+}
+
+Client	*Channel::checkClient(std::string &nickname) {
+	if (this->_clients.empty())
+    	return NULL;
+	for (size_t i = 0; i < this->_clients.size(); ++i) {
+		if (this->_clients[i]->getNickname() == nickname)
+			return this->_clients[i];
+	}
+	return NULL;
 }
 
 bool	Channel::isEmtpy() { return this->_clients.empty() ; }
@@ -128,14 +158,28 @@ void	Channel::addClientsInvited(std::string client) { this->_clientsInvited.push
 
 void	Channel::addOperatorClient(Client *client) { this->_operatorClients.push_back(client); }
 
+void Channel::removeOperatorClient(Client *client) {
+    // Usamos std::remove para desplazar el elemento al final
+    	this->_operatorClients.erase(std::remove(this->_operatorClients.begin(), this->_operatorClients.end(), client), this->_operatorClients.end());
+	
+	/*std::vector<Client *>::iterator it = this->_operatorClients.begin();
+	for (; it != this->_operatorClients.end(); ++it) {
+		if (*it == client)
+			it = this->_operatorClients.erase(it);
+	}*/
+}
+
+
 void	Channel::rmClient(Client *client) {
 	for (size_t i = 0; i < _clients.size(); ++i) {
 		// send message all of clients before erase.
-		if (_clients[i]->getUsername() == client->getUsername())
-			delete _clients[i];
+		if (_clients[i]->getUsername() == client->getUsername()) {
+			_clients.erase(_clients.begin() + i); // Eliminar del canal
+            break;
+		}
 	}
-	if (_clients.empty())
-		delete this;
+	//if (_clients.empty())
+	//	delete this;
 }
 
 std::vector<int>	Channel::listFdClients() {
@@ -152,16 +196,20 @@ std::vector<int>	Channel::listFdClients() {
 	return (list);
 }
 
-void Channel::broadcast(Client *client) {
+void Channel::broadcast(Client *client, std::string &msg) {
     std::vector<int> fds = listFdClients();
-    std::ostringstream oss;
+	(void)client;
+
+    //std::ostringstream oss;
 
     // Mensaje JOIN con el prefijo correcto
-    oss << ":" << client->getNickname() << "!" 
-        << client->getUsername() << "@127.0.0.1 JOIN :" 
-        << this->getName() << "\r\n";
+	// :<nickname>!<username>@<hostname> JOIN :<channelName>\r\n
+	
+    //oss << ":" << client->getNickname() << "!" 
+    //    << client->getUsername() << "@127.0.0.1 JOIN :" 
+     //   << this->getName() << "\r\n";
 
-    std::string msg = oss.str();
+    //std::string msg = oss.str();
 
     // Enviar a todos los clientes del canal
     for (size_t i = 0; i < fds.size(); ++i) {
@@ -202,6 +250,7 @@ void	Channel::broadcast(Client *client) {
 void	Channel::RPLTOPIC(Client *client) {
 	std::ostringstream oss;
 	
+	// :<servername> 331/332 <nickname> <username> : <topic or no topic is set>
 	oss << ":" << Server::getServerName() << " " << ((this->_topic.empty()) ? 331 : 332)
 		<< " " << client->getNickname() << " " << this->getName() << " :"
 		<< ((this->_topic.empty()) ? "No topic is set" : this->_topic)
@@ -213,7 +262,7 @@ void	Channel::RPLTOPIC(Client *client) {
 void	Channel::RPL_NAMREPLY(Client *client) {
 	std::string	list = this->getUserList();
 
-	//:<servidor> 353 <cliente> = <canal> :<nicks>
+	//:<servidor> 353 <cliente> = <canal> :<nicks>,{<nick>}
 	std::ostringstream oss;
 
 	oss << ":" << Server::getServerName() << " " << 353 << " "

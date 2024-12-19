@@ -3,4 +3,5 @@
 .o
 .d
 .vscode
-./srcs/cmds/INVITE.cpp
+/objs
+ircserv

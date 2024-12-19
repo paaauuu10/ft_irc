@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   NICK.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 11:47:10 by anovio-c          #+#    #+#             */
 /*   Updated: 2024/12/19 10:57:31 by pborrull         ###   ########.fr       */
@@ -48,16 +48,14 @@ static int validateNick(std::string &nick)
 
 void	NICK(Client *client, std::string &nickname)
 {
+	std::cout << "--> " << nickname << std::endl;
 	std::vector<std::string> words = split(nickname, ' ');
 	if (words.empty())
-	{
-		sendError(client, 431, "No nickname given", client->getNickname()); //ERR_NONICKNAMEGIVEN
-		return ;
-	}
+		return (sendError(client, 431, "ERR_NONICKNAMEGIVEN", client->getNickname())); //ERR_NONICKNAMEGIVEN
 	std::string nick = words[0];
-	while(nick[0] == ' ')
+	while (nick[0] == ' ')
 		nick.erase(0, 1);
-	if (nick.empty())	
+	if (nick.empty())
 		sendError(client, 431, "No nickname given", client->getNickname()); //ERR_NONICKNAMEGIVEN
 	else if (validateNick(nick))
 		sendError(client, 432, "Erroneous nickname", client->getNickname() + " " + nick); //ERR_ERRONEUSNICKNAME
