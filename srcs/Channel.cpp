@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:58:33 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/18 15:30:13 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/19 12:30:31 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ Channel::Channel(const std::string &channelName, const std::string &key, Client 
 	_operatorClients.push_back(creator);
 	// invitation mode, by default is false
 	_modes['i'] = false;
+	_modes['t'] = false;
 	if (key.empty()) {
 		_key = "";
 		_modes['k'] = false;
@@ -64,6 +65,10 @@ std::string	Channel::getUserList() {
 	return names;
 }
 
+std::string	Channel::getTopic() {
+	return this->_topic;
+}
+
 void	Channel::setMode(char mode, bool status, int value) {
 
 // · i: Set/remove Invite-only channel
@@ -74,6 +79,10 @@ void	Channel::setMode(char mode, bool status, int value) {
 	(void)value;
 	_modes[mode] = status;
 	std::cout << "Channel " << _name << " mode " << mode << " set to " << (status ? "ON" : "OFF") << ".\n";
+}
+
+void	Channel::setTopic(const std::string &topic) {
+	this->_topic = topic;
 }
 
 bool	Channel::isKeyProtected() {
@@ -93,7 +102,9 @@ bool	Channel::checkOperatorClient(Client *client) {
 }
 
 Client	*Channel::checkClient(std::string &nickname) {
-	for (size_t i = 0; this->_clients.size(); ++i) {
+	if (this->_clients.empty())
+    	return NULL;
+	for (size_t i = 0; i < this->_clients.size(); ++i) {
 		if (this->_clients[i]->getNickname() == nickname)
 			return this->_clients[i];
 	}
@@ -113,8 +124,10 @@ void	Channel::addOperatorClient(Client *client) { this->_operatorClients.push_ba
 void	Channel::rmClient(Client *client) {
 	for (size_t i = 0; i < _clients.size(); ++i) {
 		// send message all of clients before erase.
-		if (_clients[i]->getUsername() == client->getUsername())
-			delete _clients[i];
+		if (_clients[i]->getUsername() == client->getUsername()) {
+			_clients.erase(_clients.begin() + i); // Eliminar del canal
+            break;
+		}
 	}
 	//if (_clients.empty())
 	//	delete this;

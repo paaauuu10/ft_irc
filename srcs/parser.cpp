@@ -14,8 +14,9 @@
 
 static bool validCommand(Client *client, std::string str, std::string cmd)
 {
+	//"SERVER", "OPER""QUIT", "SQUIT", "NAMES", "LIST", "VERSION","PART",
     int index = 0;
-    std::string commands[17] = { "PASS", "NICK", "USER", "SERVER", "OPER", "QUIT", "SQUIT", "JOIN", "PART", "MODE", "TOPIC", "NAMES", "LIST", "INVITE", "KICK", "VERSION", "PRIVMSG"};
+    std::string commands[17] = { "PASS", "NICK", "USER", "JOIN", "MODE", "TOPIC", "INVITE", "KICK", "PRIVMSG"};
    	if (!client->getLogged() && cmd != "PASS")
 	{	
 		sendError(client, 1, "No logged, put the password PASS <password>");
@@ -50,50 +51,26 @@ static bool validCommand(Client *client, std::string str, std::string cmd)
 			USER(client, value);
 			break;
 		case 4:
-			std::cout << commands[index - 1] << std::endl;
-			break;
-		case 5:
-			std::cout << commands[index - 1] << std::endl;
-			break;
-		case 6:
-			std::cout << commands[index - 1] << std::endl;
-			break;
-		case 7:
-			std::cout << commands[index - 1] << std::endl;
-			break;
-		case 8:
-			std::cout << commands[index - 1] << std::endl;
 			JOIN(client, value);
 			break;
-		case 9:
-			std::cout << commands[index - 1] << std::endl;
-			break;
-		case 10:
+		case 5:
 			MODE(client, value);
 			break;
-		case 11:
-			std::cout << commands[index - 1] << std::endl;
+		case 6:
+			TOPIC(client, value);
 			break;
-		case 12:
-			std::cout << commands[index - 1] << std::endl;
-			break;
-		case 13:
-			std::cout << commands[index - 1] << std::endl;
-			break;
-		case 14:
+		case 7:
 			INVITE(client, value);
 			break;
-		case 15:
-			std::cout << commands[index - 1] << std::endl;
+		case 8:
 			KICK(client, value);
 			break;
-		case 16:
-			std::cout << commands[index - 1] << std::endl;
-			break;
-		case 17:
+		case 9:
 			PRIVMSG(client, value);
-			std::cout << commands[index - 1] << std::endl;
 			break;
+/* 		case 10:
+			MODE(client, value);
+			break; */
 	}
 	return true;
 }

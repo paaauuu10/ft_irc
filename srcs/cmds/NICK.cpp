@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 11:47:10 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/18 16:07:32 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/19 11:34:18 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,12 @@ void	NICK(Client *client, std::string &nickname)
 {
 	std::cout << "--> " << nickname << std::endl;
 	std::vector<std::string> words = split(nickname, ' ');
+	if (words.empty())
+		return (sendError(client, 431, "No nickname given", client->getNickname()));
 	std::string nick = words[0];
 	while (nick[0] == ' ')
 		nick.erase(0, 1);
-	if (nick.empty())	
+	if (nick.empty())
 		sendError(client, 431, "No nickname given", client->getNickname()); //ERR_NONICKNAMEGIVEN
 	else if (validateNick(nick))
 		sendError(client, 432, "Erroneous nickname", client->getNickname()); //ERR_ERRONEUSNICKNAME

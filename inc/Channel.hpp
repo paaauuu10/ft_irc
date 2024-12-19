@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 12:08:38 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/16 15:22:29 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/19 12:20:42 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,13 @@ class Channel {
 		std::string	getName();
 		bool		getMode(char key);
 		std::string	getUserList();
+		std::string	getTopic();
 
 		// Setters
 
 		// Of course is not the definitive function
 		void	setMode(char mode, bool status, int value);
+		void	setTopic(const std::string &topic);
 		
 		// Methods
 		

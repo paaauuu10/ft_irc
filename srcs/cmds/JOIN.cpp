@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 09:55:32 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/17 16:42:11 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/19 10:30:09 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,5 +78,6 @@ void	JOIN(Client *client, std::string& args) {
         channel->broadcast(client, message);
 		channel->RPLTOPIC(client);
 		channel->RPL_NAMREPLY(client);
+		// enviar lista de comandos
 	}
 }
