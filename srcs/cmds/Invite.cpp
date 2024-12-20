@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   INVITE.cpp                                         :+:      :+:    :+:   */
+/*   Invite.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pbotargu <pbotargu@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 13:51:35 by pborrull          #+#    #+#             */
-/*   Updated: 2024/12/19 12:52:25 by pborrull         ###   ########.fr       */
+/*   Updated: 2024/12/20 09:54:41 by pborrull         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,18 +54,18 @@ void		invite(Client *client, std::string &invitation)
 		sendError(client, 401, "No such nickname"); //ERR_NOSUCHNICK
 	else if (!channel)
 		sendError(client, 403, "No such channel"); //ERR_NOSUCHCHANNEL
-	else if (channel->getClientList(words[0])) //Falta fer-la
+	else if (channel->getClientList(words[0]))
 		sendError(client, 443, "is already on channel <channel name>"); //ERR_USERONCHANNEL
 	else if (!channel->getOperatorList(client->getNickname())) //&& i is true)
 		sendError(client, 482, "You don't have channel operator privileges"); //ERR_CHANOPRIVSNEEDED
 	else
 	{
 		channel->addClientsInvited(words[0]);
+		Client *invited = Server::getInstance().getClientByNickname(words[0]);
 		std::cout << client->getNickname() << " is inviting you to " << channel->getName() << std::endl;
-		//sendError(client, 341, "Client is inviting you to #<channel>");
-	std::ostringstream oss;
-    oss << channel->getName() << " " << words[0] << "\r\n";
-    std::string msg = oss.str();
-    send(client->getFd(), msg.c_str(), msg.size(), 0);
+		std::ostringstream oss;
+	    oss << channel->getName() << " " << words[0] << "\r\n";
+	    std::string msg = oss.str();
+	    send(invited->getFd(), msg.c_str(), msg.size(), 0);
 	}
 }
