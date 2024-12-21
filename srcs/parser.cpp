@@ -30,18 +30,19 @@ static bool validCommand(Client *client, std::string str, std::string cmd)
 		return true;
 	}
 
-	if (!client->getRegistered() && cmd == "USER") {
+/* 	if (!client->getRegistered() && cmd != "NICK") {
 		if (client->getUsername().empty())
 			sendError(client, 431, "ERR_NONICKNAMEGIVEN");
 		return true;
-	}
-	// if (!client->getRegistered() && cmd != "USER" && cmd != "NICK" && client->getLogged()) {
-	// 	if (client->getUsername().empty())
-	// 		sendError(client, 1, "You need to use cmd USER <username> <hostname> <servername> <realname>");
-	// 	if (client->getNickname().empty())
-	// 		sendError(client, 1, "You need to use cmd NICK <nickname>");
-	// 	return true;
-	// }
+	} */
+
+	if (!client->getRegistered() && cmd != "USER" && cmd != "NICK" && client->getLogged()) {
+	 	if (client->getNickname().empty())
+	 		return (sendError(client, 444, "ERR_NONICKNAMEGIVEN"), true);
+		if (client->getUsername().empty())
+	 		return (sendError(client, 1, "You need to use cmd /USER"), true);
+	 	return true;
+	 }
 
 	std::string	value = str.substr(cmd.size(), str.size() - cmd.size());
 	while ((cmd != commands[index]) && cmd != ('/' + commands[index])) {

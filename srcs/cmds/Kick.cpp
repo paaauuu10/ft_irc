@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   KICK.cpp                                           :+:      :+:    :+:   */
+/*   Kick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 19:44:07 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/19 11:55:45 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/21 14:14:26 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,14 +105,16 @@ void	kick(Client *client, std::string &args) {
 	}
 	
 	std::vector<std::string>	channels = extractChannels(tokens[0]);
-	if (channels.empty()) {
-        sendError(client, 403, "ERR_NOSUCHCHANNEL - Invalid channel(s)");
+	std::vector<std::string>	usersList = split(tokens[1], ',');
+
+	if (channels.size() != usersList.size()) {
+        sendError(client, 461, "ERR_NEEDMOREPARAMS - Channels and users mismatch");
         return;
     }
-	std::vector<std::string>	usersList = split(tokens[1], ',');
 
 	for (size_t i = 0; i < channels.size(); ++i) {
 		const std::string &channelName = channels[i];
+		std::string &userToKick = usersList[i];
 		
 		Channel *channel = Server::getInstance().getCheckChannel(channelName);
 
@@ -125,30 +127,25 @@ void	kick(Client *client, std::string &args) {
 			sendError(client, 482, "ERR_CHANOPRIVSNEEDED");
 			continue ;
 		}
-
-		for (size_t j = 0; j < usersList.size(); ++j) {
 			
-			std::string userToKick = usersList[j];
-			
-			if (userToKick.empty()) {
-				sendError(client, 482, "ERR_NEEDMOREPARAMS - No user specified for channel " + channelName);
-				continue ;
-			}
-
-            if (userToKick[0] == ':')
-                userToKick = userToKick.substr(1);
-
-			Client *toKick = channel->checkClient(userToKick);
-			
-			if (!toKick) {
-				sendError(client, 442, "ERR_NOTONCHANNEL");
-				continue ;
-			}
-
-			std::string msg = makeBroadcastMessage(client, channelName, userToKick, reason);
-
-			channel->broadcast(client, msg);
-			channel->rmClient(toKick);
+		if (userToKick.empty()) {
+			sendError(client, 482, "ERR_NEEDMOREPARAMS - No user specified for channel " + channelName);
+			continue ;
 		}
+
+		if (userToKick[0] == ':')
+			userToKick = userToKick.substr(1);
+
+		Client *toKick = channel->checkClient(userToKick);
+		
+		if (!toKick) {
+			sendError(client, 442, "ERR_NOTONCHANNEL");
+			continue ;
+		}
+
+		std::string msg = makeBroadcastMessage(client, channelName, userToKick, reason);
+
+		channel->broadcast(client, msg);
+		channel->rmClient(toKick);
 	}
 }

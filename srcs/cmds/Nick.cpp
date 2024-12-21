@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   NICK.cpp                                           :+:      :+:    :+:   */
+/*   Nick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 11:47:10 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/20 22:12:46 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/21 13:51:35 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,10 @@ int checkNickname(std::string &nickname)
 	return 0;
 }
 
-static bool validateNick(std::string &nick)
+static int validateNick(std::string &nick)
 {
-	if (nick.size() >= 9 || (nick[0] >= '0' && nick[0] <= '9') || nick[0] == '-')
-		return false;
+	if (nick.size() > 9 || (nick[0] >= '0' && nick[0] <= '9') || nick[0] == '-')
+		return 1;
 	
 	const char validCharArray[] = {'-', '[', ']', '\\', '^', '_', '{', '}', '|'};
 	const std::set<char> validChar(validCharArray, validCharArray + sizeof(validCharArray) / sizeof(char));
@@ -40,43 +40,42 @@ static bool validateNick(std::string &nick)
 	{
 		if ((validChar.find(nick[i]) == validChar.end()) && (nick[i] < '0' || nick[i] > '9')
 			&& (nick[i] < 'a' || nick[i] > 'z') && (nick[i] < 'A' || nick[i] > 'Z'))
-			return false;
+			return 1;
     }
-	return true;
+	return 0;
 }
 
 void	nick(Client *client, std::string &nickname)
 {
 	std::cout << "--> " << nickname << std::endl;
-	
-	if (nickname.empty())
-		return (sendError(client, 431, "ERR_NONICKNAMEGIVEN", client->getNickname()));
-		
-	if (nickname.find(' ') != std::string::npos)
-		return (sendError(client, 432, "ERR_ERRONEUSNICKNAME"));
-	
-	if (!validateNick(nickname))
-		return (sendError(client, 432, "ERR_ERRONEUSNICKNAME", client->getNickname() + " " + nickname)); //ERR_ERRONEUSNICKNAME
-	
-	if (!client->getNickname().empty() && nickname == client->getNickname())
-		return (sendError(client, 436, "Nickname collision KILL", client->getNickname() + " " + nickname)); //ERR_NICKCOLLISION
-	
-	if (checkNickname(nickname))
-		sendError(client, 433, "Nickname is already in use", client->getNickname() + " " + nickname); //ERR_NICKNAMEINUSE
+	std::vector<std::string> words = split(nickname, ' ');
+	if (words.empty())
+		return (sendError(client, 431, "ERR_NONICKNAMEGIVEN", client->getNickname())); //ERR_NONICKNAMEGIVEN
+	std::string nick = words[0];
+	while (nick[0] == ' ')
+		nick.erase(0, 1);
+	if (nick.empty())
+		sendError(client, 431, "No nickname given", client->getNickname()); //ERR_NONICKNAMEGIVEN
+	else if (validateNick(nick))
+		sendError(client, 432, "Erroneous nickname", client->getNickname() + " " + nick); //ERR_ERRONEUSNICKNAME
+	else if (!client->getNickname().empty() && nick == client->getNickname())
+		sendError(client, 436, "Nickname collision KILL", client->getNickname() + " " + nick); //ERR_NICKCOLLISION
+	else if (checkNickname(nick))
+		sendError(client, 433, "Nickname is already in use", client->getNickname() + " " + nick); //ERR_NICKNAMEINUSE
 	else
 	{
 		std::string str = "";
 		if (client->getNickname().empty())
 		{
-			str = "Introducing new nick \"" + nickname + "\"\n";
+			str = "Introducing new nick \"" + nick + "\"\n";
 			send(client->getFd(), str.c_str(), str.size(), 0);
 		}
 		else
 		{
-			str = ":" + client->getNickname() + " NICK :" + nickname + "\n";	
+			str = ":" + client->getNickname() + " NICK :" + nick + "\n";	
 			send(client->getFd(), str.c_str(), str.size(), 0);
 		}
-		client->setNickname(nickname);
+		client->setNickname(nick);
 		if (!client->getUsername().empty() && !client->getRegistered())
 		{	
 			client->setRegistered(true);

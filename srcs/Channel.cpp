@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:58:33 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/19 12:07:24 by pborrull         ###   ########.fr       */
+/*   Updated: 2024/12/21 15:06:07 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,6 +142,10 @@ Client	*Channel::checkClient(std::string &nickname) {
 	for (size_t i = 0; i < this->_clients.size(); ++i) {
 		if (this->_clients[i]->getNickname() == nickname)
 			return this->_clients[i];
+	}
+	for (size_t i = 0; i < this->_operatorClients.size(); ++i) {
+		if (this->_operatorClients[i]->getNickname() == nickname)
+			return this->_operatorClients[i];
 	}
 	return NULL;
 }
