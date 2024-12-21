@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   USER.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 11:12:30 by pbotargu          #+#    #+#             */
-/*   Updated: 2024/12/19 11:36:09 by pbotargu         ###   ########.fr       */
+/*   Updated: 2024/12/20 20:57:39 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,42 @@
 #include <vector>
 #include <string>
 #include "Utils.hpp"
+
+static bool checkServerName(std::string &name) {
+	
+	std::string serverName = Server::getInstance().getServerName();
+
+	if (serverName == name)
+		return true;
+	return false;
+}
+
+static bool isValidIp(std::string &host) {
+	std::vector<std::string>	tokens = split(host, '.');
+
+	if (tokens.size() != 4)
+		return false;
+	
+	for (size_t i = 0; i < tokens.size(); ++i) {
+		const std::string &part = tokens[i];
+
+		if (part.empty())
+			return false;
+		
+		for (size_t j = 0; j < part.size(); ++j) {
+			if (!std::isdigit(part[j]))
+				return false;
+		}
+		
+		if (part.size() > 1 && part[0] == '0')
+			return false;
+		
+		long value = std::strtol(part.c_str(), NULL, 10);
+		if (value < 0 || value > 255)
+			return false;
+	}
+	return true;
+}
 
 static bool checkUser(std::string &username)
 {
@@ -31,8 +67,10 @@ static bool checkUser(std::string &username)
 
 void	user(Client *client, std::string pass)
 {
-    if (checkerIsLogged(client) == false)
-        return ;
+    // if (checkerIsLogged(client) == false)
+    //     return ;
+	if (!client->getLogged() || client->getNickname().empty())
+		return ;
     std::vector<std::string> words = split(pass, ' ');
     if (words.size() < 4)
         return (sendError(client, 461, "Not enought parameters. \n/USER <user> <hostname> <serverName> <realname> ")); //revisar codi d'error  i missatge!!!    
@@ -44,8 +82,16 @@ void	user(Client *client, std::string pass)
     }
     // <username> <hostname> <servername> <realname>
     client->setUsername(words[0]);
-    client->setHostname(words[1]); // revisar com ha de ser hostname
-    client->setServername(words[2]);
+	if (!words[1].empty() && !isValidIp(words[1])) {
+		sendError(client, 461, "ERR_NEEDMOREPARAMS - Invalid ip"); //revisar codi d'error  i missatge!!!    
+        return ;
+	}
+    client->setHostname(words[1]);
+	if (!words[2].empty() && !checkServerName(words[2])) {
+		sendError(client, 461, "ERR_NEEDMOREPARAMS - Invalid server"); //revisar codi d'error  i missatge!!!    
+        return ;
+	}
+    client->setServername(words[2]); // hacer funcion que chequee que sea el mismo nombre del server y quitarle los ':'
     client->setRealName(words[3]);
 	std::string response = "User created!\r\n";
     send(client->getFd(), response.c_str(), response.size(), 0);

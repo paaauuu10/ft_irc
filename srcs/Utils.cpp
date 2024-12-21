@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   Utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 12:00:21 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/17 11:54:15 by pborrull         ###   ########.fr       */
+/*   Updated: 2024/12/20 21:07:16 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Utils.hpp"
-
-
 
 // :<server> <error_code> <target> :<error_message>
 // :irc.example.com 432 user123 :Erroneous nickname
@@ -46,11 +44,8 @@ std::vector<std::string> split(const std::string& input, char delimiter) {
                 token.clear();
             }
         }
-        else {
+        else
             token += input[i];
-            if (input[i] == delimiter)
-                ++i;
-        }
     }
     if (!token.empty())
         tokens.push_back(token);

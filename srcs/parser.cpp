@@ -17,23 +17,31 @@ static bool validCommand(Client *client, std::string str, std::string cmd)
 	//"SERVER", "OPER""QUIT", "SQUIT", "NAMES", "LIST", "VERSION","PART",
     int index = 0;
     std::string commands[9] = { "PASS", "NICK", "USER", "JOIN", "MODE", "TOPIC", "INVITE", "KICK", "PRIVMSG"};
+	
+	// if (!client->getLogged() && cmd != "PASS") {
+	// 	std::string server = Server::getInstance().getServerName();
+	// 	std::string response = ":" + server + " 451 :You have not registered\r\n"; //ERR_NOTREGISTERED
+	// 	send(client->getFd(), response.c_str(), response.size(), 0);
+	// 	return true;
+	// }
+
 	if (!client->getLogged() && cmd != "PASS") {
-		std::string server = Server::getInstance().getServerName();
-		std::string response = ":" + server + " 451 :You have not registered\r\n"; //ERR_NOTREGISTERED
-		send(client->getFd(), response.c_str(), response.size(), 0);
+		sendError(client, 444, "ERR_NOLOGIN"); //ERR_NEEDMOREPARAMS
 		return true;
 	}
-	if (client->getLogged() && cmd == "PASS") {
-		sendError(client, 462, "You may not reregister"); //ERR_NEEDMOREPARAMS
-		return true;
-	}
-	if (!client->getRegistered() && cmd != "USER" && cmd != "NICK" && client->getLogged()) {
+
+	if (!client->getRegistered() && cmd == "USER") {
 		if (client->getUsername().empty())
-			sendError(client, 1, "You need to use cmd USER <username> <hostname> <servername> <realname>");
-		if (client->getNickname().empty())
-			sendError(client, 1, "You need to use cmd NICK <nickname>");
+			sendError(client, 431, "ERR_NONICKNAMEGIVEN");
 		return true;
 	}
+	// if (!client->getRegistered() && cmd != "USER" && cmd != "NICK" && client->getLogged()) {
+	// 	if (client->getUsername().empty())
+	// 		sendError(client, 1, "You need to use cmd USER <username> <hostname> <servername> <realname>");
+	// 	if (client->getNickname().empty())
+	// 		sendError(client, 1, "You need to use cmd NICK <nickname>");
+	// 	return true;
+	// }
 
 	std::string	value = str.substr(cmd.size(), str.size() - cmd.size());
 	while ((cmd != commands[index]) && cmd != ('/' + commands[index])) {
