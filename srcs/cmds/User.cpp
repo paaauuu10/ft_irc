@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   User.cpp                                           :+:      :+:    :+:   */
+/*   USER.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 11:12:30 by pbotargu          #+#    #+#             */
-/*   Updated: 2024/12/21 13:59:37 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/22 18:54:27 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ static bool isValidIp(std::string &host) {
 
 static bool checkUser(std::string &username)
 {
-	
 	std::vector<Client *>	vclient = Server::getInstance().getClients();
 	for (long unsigned int i = 0; i < vclient.size(); i++)
 	{
@@ -69,7 +68,7 @@ static bool checkUser(std::string &username)
 	return true;
 }
 
-void	user(Client *client, std::string pass)
+void	user(Client *client, std::string &pass)
 {
     // if (checkerIsLogged(client) == false)
     //     return ;
@@ -79,12 +78,15 @@ void	user(Client *client, std::string pass)
     if (words.size() < 4)
         return (sendError(client, 461, "Not enought parameters. \n/USER <user> <hostname> <serverName> <realname> ")); //revisar codi d'error  i missatge!!!    
     //username es unic? en cas que si cal revisar si ja existeix o no. Mirar si el client ja esta registrat?
-    if (!checkUser(words[0]))
-    {    
+    if (!checkUser(words[0])) {    
         sendError(client, 433, "This username already exists!"); //revisar codi d'error  i missatge!!!    
         return ;
     }
     // <username> <hostname> <servername> <realname>
+    if (client->getNickname().empty()) {
+        sendError(client, 461, "ERR_NEEDMOREPARAMS - Nickname required"); //revisar codi d'error  i missatge!!!    
+        return ;
+    }
     client->setUsername(words[0]);
 	if (!words[1].empty() && words[1][0] != '0' && !isValidIp(words[1])) {
 		sendError(client, 461, "ERR_NEEDMOREPARAMS - Invalid ip"); //revisar codi d'error  i missatge!!!    

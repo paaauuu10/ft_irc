@@ -6,13 +6,13 @@
 /*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:57:43 by pbotargu          #+#    #+#             */
-/*   Updated: 2024/12/20 21:04:20 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/21 21:17:51 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-void	pass( Client *client, std::string pass)
+void	pass( Client *client, std::string &pass)
 {
    	std::string password = Server::getInstance().getPass(); // We get PASS from Server
     std::string clean_pass = pass.substr(pass.find(' ') + 1); // Delete initial space

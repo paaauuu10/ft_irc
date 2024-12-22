@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 12:00:21 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/20 21:07:16 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/21 19:46:43 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 // target se predefine en "", si no es pasado como parametro
 void sendError(Client* client, int errorCode, const std::string& errorMessage, const std::string& target) {
-    if (!client || !client->getLogged()) {
+    if (!client) {
         std::cerr << "Error: Cliente no está conectado.\n";
         return;
     }
@@ -63,3 +63,11 @@ bool    checkerIsLogged(Client *client)
     return true;
 }
 
+std::string trim(const std::string &str)
+{
+	size_t first = str.find_first_not_of(" \t\r");
+	if (first == std::string::npos)
+		return ""; // return empty str if only contains tabs or spaces
+	size_t last = str.find_last_not_of(" \t\r");
+	return str.substr(first, last - first + 1);
+}

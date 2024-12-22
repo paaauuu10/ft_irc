@@ -12,11 +12,41 @@
 
 #include "Server.hpp"
 
-static bool validCommand(Client *client, std::string str, std::string cmd)
+static	void	handleLoginAndRegistration(Client *client, const std::string &cmd) {
+	
+	if (!client->getLogged() && cmd != "PASS") {
+		sendError(client, 444, "ERR_NOLOGIN"); //ERR_NEEDMOREPARAMS
+		return ;
+	}
+
+	if (!client->getRegistered() && client->getLogged()) {
+		if (client->getNickname().empty()) {
+			if (cmd != "NICK") {
+				sendError(client, 444, "ERR_NONICKNAMEGIVEN 1");
+				return ;
+			}
+		}
+
+		if (client->getUsername().empty()) {
+			if (cmd != "USER" && cmd != "NICK") {
+				sendError(client, 1, "You need to use cmd /USER");
+				return ;
+			}
+		}
+	}
+}
+
+
+//"SERVER", "OPER""QUIT", "SQUIT", "NAMES", "LIST", "VERSION","PART",
+
+static bool validCommand(Client *client, std::string &value, std::string &cmd)
 {
-	//"SERVER", "OPER""QUIT", "SQUIT", "NAMES", "LIST", "VERSION","PART",
-    int index = 0;
-    std::string commands[9] = { "PASS", "NICK", "USER", "JOIN", "MODE", "TOPIC", "INVITE", "KICK", "PRIVMSG"};
+	handleLoginAndRegistration(client, cmd);
+	
+	typedef void (*cmdFunction)(Client *, std::string&);
+    
+	std::string commands[9] = { "PASS", "NICK", "USER", "JOIN", "MODE", "TOPIC", "INVITE", "KICK", "PRIVMSG"};
+	cmdFunction functions[9] = { pass, nick, user, join, mode, topic, invite, kick, privMsg };
 	
 	// if (!client->getLogged() && cmd != "PASS") {
 	// 	std::string server = Server::getInstance().getServerName();
@@ -25,84 +55,48 @@ static bool validCommand(Client *client, std::string str, std::string cmd)
 	// 	return true;
 	// }
 
-	if (!client->getLogged() && cmd != "PASS") {
-		sendError(client, 444, "ERR_NOLOGIN"); //ERR_NEEDMOREPARAMS
+	int index = 0;
+	for (; index < 9; ++index) { //('/' + commands[index])) {
+		if (cmd == commands[index])
+			break;
+	}
+
+	if (index < 9) {
+		functions[index](client, value);
 		return true;
-	}
-
-/* 	if (!client->getRegistered() && cmd != "NICK") {
-		if (client->getUsername().empty())
-			sendError(client, 431, "ERR_NONICKNAMEGIVEN");
-		return true;
-	} */
-
-	if (!client->getRegistered() && cmd != "USER" && cmd != "NICK" && client->getLogged()) {
-	 	if (client->getNickname().empty())
-	 		return (sendError(client, 444, "ERR_NONICKNAMEGIVEN"), true);
-		if (client->getUsername().empty())
-	 		return (sendError(client, 1, "You need to use cmd /USER"), true);
-	 	return true;
-	 }
-
-	std::string	value = str.substr(cmd.size(), str.size() - cmd.size());
-	while ((cmd != commands[index]) && cmd != ('/' + commands[index])) {
-		index++;
-		if (index == 9)
-			return false;
-	}
-	index++;
-	switch(index) {
-		case 1:
-			pass(client, value);
-			break;
-		case 2:
-			nick(client, value);
-			break;
-		case 3:
-			user(client, value);
-			break;
-		case 4:
-			join(client, value);
-			break;
-		case 5:
-			mode(client, value);
-			break;
-		case 6:
-			topic(client, value);
-			break;
-		case 7:
-			invite(client, value);
-			break;
-		case 8:
-			kick(client, value);
-			break;
-		case 9:
-			privMsg(client, value);
-			break;
-/* 		case 10:
-			MODE(client, value);
-			break; */
-		//default:
-		//	break ;
-	}
-	return true;
+	} else
+		return false;
 }
+
+
 void parser(Client *client, std::string str)
 {
-	while (!str.empty() && ((str[str.size() - 1]) == '\n' || (str[str.size() - 1]) == '\r'))
-		str.erase(str.size() -1);
+	if (!str.empty() && str[0] == '/')
+		str = str.substr(1);
+	std::cout << "STR BEFORE: -" << str << std::endl;
+	while (!str.empty() && (str.back() == '\n' || str.back() == '\r'))
+		str.pop_back();
 
-    std::string cmd = str.substr(0, str.find(' '));
-	std::string cmdUpper = cmd;
-	
-	for (size_t i = 0; i < cmd.length(); ++i)
-		cmdUpper[i] = std::toupper(cmd[i]);
-    if (str == "\r\n") // revisar aquesta guarrada: Si treiem aixo mostra :UNKNOWN COMMAND!
-        return ;
-    if  (str.size() > 0)// && str[0] == '/')
-    {
-        if (!validCommand(client, str, cmdUpper))
-        {
+	std::cout << "STR AFTER: -" << str << std::endl;
+
+    std::string::size_type pos = str.find_first_of(" \t");
+	std::string cmd = (pos == std::string::npos) ? str : str.substr(0, pos);
+
+	std::cout << "cmd AFTER: -" << cmd << std::endl;
+
+	//if (str == "\r\n") // revisar aquesta guarrada: Si treiem aixo mostra :UNKNOWN COMMAND!
+    //    return ;
+
+	//std::string cmdUpper = cmd;
+	//for (size_t i = 0; i < cmd.length(); ++i)
+	//	cmdUpper[i] = std::toupper(cmd[i]);
+
+	std::string value = (pos == std::string::npos) ? "" : str.substr(pos + 1);
+	value = trim(value);
+    
+	std::cout << "VALUE AFTER22: -" << value << std::endl;
+    if (!str.empty()) {// && str[0] == '/') {
+        if (!validCommand(client, value, cmd)) {
             std::string response = cmd + " :Unknown command\r\n";
             send(client->getFd(), response.c_str(), response.size(), 0);
         }
@@ -112,20 +106,21 @@ void parser(Client *client, std::string str)
 void parsingbuffer(char *buffer, Client *client)
 {
 	std::istringstream	stream(buffer);
-	static std::string line;
+	//static std::string line;
 	std::string	temp;
 
 	while (std::getline(stream, temp))
-	{
-		line += temp;
-		temp.clear();
-		if (stream.eof() && temp.empty())
-			return ;
-		if (line.find('\0') != std::string::npos)
-			return ;
+		parser(client, temp);
+	// {
+	// 	line += temp;
+	// 	temp.clear();
+	// 	if (stream.eof() && temp.empty())
+	// 		return ;
+	// 	if (line.find('\0') != std::string::npos)
+	// 		return ;
 
-		if (line != "CAP LS 302\r")
-			parser(client, line);
-		line.clear();
-	}
+	// 	if (line != "CAP LS 302\r")
+	// 		parser(client, line);
+	// 	line.clear();
+	// }
 }
