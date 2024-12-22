@@ -74,8 +74,8 @@ void parser(Client *client, std::string str)
 	if (!str.empty() && str[0] == '/')
 		str = str.substr(1);
 	std::cout << "STR BEFORE: -" << str << std::endl;
-	while (!str.empty() && (str.back() == '\n' || str.back() == '\r'))
-		str.pop_back();
+	while (!str.empty() && (str[str.size() - 1] == '\n' || str[str.size() - 1] == '\r'))
+		str.erase(str.size() - 1);
 
 	std::cout << "STR AFTER: -" << str << std::endl;
 

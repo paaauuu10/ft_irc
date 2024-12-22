@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:58:33 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/21 15:06:07 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/22 19:18:46 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ bool	Channel::checkKey(const std::string &str) const {
 }
 
 bool	Channel::checkOperatorClient(Client *client) {
-	for (size_t i = 0; this->_operatorClients.size(); ++i) {
+	for (size_t i = 0; i < this->_operatorClients.size(); ++i) {
 		if (this->_operatorClients[i]->getNickname() == client->getNickname())
 			return true;
 	}
@@ -138,7 +138,7 @@ bool	Channel::checkOperatorClient(Client *client) {
 
 Client	*Channel::checkClient(std::string &nickname) {
 	if (this->_clients.empty())
-    	return NULL;
+		return NULL;
 	for (size_t i = 0; i < this->_clients.size(); ++i) {
 		if (this->_clients[i]->getNickname() == nickname)
 			return this->_clients[i];
