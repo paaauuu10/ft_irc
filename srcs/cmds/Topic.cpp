@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   TOPIC.cpp                                          :+:      :+:    :+:   */
+/*   Topic.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 11:56:19 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/22 19:01:50 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/22 19:25:49 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void    topic(Client *client, std::string &arg) {
     std::string channelName = (spacePos == std::string::npos) ? arg : arg.substr(0, spacePos);
     std::string topic = (spacePos == std::string::npos) ? "" : arg.substr(spacePos + 1);
 
-    if (!channelName.empty() || (channelName[0] != '#' && channelName[0] != '&')) {
+    if (channelName.empty() || (channelName[0] != '#' && channelName[0] != '&')) {
         sendError(client, 461, "ERR_NEEDMOREPARAMS - Invalid channel name");
         return ;
     }
