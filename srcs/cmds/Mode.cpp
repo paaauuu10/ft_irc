@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 12:22:51 by pbotargu          #+#    #+#             */
-/*   Updated: 2024/12/23 15:21:25 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/25 19:15:21 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ void handleModeO(Channel *channel, Client *client, char s, std::string nickname)
         return;
     }
     std::string response = client->getNickname() + (s == '-' ? " removes " : " grants ") + "operator status to " + nickname + " in " + channel->getName() + "'s channel\n";
-    if (s == '-') {
+    // chequear si el operator ya esta 
+	if (s == '-') {
         channel->removeOperatorClient(clientO);
     } else {
         channel->addOperatorClient(clientO);
@@ -58,21 +59,15 @@ void handleModeO(Channel *channel, Client *client, char s, std::string nickname)
 
 void handleModeL(Channel *channel, Client *client, char s, std::string limitStr) {
     limitStr = trim(limitStr);
-	int limit = 0;
-	
-	try {
-		limit = std::stoi(limitStr);
-		if (limit <= 0)
-			throw std::out_of_range("Limit must be positive.");
-	} catch (const std::invalid_argument &e) {
-		sendError(client, 461, "ERR_NEEDMOREPARAMS - Invalid limit value");
-		return ;
-	} catch (const std::out_of_range &e) {
-		sendError(client, 461,  "ERR_NEEDMOREPARAMS - Limit value out of range");
-		return ;
-	}
-	
-	std::string response = client->getNickname() + (s == '-' ? " disables " : " enables ") + "l mode in " + channel->getName() + "'s channel\n";
+    int limit = 0;
+
+    std::stringstream ss(limitStr);
+    if (!(ss >> limit) || limit <= 0) {
+        sendError(client, 461, "ERR_NEEDMOREPARAMS - Invalid limit value");
+        return;
+    }
+
+    std::string response = client->getNickname() + (s == '-' ? " disables " : " enables ") + "l mode in " + channel->getName() + "'s channel\n";
     channel->setMode('l', s == '+', 0);
     if (s == '+') {
         channel->setLimit(limit);
