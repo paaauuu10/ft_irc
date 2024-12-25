@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:20:37 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/21 21:18:14 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/23 15:25:51 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ void	user(Client *client, std::string &pass);
 void	nick(Client *client, std::string &nickname);
 void	invite(Client *client, std::string &invitation);
 void	mode(Client *client, std::string &str);
+void	sendFile(Client *client, std::string &args);
 
 
 void 	privMsg(Client *sender, std::string &value);

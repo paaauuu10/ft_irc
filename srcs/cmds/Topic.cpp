@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 11:56:19 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/22 19:25:49 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/23 14:51:24 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,8 @@ void    topic(Client *client, std::string &arg) {
 		}
 
 		if (topic[0] != ':') {
-    		sendError(client, 461, "ERR_NEEDMOREPARAMS - Topic must start with ':'");
-    		return;
+			sendError(client, 461, "ERR_NEEDMOREPARAMS - Topic must start with ':'");
+			return;
 		}
 		
 		channel->setTopic(topic.substr(1));
