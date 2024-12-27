@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 12:22:51 by pbotargu          #+#    #+#             */
-/*   Updated: 2024/12/25 19:22:44 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/27 12:39:25 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ void handleModeO(Channel *channel, Client *client, char s, std::string nickname)
 	if (s == '-') {
         channel->removeOperatorClient(clientO);
     } else {
+		// revisar si ya es cliente 
         channel->addOperatorClient(clientO);
     }
     send(client->getFd(), response.c_str(), response.size(), 0);

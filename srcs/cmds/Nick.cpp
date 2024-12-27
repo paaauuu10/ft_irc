@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   NICK.cpp                                           :+:      :+:    :+:   */
+/*   Nick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 11:47:10 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/22 18:32:26 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/27 11:34:18 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	nick(Client *client, std::string &nickname)
 	std::cout << "--> " << nickname << std::endl;
 
 	if (nickname.empty()) {
-		sendError(client, 431, "ERR_NONICKNAMEGIVEN", client->getNickname()); // ERR_NONICKNAMEGIVEN
+		//sendError(client, 431, "ERR_NONICKNAMEGIVEN", client->getNickname()); // ERR_NONICKNAMEGIVEN
 		return;
 	}
 	

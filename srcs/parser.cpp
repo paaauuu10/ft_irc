@@ -12,6 +12,8 @@
 
 #include "Server.hpp"
 
+
+ // pasar a bool has nick has user y solo setear registered si las dos son ok!
 static	void	handleLoginAndRegistration(Client *client, const std::string &cmd) {
 	
 	if (!client->getLogged() && cmd != "PASS") {
@@ -106,21 +108,20 @@ void parser(Client *client, std::string str)
 void parsingbuffer(char *buffer, Client *client)
 {
 	std::istringstream	stream(buffer);
-	//static std::string line;
+	static std::string line;
 	std::string	temp;
 
 	while (std::getline(stream, temp))
-		parser(client, temp);
-	// {
-	// 	line += temp;
-	// 	temp.clear();
-	// 	if (stream.eof() && temp.empty())
-	// 		return ;
-	// 	if (line.find('\0') != std::string::npos)
-	// 		return ;
+	{
+	 	line += temp;
+	 	temp.clear();
+	 	if (stream.eof() && temp.empty())
+	 		return ;
+	 	if (line.find('\0') != std::string::npos)
+	 		return ;
 
-	// 	if (line != "CAP LS 302\r")
-	// 		parser(client, line);
-	// 	line.clear();
-	// }
+	 	if (line != "CAP LS 302\r")
+	 		parser(client, line);
+	 	line.clear();
+	}
 }

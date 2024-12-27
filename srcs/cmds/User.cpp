@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   USER.cpp                                           :+:      :+:    :+:   */
+/*   User.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 11:12:30 by pbotargu          #+#    #+#             */
-/*   Updated: 2024/12/22 18:54:27 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/27 12:25:26 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,10 @@ static bool checkServerName(std::string &name) {
 	std::cout << "serv : -" << name << std::endl;
 	std::string serverName = Server::getInstance().getServerName();
 
-	if (name == "*")
+	if (name == "*") {
+		name = serverName;
 		return true;
+	}
 	if (serverName == name)
 		return true;
 	return false;
@@ -88,11 +90,13 @@ void	user(Client *client, std::string &pass)
         return ;
     }
     client->setUsername(words[0]);
+	
 	if (!words[1].empty() && words[1][0] != '0' && !isValidIp(words[1])) {
 		sendError(client, 461, "ERR_NEEDMOREPARAMS - Invalid ip"); //revisar codi d'error  i missatge!!!    
         return ;
 	}
     client->setHostname(words[1]);
+	
 	if (!words[2].empty() && !checkServerName(words[2])) {
 		sendError(client, 461, "ERR_NEEDMOREPARAMS - Invalid server"); //revisar codi d'error  i missatge!!!    
         return ;

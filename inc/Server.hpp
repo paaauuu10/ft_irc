@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:20:37 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/25 20:43:36 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/27 11:50:01 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,8 @@ class Server
 		static std::string	getServerName() {
 			return _srvName;
 		}
+		void				removeClientFromPolls(int fd);
+		void				removeClientFromServer(Client *client);
 };
 
 void 	parser(Client *client, std::string str);

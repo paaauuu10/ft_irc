@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 12:00:38 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/25 20:43:59 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/27 10:58:49 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,8 +112,10 @@ void	Client::addChannel(Channel *channel) {
 
 void	Client::rmChannel(std::string &channelName) {
 	for (size_t i = 0; i < _channels.size(); ++i) {
-		if (_channels[i]->getName() == channelName)
-			delete _channels[i];
+		if (_channels[i]->getName() == channelName) {\
+			_channels.erase(_channels.begin() + i);
+			break ;
+		}
 	}
 }
 
@@ -127,8 +129,11 @@ void	Client::disconnect(void) {
 		_fd = -1;
 	}
 
-	for (size_t i = 0; i < _channels.size(); ++i)
+	for (size_t i = 0; i < _channels.size(); ++i) {
 		_channels[i]->rmClient(this);
+		if (_channels.empty())
+			delete _channels[i];
+	}
 	
 	_channels.clear();
 }

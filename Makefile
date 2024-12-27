@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+         #
+#    By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/21 14:36:31 by pbotargu          #+#    #+#              #
-#    Updated: 2024/12/25 20:40:27 by anovio-c         ###   ########.fr        #
+#    Updated: 2024/12/27 11:22:52 by anovio-c         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,7 +43,7 @@ SRC		= $(SRC_DIR)Server.cpp \
 OBJ = $(SRC:$(SRC_DIR)%.cpp=$(OBJ_DIR)%.o)
 DEP = $(OBJ:.o=.d)
 CC = g++ 
-CFLAGS = -Wall -Wextra -Werror -std=c++98 -fsanitize=address -pedantic -MMD -MP -g 
+CFLAGS = -Wall -Wextra -Werror -std=c++98 -pedantic -MMD -MP -g 
 
 # Colored output
 ERASE	= \033[2K\r

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:58:33 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/25 20:44:11 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/27 12:32:09 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ Channel::Channel(const std::string &channelName, const std::string &key, Client 
 	// invitation mode, by default is false
 	_modes['i'] = false;
 	_modes['t'] = false;
+	_modes['l'] = false;
 	if (key.empty()) {
 		_key = "";
 		_modes['k'] = false;
@@ -31,7 +32,7 @@ Channel::Channel(const std::string &channelName, const std::string &key, Client 
 		_key = key;
 		_modes['k'] = true;
 	}
-	_limit = 999; // ?? -1
+	_limit = -1; // ?? -1
 	std::cout << "Channel '" << channelName << "' created by " << creator->getUsername() << ".\n";
 }
 
@@ -156,11 +157,25 @@ bool	Channel::isFull() {
 	return ((this->_clients.size() + this->_operatorClients.size()) == static_cast<u_long>(this->_limit) ? true : false );
 }
 
-void	Channel::addClient(Client *client) { this->_clients.push_back(client); }
+void	Channel::addClient(Client *client) {
+	if (this->isFull()) {
+        sendError(client, 471, "ERR_CHANNELISFULL - Channel is full", this->getName());
+        return;
+    }
+	this->_clients.push_back(client);
+}
 
 void	Channel::addClientsInvited(std::string client) { this->_clientsInvited.push_back(client); }
 
-void	Channel::addOperatorClient(Client *client) { this->_operatorClients.push_back(client); }
+void	Channel::addOperatorClient(Client *client) {
+	
+	if (this->isFull()) {
+        sendError(client, 471, "ERR_CHANNELISFULL - Channel is full", this->getName());
+        return;
+    }
+	this->_operatorClients.push_back(client);
+
+}
 
 void Channel::removeOperatorClient(Client *client) {
     // Usamos std::remove para desplazar el elemento al final
@@ -253,7 +268,7 @@ void Channel::cmdHelp(Client *client) {
 		<< "/invite <nickname> <channel> - Invite a user to a channel\n"
 		<< "/kick <channel> <nickname> - Kick a user from a channel\n"
 		<< "/mode <channel> <mode> [parameters] - Change channel modes\n"
-		<< "/!!!msg <nickname> <message> - Send a private message to a user\n";
+		<< "/!!!msg <nickname> <message> - Send a private message to a user\r\n";
 	std::string msg = oss.str();
 	send(client->getFd(), msg.c_str(), msg.size(), 0);
 }
