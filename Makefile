@@ -6,7 +6,7 @@
 #    By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/21 14:36:31 by pbotargu          #+#    #+#              #
-#    Updated: 2024/12/25 19:10:52 by anovio-c         ###   ########.fr        #
+#    Updated: 2024/12/25 20:40:27 by anovio-c         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,7 @@ SRC		= $(SRC_DIR)Server.cpp \
 		  $(SRC_DIR)cmds/Invite.cpp \
 		  $(SRC_DIR)cmds/Join.cpp \
 		  $(SRC_DIR)cmds/Topic.cpp \
+		  $(SRC_DIR)cmds/Quit.cpp \
 		  $(SRC_DIR)cmds/Kick.cpp \
 		  $(SRC_DIR)cmds/Pass.cpp \
 		  $(SRC_DIR)cmds/PrivMsg.cpp \

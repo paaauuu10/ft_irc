@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   JOIN.cpp                                           :+:      :+:    :+:   */
+/*   Join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 09:55:32 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/17 10:27:33 by pborrull         ###   ########.fr       */
+/*   Updated: 2024/12/25 19:41:27 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,6 @@ void	join(Client *client, std::string& args) {
         channel->broadcast(client, message);
 		channel->RPLTOPIC(client);
 		channel->RPL_NAMREPLY(client);
-		// enviar lista de comandos
+		channel->cmdHelp(client);
 	}
 }

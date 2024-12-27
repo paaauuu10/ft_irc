@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:58:33 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/22 19:18:46 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/25 20:44:11 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ bool	Channel::checkOperatorClient(Client *client) {
 	return false;
 }
 
-Client	*Channel::checkClient(std::string &nickname) {
+Client	*Channel::checkClient(std::string nickname) {
 	if (this->_clients.empty())
 		return NULL;
 	for (size_t i = 0; i < this->_clients.size(); ++i) {
@@ -164,13 +164,10 @@ void	Channel::addOperatorClient(Client *client) { this->_operatorClients.push_ba
 
 void Channel::removeOperatorClient(Client *client) {
     // Usamos std::remove para desplazar el elemento al final
-    	this->_operatorClients.erase(std::remove(this->_operatorClients.begin(), this->_operatorClients.end(), client), this->_operatorClients.end());
-	
-	/*std::vector<Client *>::iterator it = this->_operatorClients.begin();
-	for (; it != this->_operatorClients.end(); ++it) {
-		if (*it == client)
-			it = this->_operatorClients.erase(it);
-	}*/
+    this->_operatorClients.erase(
+		std::remove(this->_operatorClients.begin(), this->_operatorClients.end(), client),
+		this->_operatorClients.end());
+
 }
 
 
@@ -190,13 +187,13 @@ std::vector<int>	Channel::listFdClients() {
 	std::vector<int>	list;
 	std::vector<Client *>::iterator it = _clients.begin();
 
-	for (; it != _clients.end(); ++it) {
+	for (; it != _clients.end(); ++it)
 		list.push_back((*it)->getFd());
-	}
+		
 	it = _operatorClients.begin();
-	for (; it != _operatorClients.end(); ++it) {
+	for (; it != _operatorClients.end(); ++it)
 		list.push_back((*it)->getFd());
-	}
+		
 	return (list);
 }
 
@@ -204,52 +201,11 @@ void Channel::broadcast(Client *client, std::string &msg) {
     std::vector<int> fds = listFdClients();
 	(void)client;
 
-    //std::ostringstream oss;
-
-    // Mensaje JOIN con el prefijo correcto
-	// :<nickname>!<username>@<hostname> JOIN :<channelName>\r\n
-	
-    //oss << ":" << client->getNickname() << "!" 
-    //    << client->getUsername() << "@127.0.0.1 JOIN :" 
-     //   << this->getName() << "\r\n";
-
-    //std::string msg = oss.str();
-
-    // Enviar a todos los clientes del canal
     for (size_t i = 0; i < fds.size(); ++i) {
         send(fds[i], msg.c_str(), msg.size(), 0);
     }
 }
 
-
-/*
-void	Channel::broadcast(Client *client) {
-	//:<servidor> JOIN <cliente> <canal>
-	
-	std::vector<int> fds = listFdClients();
-	std::ostringstream oss;
-
-	oss << ":" << Server::getServerName() << " JOIN :"
-		<< client->getNickname() << " " << this->getName()
-		<< "\r\n";
-		
-	std::string msg = oss.str();
-	//:<server_name> JOIN :#canal1
-	std::ostringstream ossOwn;
-
-	ossOwn << ":" << Server::getServerName() << " JOIN :"
-		<< this->getName() << "\r\n";
-	std::string msgOwn = ossOwn.str();
-
-	for (size_t i = 0; i < fds.size(); ++i) {
-		if (fds[i] == client->getFd()) {
-			send(fds[i], msgOwn.c_str(), msgOwn.size(), 0);
-			continue ;
-		}
-		std::cout << "FD  == " << fds[i] << std::endl;
-		send(fds[i], msg.c_str(), msg.size(), 0);
-	}
-}*/
 
 void	Channel::RPLTOPIC(Client *client) {
 	std::ostringstream oss;
@@ -283,4 +239,21 @@ void	Channel::RPL_NAMREPLY(Client *client) {
 		<< " :End of NAMES list." << "\r\n";
 	msg = oss.str();
     send(client->getFd(), msg.c_str(), msg.size(), 0);
+}
+
+void Channel::cmdHelp(Client *client) {
+	std::ostringstream oss;
+
+	oss << "Available commands in the channel:\n"
+		<< "/join <channel> [key] - Join a channel\n"
+		// << "/part <channel> - Leave a channel\n"
+		<< "/topic <channel> [topic] - Set or view the topic of a channel\n"
+		// << "/names <channel> - List users in a channel\n"
+		// << "/list - List all channels\n"
+		<< "/invite <nickname> <channel> - Invite a user to a channel\n"
+		<< "/kick <channel> <nickname> - Kick a user from a channel\n"
+		<< "/mode <channel> <mode> [parameters] - Change channel modes\n"
+		<< "/!!!msg <nickname> <message> - Send a private message to a user\n";
+	std::string msg = oss.str();
+	send(client->getFd(), msg.c_str(), msg.size(), 0);
 }

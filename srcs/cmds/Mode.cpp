@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 12:22:51 by pbotargu          #+#    #+#             */
-/*   Updated: 2024/12/25 19:15:21 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/25 19:22:44 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,11 @@ void handleModeK(Channel *channel, Client *client, char s, std::string key) {
     key = trim(key);
 	std::string response = client->getNickname() + (s == '-' ? " disables " : " enables ") + "k mode in " + channel->getName() + "'s channel\n";
     channel->setMode('k', s == '+', 0);
-    if (s == '-') {
+    if (s == '-')
         channel->setKey("");
-    } else {
+	else
         channel->setKey(key);
-    }
+		
     send(client->getFd(), response.c_str(), response.size(), 0);
 }
 

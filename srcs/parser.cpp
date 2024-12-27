@@ -45,8 +45,8 @@ static bool validCommand(Client *client, std::string &value, std::string &cmd)
 	
 	typedef void (*cmdFunction)(Client *, std::string&);
     
-	std::string commands[9] = { "PASS", "NICK", "USER", "JOIN", "MODE", "TOPIC", "INVITE", "KICK", "PRIVMSG" };//, "SEND"};
-	cmdFunction functions[9] = { pass, nick, user, join, mode, topic, invite, kick, privMsg }; //, sendFile };
+	std::string commands[10] = { "PASS", "NICK", "USER", "JOIN", "MODE", "TOPIC", "INVITE", "KICK", "PRIVMSG", "QUIT" };//, "SEND"};
+	cmdFunction functions[10] = { pass, nick, user, join, mode, topic, invite, kick, privMsg, quit }; //, sendFile };
 	
 	// if (!client->getLogged() && cmd != "PASS") {
 	// 	std::string server = Server::getInstance().getServerName();
@@ -56,12 +56,12 @@ static bool validCommand(Client *client, std::string &value, std::string &cmd)
 	// }
 
 	int index = 0;
-	for (; index < 9; ++index) { //('/' + commands[index])) {
+	for (; index < 10; ++index) { //('/' + commands[index])) {
 		if (cmd == commands[index])
 			break;
 	}
 
-	if (index < 9) {
+	if (index < 10) {
 		functions[index](client, value);
 		return true;
 	} else

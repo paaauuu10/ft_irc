@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:24:51 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/19 11:17:27 by pborrull         ###   ########.fr       */
+/*   Updated: 2024/12/25 20:23:27 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,5 +225,18 @@ void Server::handleWho(Client *client, const std::string &channelName) {
         << " " << channelName << " :End of WHO list" << "\r\n";
     std::string msg = oss.str();
     send(client->getFd(), msg.c_str(), msg.size(), 0);
+}
+
+std::vector<Channel *>	Server::getChannels(Client *client) {
+	std::vector<Channel *>	channels;
+
+	//for (std::map<std::string, Channel *>::iterator it = this->_channels.begin(); )
+	for (std::vector<Channel *>::iterator it = this->_channels.begin(); it != this->_channels.end(); ++it) {
+        if ((*it)->checkClient(client->getNickname())) {
+            channels.push_back(*it);
+        }
+    }
+	
+	return channels;
 }
 

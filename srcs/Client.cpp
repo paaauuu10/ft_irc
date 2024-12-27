@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 12:00:38 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/16 12:55:40 by pbotargu         ###   ########.fr       */
+/*   Updated: 2024/12/25 20:43:59 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,11 @@ Channel		*Client::getChannel(Channel *channel) {
 	return (NULL);
 }
 
+std::vector<Channel *>	Client::getChannels(void) {
+
+	return _channels;
+}
+
 
 // SETTERS
 
@@ -116,3 +121,14 @@ void	Client::freeBuffer(void) {
 	this->_buffer.clear();
 }
 
+void	Client::disconnect(void) {
+	if (_fd != -1) {
+		close(_fd);
+		_fd = -1;
+	}
+
+	for (size_t i = 0; i < _channels.size(); ++i)
+		_channels[i]->rmClient(this);
+	
+	_channels.clear();
+}

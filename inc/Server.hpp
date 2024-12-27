@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:20:37 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/23 15:25:51 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/25 20:43:36 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,8 @@ class Server
 		Client 				*getClientBySocket(int fd);
 		Client				*getClientByNickname(std::string nickname);
 		Channel				*getCheckChannel(const std::string &name);
+		std::vector<Channel *>	getChannels(Client *client);
+		// tener que hacerlo en vector tambien
 		std::vector<Client *>	getClients(void);
 		void				handleMode(Client *client, const std::string &channelName);
 		void				handleWho(Client *client, const std::string &channelName);
@@ -91,6 +93,7 @@ void	nick(Client *client, std::string &nickname);
 void	invite(Client *client, std::string &invitation);
 void	mode(Client *client, std::string &str);
 void	sendFile(Client *client, std::string &args);
+void	quit(Client *client, std::string &message);
 
 
 void 	privMsg(Client *sender, std::string &value);
