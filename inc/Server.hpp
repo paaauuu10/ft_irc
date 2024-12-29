@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:20:37 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/27 11:50:01 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/29 18:42:56 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 #include <algorithm>
 #include <ctime>
 #include <limits.h>
+#include <fcntl.h>
 #include "Utils.hpp"
 
 

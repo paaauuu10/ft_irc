@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:58:33 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/27 12:32:09 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/29 18:50:41 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,10 @@ std::string	Channel::getTopic() {
 	return this->_topic;
 }
 
+size_t		Channel::getUserCount() {
+	return (_clients.size() + _operatorClients.size());
+}
+
 void	Channel::setMode(char mode, bool status, int value) {
 
 // · i: Set/remove Invite-only channel
@@ -158,22 +162,46 @@ bool	Channel::isFull() {
 }
 
 void	Channel::addClient(Client *client) {
-	if (this->isFull()) {
-        sendError(client, 471, "ERR_CHANNELISFULL - Channel is full", this->getName());
-        return;
+	// if (this->isFull()) {
+    //     sendError(client, 471, "ERR_CHANNELISFULL - Channel is full", this->getName());
+    //     return;
+    // }
+	// this->_clients.push_back(client);
+
+    if (std::find(_clients.begin(), _clients.end(), client) == _clients.end() &&
+        std::find(_operatorClients.begin(), _operatorClients.end(), client) == _operatorClients.end()) {
+		if (this->isFull()) {
+            sendError(client, 471, "ERR_CHANNELISFULL - Channel is full", this->getName());
+            return;
+        }
+        _clients.push_back(client);
     }
-	this->_clients.push_back(client);
 }
 
 void	Channel::addClientsInvited(std::string client) { this->_clientsInvited.push_back(client); }
 
 void	Channel::addOperatorClient(Client *client) {
 	
-	if (this->isFull()) {
-        sendError(client, 471, "ERR_CHANNELISFULL - Channel is full", this->getName());
-        return;
+	// if (this->isFull()) {
+    //     sendError(client, 471, "ERR_CHANNELISFULL - Channel is full", this->getName());
+    //     return;
+    // }
+	// this->_operatorClients.push_back(client);
+
+    if (std::find(_clients.begin(), _clients.end(), client) == _clients.end() &&
+        std::find(_operatorClients.begin(), _operatorClients.end(), client) == _operatorClients.end()) {
+        if (this->isFull()) {
+            sendError(client, 471, "ERR_CHANNELISFULL - Channel is full", this->getName());
+            return;
+        }
     }
-	this->_operatorClients.push_back(client);
+
+    if (std::find(_operatorClients.begin(), _operatorClients.end(), client) == _operatorClients.end())
+        _operatorClients.push_back(client);
+
+    std::vector<Client*>::iterator it = std::find(_clients.begin(), _clients.end(), client);
+    if (it != _clients.end())
+        _clients.erase(it);
 
 }
 

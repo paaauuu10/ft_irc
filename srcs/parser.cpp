@@ -39,7 +39,7 @@ static	void	handleLoginAndRegistration(Client *client, const std::string &cmd) {
 }
 
 
-//"SERVER", "OPER""QUIT", "SQUIT", "NAMES", "LIST", "VERSION","PART",
+//"SERVER", "OPER", "SQUIT", "NAMES", "LIST", "VERSION","PART",
 
 static bool validCommand(Client *client, std::string &value, std::string &cmd)
 {
@@ -113,15 +113,16 @@ void parsingbuffer(char *buffer, Client *client)
 
 	while (std::getline(stream, temp))
 	{
-	 	line += temp;
-	 	temp.clear();
-	 	if (stream.eof() && temp.empty())
-	 		return ;
-	 	if (line.find('\0') != std::string::npos)
-	 		return ;
+		line += temp;
+		temp.clear();
+		if (stream.eof() && temp.empty())
+			return ;
 
-	 	if (line != "CAP LS 302\r")
-	 		parser(client, line);
-	 	line.clear();
+		if (line.find('\0') != std::string::npos)
+			return ;
+
+		if (line != "CAP LS 302\r")
+			parser(client, line);
+		line.clear();
 	}
 }

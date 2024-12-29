@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:24:51 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/27 11:51:24 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/29 18:47:48 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,12 @@ int	Server::start()
 		std::cerr << "Error creating a socket" << std::endl;
 		return 1;
 	}
+
+	if (fcntl(this->_listeningSocket, F_SETFL, O_NONBLOCK) == -1)
+    {
+        std::cerr << "Error setting socket to non-blocking" << std::endl;
+        return 1;
+    }
 
 	sockaddr_in hint;
 	hint.sin_family = AF_INET;
@@ -230,7 +236,9 @@ void Server::handleWho(Client *client, const std::string &channelName) {
 std::vector<Channel *>	Server::getChannels(Client *client) {
 	std::vector<Channel *>	channels;
 
-	//for (std::map<std::string, Channel *>::iterator it = this->_channels.begin(); )
+	if (client == NULL)
+		return _channels;
+
 	for (std::vector<Channel *>::iterator it = this->_channels.begin(); it != this->_channels.end(); ++it) {
         if ((*it)->checkClient(client->getNickname())) {
             channels.push_back(*it);
