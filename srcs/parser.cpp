@@ -17,21 +17,21 @@
 static	void	handleLoginAndRegistration(Client *client, const std::string &cmd) {
 	
 	if (!client->getLogged() && cmd != "PASS") {
-		sendError(client, 444, "ERR_NOLOGIN"); //ERR_NEEDMOREPARAMS
+		sendError(client, 444, "ERR_NOLOGIN");
 		return ;
 	}
 
 	if (!client->getRegistered() && client->getLogged()) {
-		if (client->getNickname().empty()) {
+		/*if (client->getNickname().empty()) {
 			if (cmd != "NICK") {
 				sendError(client, 444, "ERR_NONICKNAMEGIVEN 1");
 				return ;
 			}
-		}
+		}*/
 
 		if (client->getUsername().empty()) {
 			if (cmd != "USER" && cmd != "NICK") {
-				sendError(client, 1, "You need to use cmd /USER");
+				sendError(client, 451, "ERR_NOTREGISTERED");
 				return ;
 			}
 		}
@@ -75,11 +75,11 @@ void parser(Client *client, std::string str)
 {
 	if (!str.empty() && str[0] == '/')
 		str = str.substr(1);
-	std::cout << "STR BEFORE: -" << str << std::endl;
+	//std::cout << "STR BEFORE: -" << str << std::endl;
 	while (!str.empty() && (str[str.size() - 1] == '\n' || str[str.size() - 1] == '\r'))
 		str.erase(str.size() - 1);
 
-	std::cout << "STR AFTER: -" << str << std::endl;
+	//std::cout << "STR AFTER: -" << str << std::endl;
 
     std::string::size_type pos = str.find_first_of(" \t");
 	std::string cmd = (pos == std::string::npos) ? str : str.substr(0, pos);

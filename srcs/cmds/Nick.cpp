@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 11:47:10 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/27 11:34:18 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/30 15:37:57 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,21 +51,21 @@ void	nick(Client *client, std::string &nickname)
 	std::cout << "--> " << nickname << std::endl;
 
 	if (nickname.empty()) {
-		//sendError(client, 431, "ERR_NONICKNAMEGIVEN", client->getNickname()); // ERR_NONICKNAMEGIVEN
+		sendError(client, 431, "ERR_NONICKNAMEGIVEN"); // ERR_NONICKNAMEGIVEN
 		return;
 	}
 	
 	if (validateNick(nickname)) {
-		sendError(client, 432, "Erroneous nickname", client->getNickname() + " " + nickname); //ERR_ERRONEUSNICKNAME
+		sendError(client, 432, "ERR_ERRONEUSNICKNAME"); //ERR_ERRONEUSNICKNAME
 		return ;
 	}
 	
 	if (!client->getNickname().empty() && nickname == client->getNickname()) {
-		sendError(client, 436, "Nickname collision KILL", client->getNickname() + " " + nickname); // ERR_NICKCOLLISION
+		sendError(client, 436, "ERR_NICKCOLLISION", client->getNickname() + " " + nickname); // ERR_NICKCOLLISION
 		return;
 	}
 	if (checkNickname(nickname)) {
-		sendError(client, 433, "Nickname is already in use", client->getNickname() + " " + nickname); // ERR_NICKNAMEINUSE
+		sendError(client, 433, "ERR_NICKNAMEINUSE", client->getNickname() + " " + nickname); // ERR_NICKNAMEINUSE
 		return;
 	}
 	

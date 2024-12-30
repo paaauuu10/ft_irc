@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 11:12:30 by pbotargu          #+#    #+#             */
-/*   Updated: 2024/12/27 12:25:26 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/30 15:36:09 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,12 @@
 #include <vector>
 #include <string>
 #include "Utils.hpp"
+
+static bool	checkRealname(std::string &name) {
+	if (name.empty() && name[0] == ':')
+		return true;
+	return false;
+}
 
 static bool checkServerName(std::string &name) {
 	
@@ -61,38 +67,43 @@ static bool isValidIp(std::string &host) {
 
 static bool checkUser(std::string &username)
 {
+	if (username.empty())
+		return false;
+
 	std::vector<Client *>	vclient = Server::getInstance().getClients();
-	for (long unsigned int i = 0; i < vclient.size(); i++)
-	{
+	for (size_t i = 0; i < vclient.size(); i++) {
 		if (vclient[i]->getUsername() == username)
 			return false;
 	}
 	return true;
 }
 
+/*    Since it is easy for a client to lie about its username by relying
+   solely on the USER message, the use of an "Identity Server" is
+   recommended.  If the host which a user connects from has such a
+   server enabled the username is set to that as in the reply from the
+   "Identity Server". */
+
 void	user(Client *client, std::string &pass)
 {
-    // if (checkerIsLogged(client) == false)
-    //     return ;
 	if (!client->getLogged() || client->getNickname().empty())
 		return ;
+
     std::vector<std::string> words = split(pass, ' ');
-    if (words.size() < 4)
-        return (sendError(client, 461, "Not enought parameters. \n/USER <user> <hostname> <serverName> <realname> ")); //revisar codi d'error  i missatge!!!    
+    if (words.size() < 4) {
+		std::cerr << "USE: /USER <user> <hostname> <serverName> <realname>" << std::endl;
+        return (sendError(client, 461, "ERR_NEEDMOREPARAMS"));
+		
+	}
     //username es unic? en cas que si cal revisar si ja existeix o no. Mirar si el client ja esta registrat?
     if (!checkUser(words[0])) {    
-        sendError(client, 433, "This username already exists!"); //revisar codi d'error  i missatge!!!    
-        return ;
-    }
-    // <username> <hostname> <servername> <realname>
-    if (client->getNickname().empty()) {
-        sendError(client, 461, "ERR_NEEDMOREPARAMS - Nickname required"); //revisar codi d'error  i missatge!!!    
+        sendError(client, 462, "ERR_ALREADYREGISTRED"); 
         return ;
     }
     client->setUsername(words[0]);
 	
 	if (!words[1].empty() && words[1][0] != '0' && !isValidIp(words[1])) {
-		sendError(client, 461, "ERR_NEEDMOREPARAMS - Invalid ip"); //revisar codi d'error  i missatge!!!    
+		sendError(client, 461, "ERR_NEEDMOREPARAMS - Invalid ip");
         return ;
 	}
     client->setHostname(words[1]);
@@ -101,12 +112,21 @@ void	user(Client *client, std::string &pass)
 		sendError(client, 461, "ERR_NEEDMOREPARAMS - Invalid server"); //revisar codi d'error  i missatge!!!    
         return ;
 	}
-    client->setServername(words[2]); // hacer funcion que chequee que sea el mismo nombre del server y quitarle los ':'
-    client->setRealName(words[3]);
-	std::string response = "User created!\r\n";
-    send(client->getFd(), response.c_str(), response.size(), 0);
-    if (!client->getNickname().empty() && !client->getRegistered())
-    {
+	if (words[2][0] == ':')
+    	client->setServername(words[2].substr(1));
+	else
+		client->setServername(words[2]);
+
+		
+	if (words[3].empty() && !checkRealname(words[3])) {
+		sendError(client, 461, "ERR_NEEDMOREPARAMS - Invalid realname");  
+        return ;
+	}
+    client->setRealName(words[3].substr(1));
+	
+	std::cout << "User " << client->getUsername() << " created!\n" << std::endl;
+
+    if (!client->getNickname().empty() && !client->getRegistered()) {
         client->setRegistered(true);
         std::string response = "Welcome to FT_IRC!!!!\r\n";
         std::string pikachu_art = 
@@ -152,6 +172,5 @@ void	user(Client *client, std::string &pass)
 
         send(client->getFd(), response.c_str(), response.size(), 0);
         //send(client->getFd(), pikachu_art.c_str(), pikachu_art.size(), 0);
-
     }
 }

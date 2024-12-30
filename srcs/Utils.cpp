@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 12:00:21 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/21 19:46:43 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/30 12:07:42 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,17 +50,6 @@ std::vector<std::string> split(const std::string& input, char delimiter) {
     if (!token.empty())
         tokens.push_back(token);
     return (tokens);
-}
-
-bool    checkerIsLogged(Client *client)
-{
-    if (client->getLogged() == false)
-    {
-        // el missatge s'ha d'enviar al Client!!!
-        std::cout << "First you have to enter the password" << std::endl;
-        return false;
-    }
-    return true;
 }
 
 std::string trim(const std::string &str)

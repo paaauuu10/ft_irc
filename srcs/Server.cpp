@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:24:51 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/29 18:47:48 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/30 10:46:55 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,12 +87,6 @@ int	Server::start()
 		std::cerr << "Error creating a socket" << std::endl;
 		return 1;
 	}
-
-	if (fcntl(this->_listeningSocket, F_SETFL, O_NONBLOCK) == -1)
-    {
-        std::cerr << "Error setting socket to non-blocking" << std::endl;
-        return 1;
-    }
 
 	sockaddr_in hint;
 	hint.sin_family = AF_INET;
