@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:58:33 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/29 18:50:41 by anovio-c         ###   ########.fr       */
+/*   Updated: 2025/01/01 17:27:13 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ Channel::Channel(const std::string &channelName, const std::string &key, Client 
 	else
 		_name = channelName;
 	_operatorClients.push_back(creator);
-	// invitation mode, by default is false
 	_modes['i'] = false;
 	_modes['t'] = false;
 	_modes['l'] = false;
@@ -32,7 +31,7 @@ Channel::Channel(const std::string &channelName, const std::string &key, Client 
 		_key = key;
 		_modes['k'] = true;
 	}
-	_limit = -1; // ?? -1
+	_limit = -1;
 	std::cout << "Channel '" << channelName << "' created by " << creator->getUsername() << ".\n";
 }
 
@@ -102,12 +101,6 @@ size_t		Channel::getUserCount() {
 }
 
 void	Channel::setMode(char mode, bool status, int value) {
-
-// · i: Set/remove Invite-only channel
-// · t: Set/remove the restrictions of the TOPIC command to channel operators
-// · k: Set/remove the channel key (password)
-// · o: Give/take channel operator privilege
-// l: Set/remove the user limit to channel
 	(void)value;
 	_modes[mode] = status;
 	std::cout << "Channel " << _name << " mode " << mode << " set to " << (status ? "ON" : "OFF") << ".\n";
@@ -127,6 +120,10 @@ void	Channel::setTopic(const std::string &topic) {
 
 bool	Channel::isKeyProtected() {
 	return (getMode('k'));
+}
+
+bool	Channel::isInvited(const std::string &nickname) const {
+	return std::find(_clientsInvited.begin(), _clientsInvited.end(), nickname) != _clientsInvited.end();
 }
 
 bool	Channel::checkKey(const std::string &str) const {

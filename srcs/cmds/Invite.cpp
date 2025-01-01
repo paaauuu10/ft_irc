@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 13:51:35 by pborrull          #+#    #+#             */
-/*   Updated: 2024/12/20 22:14:42 by anovio-c         ###   ########.fr       */
+/*   Updated: 2025/01/01 17:31:45 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,7 @@ void		invite(Client *client, std::string &invitation)
 {
 	std::vector<std::string> words = split(invitation, ' ');
 	
-	if (words.size() < 2)
-	{
+	if (words.size() < 2) {
 		sendError(client, 461, "Not enough parameters"); //ERR_NEEDMOREPARAMS
 		return ;
 	}
@@ -65,8 +64,8 @@ void		invite(Client *client, std::string &invitation)
 		Client *invited = Server::getInstance().getClientByNickname(words[0]);
 		std::cout << client->getNickname() << " is inviting you to " << channel->getName() << std::endl;
 		std::ostringstream oss;
-	    oss << channel->getName() << " " << words[0] << "\r\n";
-	    std::string msg = oss.str();
-	    send(invited->getFd(), msg.c_str(), msg.size(), 0);
+		oss << channel->getName() << " " << words[0] << "\r\n";
+		std::string msg = oss.str();
+		send(invited->getFd(), msg.c_str(), msg.size(), 0);
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Pass.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:57:43 by pbotargu          #+#    #+#             */
-/*   Updated: 2024/12/30 15:26:55 by anovio-c         ###   ########.fr       */
+/*   Updated: 2024/12/31 10:16:36 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	pass(Client *client, std::string &pass)
 		sendError(client, 461, "ERR_NEEDMOREPARAMS");
 		return ;
 	}
-    if (pass != password) {
+    if (pass == password) {
         client->setLogged(true);
 		std::cout << "Client with fd '"<< client->getFd() << "' put a correct password." << std::endl;
     } else

@@ -14,7 +14,6 @@
 #include "Client.hpp"
 #include "Channel.hpp"
 
-
 static Client	*checkClient(std::string &nickname)
 {
 
@@ -67,7 +66,7 @@ void privMsg(Client *sender, std::string &value)
 			std::vector<int> channelSockets = ctarget->listFdClients();
 			for (size_t j = 0; j < channelSockets.size(); j++)
 			{
-    			int socket = channelSockets[j];
+				int socket = channelSockets[j];
 				if (socket == sender->getFd())
 					continue; // No send to themselfs
 				std::string fullMessage = ":" + sender->getNickname() + " PRIVMSG " + ctarget->getName() + " " + message + "\r\n";

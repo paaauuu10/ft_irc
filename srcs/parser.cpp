@@ -22,12 +22,12 @@ static	void	handleLoginAndRegistration(Client *client, const std::string &cmd) {
 	}
 
 	if (!client->getRegistered() && client->getLogged()) {
-		/*if (client->getNickname().empty()) {
+		if (client->getNickname().empty()) {
 			if (cmd != "NICK") {
 				sendError(client, 444, "ERR_NONICKNAMEGIVEN 1");
 				return ;
 			}
-		}*/
+		}
 
 		if (client->getUsername().empty()) {
 			if (cmd != "USER" && cmd != "NICK") {
@@ -122,7 +122,7 @@ void parsingbuffer(char *buffer, Client *client)
 			return ;
 
 		if (line != "CAP LS 302\r")
-			parser(client, line);
+			parser(client, trim(line));
 		line.clear();
 	}
 }

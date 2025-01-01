@@ -3,38 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   Kick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 19:44:07 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/21 14:14:26 by anovio-c         ###   ########.fr       */
+/*   Updated: 2025/01/01 17:18:41 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 #include "Channel.hpp"
-
-// 403: Canal no existe.
-// 441: Usuario no está en el canal.
-// 461: Parámetros insuficientes.
-// 482: Cliente no es administrador.
-
-/*   Numeric Replies:
-
-           ERR_NEEDMOREPARAMS              ERR_NOSUCHCHANNEL
-           ERR_BADCHANMASK                 ERR_CHANOPRIVSNEEDED
-           ERR_NOTONCHANNEL*/
-
-/* static void	reviewChannels(std::vector<std::string> &old) {
-	std::vector<std::string> filtered;
-
-	for (size_t i = 0; i < old.size(); ++i) {
-		if (std::find(filtered.begin(), filtered.end(), old[i]) == filtered.end())
-            filtered.push_back(old[i]);
-    }
-	old = filtered;
-	//for (size_t i = 0; i < filtered.size(); ++i)
-	//	std::cout << "STR ==> " << filtered[i] << std::endl;
-} */
 
 static bool	checkInput(std::vector<std::string> &tokens) {
 	size_t	count = 0;
@@ -84,10 +61,6 @@ static std::string	makeBroadcastMessage(Client *client, const std::string &chann
 
 	return (oss.str());
 }
-
-// KICK <channel>{,<channel>} ??<channel>{,<channel>}??  <user>{,<user>} [<comment>]
-// KICK #canal1 asier2 :hola y adios
-// ERR_NOSUCHNICK (401)
 
 void	kick(Client *client, std::string &args) {
 	if (args.empty()) {

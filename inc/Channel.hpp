@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 12:08:38 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/29 18:50:07 by anovio-c         ###   ########.fr       */
+/*   Updated: 2025/01/01 17:27:20 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ class Channel {
 		Client	*checkClient(std::string nickname);
 		bool	isEmtpy();
 		bool	isFull();
+		bool	isInvited(const std::string &nickname) const;
 		void	addOperatorClient(Client *client);
 		void 	removeOperatorClient(Client *client); 
 		void	addClient(Client *client);
