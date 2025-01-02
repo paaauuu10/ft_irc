@@ -12,8 +12,6 @@
 
 #include "Server.hpp"
 
-
- // pasar a bool has nick has user y solo setear registered si las dos son ok!
 static	void	handleLoginAndRegistration(Client *client, const std::string &cmd) {
 	
 	if (!client->getLogged() && cmd != "/PASS") {
@@ -21,15 +19,10 @@ static	void	handleLoginAndRegistration(Client *client, const std::string &cmd) {
 		return ;
 	}
 
-	//if (client->getLogged() && cmd == "/PASS") {
-	//	sendError(client, 462, "ERR_ALREADYREGISTRED");
-	//	return ;
-	//}
-
 	if (!client->getRegistered() && client->getLogged() && cmd != "/PASS") {
 		if (client->getNickname().empty()) {
 			if (cmd != "/NICK") {
-				sendError(client, 444, "ERR_NONICKNAMEGIVEN 1");
+				sendError(client, 444, "ERR_NONICKNAMEGIVEN");
 				return ;
 			}
 		}
@@ -41,10 +34,6 @@ static	void	handleLoginAndRegistration(Client *client, const std::string &cmd) {
 			}
 		}
 	}
-
-	//if (cmd == "/PASS" && client->getRegistered()) {
-    //    sendError(client, 462, "ERR_ALREADYREGISTRED");
-    //}
 }
 
 

@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 12:08:38 by anovio-c          #+#    #+#             */
-/*   Updated: 2025/01/01 17:27:20 by anovio-c         ###   ########.fr       */
+/*   Updated: 2025/01/02 17:55:14 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ class Channel {
 		void	addClientsInvited(std::string client);
 		void	rmClient(Client *client);
 		std::vector<int>	listFdClients();
-		void	broadcast(Client *client, std::string &msg);
+		void	broadcast(Client *sender, std::string &msg);
 		void	RPLTOPIC(Client *client);
 		void	RPL_NAMREPLY(Client *client);
 		void	cmdHelp(Client *client);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 12:22:51 by pbotargu          #+#    #+#             */
-/*   Updated: 2024/12/27 12:39:25 by anovio-c         ###   ########.fr       */
+/*   Updated: 2025/01/02 19:26:13 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,11 @@
 #include <vector>
 #include <string>
 #include <iostream>
+
+// MANDAR SOLO MENSAJES VALIDOS AL CLIENTE
+// NO PERSONALIZADOS, verificarlo bien 
+// segun protocolo si los manda o no!
+
 
 void handleModeI(Channel *channel, Client *client, char s) {
     std::string response = client->getNickname() + (s == '-' ? " disables " : " enables ") + "i mode in " + channel->getName() + "'s channel\n";

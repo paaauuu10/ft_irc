@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:24:51 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/31 10:14:29 by anovio-c         ###   ########.fr       */
+/*   Updated: 2025/01/02 17:45:26 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,8 +129,7 @@ int	Server::start()
 					sockaddr_in clientSock;
 					socklen_t clientSize = sizeof(clientSock);
 					int clientSocket = accept(this->_listeningSocket, (sockaddr*)&clientSock, &clientSize);
-					if (clientSocket == -1)
-					{
+					if (clientSocket == -1) {
 						std::cerr << "Error accepting client" << std::endl;
 						continue;
 					}
@@ -152,7 +151,11 @@ int	Server::start()
 					if (received <= 0)
 					{
 						std::cout << "Client disconnected" << std::endl;
-						// delete de client aqui??
+						Client *client = getClientBySocket(pollfds[i].fd);
+						if (client) {
+							removeClientFromServer(client);
+							delete client;
+						}
 						close(pollfds[i].fd);
 						pollfds.erase(pollfds.begin() + i);
 						--i;

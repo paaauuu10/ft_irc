@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Quit.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 19:43:49 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/27 11:54:19 by anovio-c         ###   ########.fr       */
+/*   Updated: 2025/01/02 17:56:34 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,4 +31,5 @@ void	quit(Client *client, std::string &message) {
 	
 	std::cout << "Client '" << client->getNickname() << "' disconnected from server." << std::endl;
 	client->disconnect();
+	delete client;
 }

@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:58:33 by anovio-c          #+#    #+#             */
-/*   Updated: 2025/01/01 17:27:13 by anovio-c         ###   ########.fr       */
+/*   Updated: 2025/01/02 19:22:17 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ std::string	Channel::getName() { return this->_name ; }
 
 bool		Channel::getMode(char key) {
 	if (_modes.find(key) != _modes.end()) {
-        return true; //_modes[key];
+        return _modes[key];
     }
     return false;
 }
@@ -159,11 +159,6 @@ bool	Channel::isFull() {
 }
 
 void	Channel::addClient(Client *client) {
-	// if (this->isFull()) {
-    //     sendError(client, 471, "ERR_CHANNELISFULL - Channel is full", this->getName());
-    //     return;
-    // }
-	// this->_clients.push_back(client);
 
     if (std::find(_clients.begin(), _clients.end(), client) == _clients.end() &&
         std::find(_operatorClients.begin(), _operatorClients.end(), client) == _operatorClients.end()) {
@@ -178,12 +173,6 @@ void	Channel::addClient(Client *client) {
 void	Channel::addClientsInvited(std::string client) { this->_clientsInvited.push_back(client); }
 
 void	Channel::addOperatorClient(Client *client) {
-	
-	// if (this->isFull()) {
-    //     sendError(client, 471, "ERR_CHANNELISFULL - Channel is full", this->getName());
-    //     return;
-    // }
-	// this->_operatorClients.push_back(client);
 
     if (std::find(_clients.begin(), _clients.end(), client) == _clients.end() &&
         std::find(_operatorClients.begin(), _operatorClients.end(), client) == _operatorClients.end()) {
@@ -237,12 +226,17 @@ std::vector<int>	Channel::listFdClients() {
 	return (list);
 }
 
-void Channel::broadcast(Client *client, std::string &msg) {
-    std::vector<int> fds = listFdClients();
-	(void)client;
-
-    for (size_t i = 0; i < fds.size(); ++i) {
-        send(fds[i], msg.c_str(), msg.size(), 0);
+void Channel::broadcast(Client *sender, std::string &msg) {
+	
+	for (size_t i = 0; i < _clients.size(); ++i) {
+        if (_clients[i] != sender) {
+            send(_clients[i]->getFd(), msg.c_str(), msg.size(), 0);
+        }
+    }
+    for (size_t i = 0; i < _operatorClients.size(); ++i) {
+        if (_operatorClients[i] != sender) {
+            send(_operatorClients[i]->getFd(), msg.c_str(), msg.size(), 0);
+        }
     }
 }
 
