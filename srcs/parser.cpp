@@ -16,26 +16,35 @@
  // pasar a bool has nick has user y solo setear registered si las dos son ok!
 static	void	handleLoginAndRegistration(Client *client, const std::string &cmd) {
 	
-	if (!client->getLogged() && cmd != "PASS") {
+	if (!client->getLogged() && cmd != "/PASS") {
 		sendError(client, 444, "ERR_NOLOGIN");
 		return ;
 	}
 
-	if (!client->getRegistered() && client->getLogged()) {
+	//if (client->getLogged() && cmd == "/PASS") {
+	//	sendError(client, 462, "ERR_ALREADYREGISTRED");
+	//	return ;
+	//}
+
+	if (!client->getRegistered() && client->getLogged() && cmd != "/PASS") {
 		if (client->getNickname().empty()) {
-			if (cmd != "NICK") {
+			if (cmd != "/NICK") {
 				sendError(client, 444, "ERR_NONICKNAMEGIVEN 1");
 				return ;
 			}
 		}
 
 		if (client->getUsername().empty()) {
-			if (cmd != "USER" && cmd != "NICK") {
+			if (cmd != "/USER" && cmd != "/NICK") {
 				sendError(client, 451, "ERR_NOTREGISTERED");
 				return ;
 			}
 		}
 	}
+
+	//if (cmd == "/PASS" && client->getRegistered()) {
+    //    sendError(client, 462, "ERR_ALREADYREGISTRED");
+    //}
 }
 
 
@@ -43,6 +52,8 @@ static	void	handleLoginAndRegistration(Client *client, const std::string &cmd) {
 
 static bool validCommand(Client *client, std::string &value, std::string &cmd)
 {
+	//if (client == NULL)
+	//	return false;
 	handleLoginAndRegistration(client, cmd);
 	
 	typedef void (*cmdFunction)(Client *, std::string&);
@@ -58,8 +69,8 @@ static bool validCommand(Client *client, std::string &value, std::string &cmd)
 	// }
 
 	int index = 0;
-	for (; index < 10; ++index) { //('/' + commands[index])) {
-		if (cmd == commands[index])
+	for (; index < 10; ++index) {
+		if (cmd == '/' + std::string(commands[index]))
 			break;
 	}
 
@@ -73,31 +84,25 @@ static bool validCommand(Client *client, std::string &value, std::string &cmd)
 
 void parser(Client *client, std::string str)
 {
-	if (!str.empty() && str[0] == '/')
-		str = str.substr(1);
-	//std::cout << "STR BEFORE: -" << str << std::endl;
+	if (str.empty() || str == "\r\n")
+		return ;
 	while (!str.empty() && (str[str.size() - 1] == '\n' || str[str.size() - 1] == '\r'))
 		str.erase(str.size() - 1);
+	
+	str = trim(str);
 
-	//std::cout << "STR AFTER: -" << str << std::endl;
+	size_t	tab = str.find('/');
+	if (tab == std::string::npos)
+		return ;
 
-    std::string::size_type pos = str.find_first_of(" \t");
-	std::string cmd = (pos == std::string::npos) ? str : str.substr(0, pos);
-
-	std::cout << "cmd AFTER: -" << cmd << std::endl;
-
-	//if (str == "\r\n") // revisar aquesta guarrada: Si treiem aixo mostra :UNKNOWN COMMAND!
-    //    return ;
-
-	//std::string cmdUpper = cmd;
-	//for (size_t i = 0; i < cmd.length(); ++i)
-	//	cmdUpper[i] = std::toupper(cmd[i]);
-
-	std::string value = (pos == std::string::npos) ? "" : str.substr(pos + 1);
+	std::string cmd = str.substr(tab, str.find_first_of(" \t", tab) - tab);
+	
+	size_t value_start = str.find_first_not_of(" \t", tab + cmd.size());
+	std::string value = (value_start == std::string::npos) ? "" : str.substr(value_start);
 	value = trim(value);
     
 	std::cout << "VALUE AFTER22: -" << value << std::endl;
-    if (!str.empty()) {// && str[0] == '/') {
+    if (!cmd.empty() && cmd[0] == '/' && !value.empty()) {
         if (!validCommand(client, value, cmd)) {
             std::string response = cmd + " :Unknown command\r\n";
             send(client->getFd(), response.c_str(), response.size(), 0);
