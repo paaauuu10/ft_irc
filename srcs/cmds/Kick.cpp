@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Kick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 19:44:07 by anovio-c          #+#    #+#             */
-/*   Updated: 2025/01/01 17:18:41 by anovio-c         ###   ########.fr       */
+/*   Updated: 2025/01/08 10:45:53 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static std::string	makeBroadcastMessage(Client *client, const std::string &chann
 	
 	std::ostringstream oss;
 	
-	// :<nickname>!<username>@<hostname> JOIN :<channelName>\r\n
+	// :<nickname>!<username>@<hostname> KICK :<channelName>\r\n
     oss << ":" << client->getNickname() << "!" << client->getUsername()
         << "@" << "127.0.0.1" << " KICK " << channelName << " "
         << userToKick << " :" << reason << "\r\n";
