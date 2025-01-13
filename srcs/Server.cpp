@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:24:51 by anovio-c          #+#    #+#             */
-/*   Updated: 2025/01/02 17:45:26 by anovio-c         ###   ########.fr       */
+/*   Updated: 2025/01/13 13:45:37 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -257,12 +257,16 @@ void	Server::removeClientFromPolls(int fd) {
 }
 
 void	Server::removeClientFromServer(Client *client) {
-		std::vector<Client *>::iterator it = _clients.begin();
+	if (!client) return ;
+	
+	_clients.erase(std::remove(_clients.begin(), _clients.end(), client), _clients.end());
+	
+/* 	std::vector<Client *>::iterator it = _clients.begin();
 	
 	for (; it != _clients.end(); ++it) {
 		if ((*it) == client) {
 			_clients.erase(it);
 			break ;
 		}
-	}
+	} */
 }

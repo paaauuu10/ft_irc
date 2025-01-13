@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 11:47:10 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/30 15:37:57 by anovio-c         ###   ########.fr       */
+/*   Updated: 2025/01/13 16:16:06 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ void	nick(Client *client, std::string &nickname)
 	}
 	if (checkNickname(nickname)) {
 		sendError(client, 433, "ERR_NICKNAMEINUSE", client->getNickname() + " " + nickname); // ERR_NICKNAMEINUSE
+		nickname += "1";
+        nick(client, nickname);
 		return;
 	}
 	
@@ -78,51 +80,4 @@ void	nick(Client *client, std::string &nickname)
 		send(client->getFd(), str.c_str(), str.size(), 0);
 	}
 	client->setNickname(nickname);
-	/*
-	if (!client->getUsername().empty() && !client->getRegistered()) {	
-		//client->setRegistered(true);
-		std::string response = "Welcome to FT_IRC!!!!\r\n";
-		std::string pikachu_art = 
-		"quu..__\n"
-		" $$$b  `---.__\n"
-		"  \"$b        `--.                          ___.---uuudP\n"
-		"   `$$b           `.__.------.__     __.---'      $$$$\"              .\n"
-		"     \"$b          -'            `-.-'            $$$\"              .'|\n"
-		"       \".                                       d$\"             _.'  |\n"
-		"         `.   /                              ...\"             .'     |\n"
-		"           `./                           ..::-'            _.'       |\n"
-		"            /                         .:::-'            .-'         .'\n"
-		"           :                          ::''\\          _.'            |\n"
-		"          .' .-.             .-.           `.      .'               |\n"
-		"          : /'$$|           .@\"$\\           `.   .'              _.-'\n"
-		"         .'|$u$$|          |$$,$$|           |  <            _.-'\n"
-		"         | `:$$:'          :$$$$$:           `.  `.       .-'\n"
-		"         :                  `\"--'             |    `-.     \\\n"
-		"        :##.       ==             .###.       `.      `.    `\\\n"
-		"        |##:                      :###:        |        >     >\n"
-		"        |#'     `..'`..'          `###'        x:      /     /\n"
-		"         \\                                   xXX|     /    ./\n"
-		"          \\                                xXXX'|    /   ./\n"
-		"          /`-.                                  `.  /   /\n"
-		"         :    `-  ...........,                   | /  .'\n"
-		"         |         ``:::::::'       .            |<    `.\n"
-		"         |             ```          |           x| \\ `.:``.\n"
-		"         |                         .'    /'   xXX|  `:`M`M':.\n"
-		"         |    |                    ;    /:' xXXX'|  -'MMMMM:'\n"
-		"         `.  .'                   :    /:'       |-'MMMM.-'\n"
-		"          |  |                   .'   /'        .'MMM.-'\n"
-		"          `'`'                   :  ,'          |MMM<\n"
-		"            |                     `'            |tbap\\\n"
-		"             \\                                  :MM.-'\n"
-		"              \\                 |              .''\n"
-		"               \\.               `.            /\n"
-		"                /     .:::::::.. :           /\n"
-		"               |     .:::::::::::`.         /\n"
-		"               |   .:::------------\\       /\n"
-		"              /   .''               >::'  /\n"
-		"              `',:                 :    .'\n"
-		"                                   `:.:' \n";
-		send(client->getFd(), response.c_str(), response.size(), 0);
-		//send(client->getFd(), pikachu_art.c_str(), pikachu_art.size(), 0);
-	}*/
 }

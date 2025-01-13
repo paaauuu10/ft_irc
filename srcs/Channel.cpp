@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:58:33 by anovio-c          #+#    #+#             */
-/*   Updated: 2025/01/02 19:22:17 by anovio-c         ###   ########.fr       */
+/*   Updated: 2025/01/13 16:23:41 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,8 +208,16 @@ void	Channel::rmClient(Client *client) {
             break;
 		}
 	}
-	//if (_clients.empty())
-	//	delete this;
+
+	for (size_t i = 0; i < _operatorClients.size(); ++i) {
+        if (_operatorClients[i]->getUsername() == client->getUsername()) {
+            _operatorClients.erase(_operatorClients.begin() + i);
+            break;
+        }
+    }
+	
+	if (_clients.empty() && _operatorClients.empty())
+		delete this;
 }
 
 std::vector<int>	Channel::listFdClients() {

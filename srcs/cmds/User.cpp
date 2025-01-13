@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   USER.cpp                                           :+:      :+:    :+:   */
+/*   User.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 11:12:30 by pbotargu          #+#    #+#             */
-/*   Updated: 2025/01/02 19:19:51 by anovio-c         ###   ########.fr       */
+/*   Updated: 2025/01/13 15:59:32 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,11 @@ static bool checkServerName(std::string &name) {
 	return true;
 }*/
 
-static bool isValidIp(const std::string &host) {
+static bool isValidIp(std::string &host) {
+	if (host == "0") {
+		std::string newHost = "127.0.0.1";
+		host = newHost;
+	}
     struct sockaddr_in sa;
     return inet_pton(AF_INET, host.c_str(), &(sa.sin_addr)) != 0;
 }
@@ -92,7 +96,7 @@ void	user(Client *client, std::string &args)
         return;
 	}
 	
-	if (!client->getLogged() || client->getNickname().empty())
+	if (!client->getLogged() )// || client->getNickname().empty())
 		return ;
 
     std::vector<std::string> tokens = split(args, ' ');
@@ -124,6 +128,7 @@ void	user(Client *client, std::string &args)
 
     client->setUsername(username); // lo unico que no se puede repetir es nickname
     client->setHostname(hostname);
+	std::cout << "HOST: " << hostname << std::endl;
 	client->setServername(servername);
     client->setRealName(realname);
 	client->setRegistered(true);

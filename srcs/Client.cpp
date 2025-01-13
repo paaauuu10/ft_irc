@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 12:00:38 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/27 10:58:49 by anovio-c         ###   ########.fr       */
+/*   Updated: 2025/01/13 16:21:52 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,8 +131,8 @@ void	Client::disconnect(void) {
 
 	for (size_t i = 0; i < _channels.size(); ++i) {
 		_channels[i]->rmClient(this);
-		if (_channels.empty())
-			delete _channels[i];
+		//if (_channels.empty())
+		//	delete _channels[i];
 	}
 	
 	_channels.clear();
