@@ -96,9 +96,8 @@ static bool validCommand(Client *client, std::string &value, std::string &cmd)
 
 void parser(Client *client, std::string str)
 {
-	if (!str.empty() && str[0] != '/') {
+	if (!str.empty() && str[0] != '/')
 		str = "/" + str;
-	}
 
 	size_t tab = str.find('/');
 	if (tab == std::string::npos)
