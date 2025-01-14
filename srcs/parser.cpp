@@ -70,8 +70,8 @@ static bool validCommand(Client *client, std::string &value, std::string &cmd)
 	
 	typedef void (*cmdFunction)(Client *, std::string&);
     
-	std::string commands[10] = { "PASS", "NICK", "USER", "JOIN", "MODE", "TOPIC", "INVITE", "KICK", "PRIVMSG"};//, "QUIT" }; //, "SEND"};
-	cmdFunction functions[10] = { pass, nick, user, join, mode, topic, invite, kick, privMsg};//, quit }; //, sendFile };
+	std::string commands[10] = { "PASS", "NICK", "USER", "JOIN", "MODE", "TOPIC", "INVITE", "KICK", "PRIVMSG"};//, "QUIT" };
+	cmdFunction functions[10] = { pass, nick, user, join, mode, topic, invite, kick, privMsg};//, quit };
 	
 	// if (!client->getLogged() && cmd != "PASS") {
 	// 	std::string server = Server::getInstance().getServerName();
