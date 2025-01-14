@@ -109,15 +109,11 @@ void parser(Client *client, std::string str)
 	std::string value = (value_start == std::string::npos) ? "" : str.substr(value_start);
 	value = trim(value);
 
-	if (value.empty()) {
-		sendError(client, 461, "ERR_NEEDMOREPARAMS");
-		return ;
-	}
 	if (!handleLoginAndRegistration(client, cmd))
 		return ;
-
+	std::cout << "PROMPT : " << cmd << " + " << value << std::endl;
 	// falta otro if
-	if (!cmd.empty() && !validCommand(client, value, cmd)) {
+	if (!cmd.empty() && !value.empty() && !validCommand(client, value, cmd)) {
 		std::string response = cmd + " :Unknown command\r\n";
 		send(client->getFd(), response.c_str(), response.size(), 0);
 	}

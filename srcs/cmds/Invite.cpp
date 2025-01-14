@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Invite.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 13:51:35 by pborrull          #+#    #+#             */
-/*   Updated: 2025/01/01 17:31:45 by anovio-c         ###   ########.fr       */
+/*   Updated: 2025/01/14 12:30:31 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,33 +39,61 @@ int checkChannel(std::string &nickname)
 		return 1;
 	return 0;
 }*/
+static void makeInviterMessage(Client* client, const std::string &channelName, const std::string &invitedName) {
 
+	// :servername 341 Inviter invited channelname
+	
+    std::string serverName = Server::getServerName();
+
+    std::ostringstream oss;
+    oss << ":" << serverName << " " << 341
+		<< " " << client->getNickname()
+		<< " " << invitedName << " "
+		<< channelName << "\r\n";
+		
+	std::string msg = oss.str();
+    send(client->getFd(), msg.c_str(), msg.size(), 0);
+}
+
+static void	makeInvitedMessage(Client *client, std::string channelName, Client *invited) {
+
+	// :invitador!user@host INVITE invitado canal\r\n
+	
+	std::ostringstream oss;
+
+    oss << ":" << client->getNickname() << "!" 
+        << client->getUsername() << "@" << client->getHostname() << " INVITE " << invited->getNickname() << " " << channelName << "\r\n";
+
+	std::string msg = oss.str();
+    send(invited->getFd(), msg.c_str(), msg.size(), 0);
+}
 
 void		invite(Client *client, std::string &invitation)
 {
+
+	// CHEQUEAR QUE NO SE INVITE AL MISMO CLIENTE QUE ENVIA LA PETICION DEL IVNITE
+	
 	std::vector<std::string> words = split(invitation, ' ');
 	
 	if (words.size() < 2) {
-		sendError(client, 461, "Not enough parameters"); //ERR_NEEDMOREPARAMS
+		sendError(client, 461, "ERR_NEEDMOREPARAMS"); //ERR_NEEDMOREPARAMS
 		return ;
 	}
 	Channel *channel = Server::getInstance().getCheckChannel(words[1]);
 	if (!checkNickname(words[0]))
-		sendError(client, 401, "No such nickname"); //ERR_NOSUCHNICK
+		sendError(client, 401, "ERR_NOSUCHNICK"); //ERR_NOSUCHNICK
 	else if (!channel)
-		sendError(client, 403, "No such channel"); //ERR_NOSUCHCHANNEL
+		sendError(client, 403, "ERR_NOSUCHCHANNEL"); //ERR_NOSUCHCHANNEL
 	else if (channel->getClientList(words[0]))
-		sendError(client, 443, "is already on channel <channel name>"); //ERR_USERONCHANNEL
+		sendError(client, 443, "ERR_USERONCHANNEL"); //ERR_USERONCHANNEL
 	else if (!channel->getOperatorList(client->getNickname())) //&& i is true)
-		sendError(client, 482, "You don't have channel operator privileges"); //ERR_CHANOPRIVSNEEDED
+		sendError(client, 482, "ERR_CHANOPRIVSNEEDED"); //ERR_CHANOPRIVSNEEDED
 	else
 	{
 		channel->addClientsInvited(words[0]);
 		Client *invited = Server::getInstance().getClientByNickname(words[0]);
-		std::cout << client->getNickname() << " is inviting you to " << channel->getName() << std::endl;
-		std::ostringstream oss;
-		oss << channel->getName() << " " << words[0] << "\r\n";
-		std::string msg = oss.str();
-		send(invited->getFd(), msg.c_str(), msg.size(), 0);
+		
+		makeInviterMessage(client, channel->getName(), invited->getNickname());
+		makeInvitedMessage(client, channel->getName(), invited);
 	}
 }

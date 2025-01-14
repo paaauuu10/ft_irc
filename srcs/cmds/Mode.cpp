@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 12:22:51 by pbotargu          #+#    #+#             */
-/*   Updated: 2025/01/02 19:26:13 by anovio-c         ###   ########.fr       */
+/*   Updated: 2025/01/14 12:45:28 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,9 +83,11 @@ void handleModeL(Channel *channel, Client *client, char s, std::string limitStr)
 
 void mode(Client *client, std::string &str)
 {
+    // MODE canal mode [value]
+    
     std::vector<std::string> words = split(str, ' ');
-    if (words.size() < 1) {
-        sendError(client, 461, "ERR_NEEDMOREPARAMS - Not enough parameters");
+    if (words.size() < 2 ) {
+        sendError(client, 461, "ERR_NEEDMOREPARAMS");
         return;
     }
 
@@ -100,10 +102,6 @@ void mode(Client *client, std::string &str)
         return;
     }
 
-    if (words.size() < 2) {
-        sendError(client, 461, "ERR_NEEDMOREPARAMS - Not enough parameters");
-        return;
-    }
     char s = '+';
     for (size_t i = 0; i < words[1].size(); ++i) {
         while (words[1][i] == '+' || words[1][i] == '-') {
@@ -119,27 +117,27 @@ void mode(Client *client, std::string &str)
                 break;
             case 'k':
                 if (words.size() < 3) {
-                    sendError(client, 461, "ERR_NEEDMOREPARAMS - Not enough parameters for k mode");
+                    sendError(client, 461, "ERR_NEEDMOREPARAMS - Not enough parameters for 'k' mode");
                     return;
                 }
                 handleModeK(channel, client, s, words[2]);
                 break;
             case 'o':
                 if (words.size() < 3) {
-                    sendError(client, 461, "ERR_NEEDMOREPARAMS - Not enough parameters for o mode");
+                    sendError(client, 461, "ERR_NEEDMOREPARAMS - Not enough parameters for 'o' mode");
                     return;
                 }
                 handleModeO(channel, client, s, words[2]);
                 break;
             case 'l':
                 if (s == '+' && words.size() < 3) {
-                    sendError(client, 461, "ERR_NEEDMOREPARAMS - Not enough parameters for l mode");
+                    sendError(client, 461, "ERR_NEEDMOREPARAMS - Not enough parameters for 'l' mode");
                     return;
                 }
                 handleModeL(channel, client, s, trim(words[2]));
                 break;
             default:
-                sendError(client, 472, "ERR_UNKNOWNMODE - Unknown mode character", std::string(1, words[1][i]));
+                sendError(client, 472, "ERR_UNKNOWNMODE", std::string(1, words[1][i]));
                 break;
         }
     }

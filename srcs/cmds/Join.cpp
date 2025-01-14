@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 09:55:32 by anovio-c          #+#    #+#             */
-/*   Updated: 2025/01/14 11:27:03 by anovio-c         ###   ########.fr       */
+/*   Updated: 2025/01/14 12:41:59 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static std::string	makeBroadcastMessage(Client *client, std::string &channelName
 
 void	join(Client *client, std::string& args) {
 	if (args.empty()) {
-		sendError(client, 461, "ERR_NEEDMOREPARAMS");
+		sendError(client, 461, "ERR_NEEDMOREPARAMSASIER");
 		return ;
 	}
 	
