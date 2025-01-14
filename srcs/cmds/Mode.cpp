@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 12:22:51 by pbotargu          #+#    #+#             */
-/*   Updated: 2025/01/14 12:45:28 by pbotargu         ###   ########.fr       */
+/*   Updated: 2025/01/14 13:20:29 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ void mode(Client *client, std::string &str)
     // MODE canal mode [value]
     
     std::vector<std::string> words = split(str, ' ');
+	std::cout << "SIZE: " << words.size() << std::endl;
     if (words.size() < 2 ) {
         sendError(client, 461, "ERR_NEEDMOREPARAMS");
         return;
