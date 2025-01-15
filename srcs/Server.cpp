@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:24:51 by anovio-c          #+#    #+#             */
-/*   Updated: 2025/01/13 13:45:37 by anovio-c         ###   ########.fr       */
+/*   Updated: 2025/01/15 16:13:03 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,6 +153,7 @@ int	Server::start()
 						std::cout << "Client disconnected" << std::endl;
 						Client *client = getClientBySocket(pollfds[i].fd);
 						if (client) {
+							std::cout << "hola\n";
 							removeClientFromServer(client);
 							delete client;
 						}
@@ -259,14 +260,19 @@ void	Server::removeClientFromPolls(int fd) {
 void	Server::removeClientFromServer(Client *client) {
 	if (!client) return ;
 	
-	_clients.erase(std::remove(_clients.begin(), _clients.end(), client), _clients.end());
-	
-/* 	std::vector<Client *>::iterator it = _clients.begin();
-	
-	for (; it != _clients.end(); ++it) {
-		if ((*it) == client) {
-			_clients.erase(it);
-			break ;
+	std::vector<Channel *> channels = Server::getInstance().getChannels(NULL);
+
+	if (!channels.empty()) {
+		for (size_t i = 0; i < channels.size(); ++i) {
+			channels[i]->rmClient(client);
+			if (channels[i]->isEmpty())
+				removeChannel(channels[i]);
 		}
-	} */
+	}
+	_clients.erase(std::remove(_clients.begin(), _clients.end(), client), _clients.end());
+}
+
+void	Server::removeChannel(Channel *channel) {
+    _channels.erase(std::remove(_channels.begin(), _channels.end(), channel), _channels.end());
+    delete channel;
 }

@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:58:33 by anovio-c          #+#    #+#             */
-/*   Updated: 2025/01/13 16:23:41 by anovio-c         ###   ########.fr       */
+/*   Updated: 2025/01/15 11:53:31 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,9 @@ Channel::Channel(const std::string &channelName, const std::string &key, Client 
 	_limit = -1;
 	std::cout << "Channel '" << channelName << "' created by " << creator->getUsername() << ".\n";
 }
+
+
+Channel::Channel() { }
 
 Channel::~Channel() { }
 
@@ -152,7 +155,11 @@ Client	*Channel::checkClient(std::string nickname) {
 	return NULL;
 }
 
-bool	Channel::isEmtpy() { return this->_clients.empty() ; }
+bool	Channel::isEmpty() const {
+	
+	return (this->_clients.empty() && this->_operatorClients.empty());
+
+}
 
 bool	Channel::isFull() { 
 	return ((this->_clients.size() + this->_operatorClients.size()) == static_cast<u_long>(this->_limit) ? true : false );
@@ -215,9 +222,7 @@ void	Channel::rmClient(Client *client) {
             break;
         }
     }
-	
-	if (_clients.empty() && _operatorClients.empty())
-		delete this;
+
 }
 
 std::vector<int>	Channel::listFdClients() {
