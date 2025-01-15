@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   USER.cpp                                           :+:      :+:    :+:   */
+/*   User.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 11:12:30 by pbotargu          #+#    #+#             */
-/*   Updated: 2024/12/19 11:36:09 by pbotargu         ###   ########.fr       */
+/*   Updated: 2025/01/13 15:59:32 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,85 +17,130 @@
 #include <string>
 #include "Utils.hpp"
 
-static bool checkUser(std::string &username)
-{
+static bool	checkRealname(std::string &name) {
+	return !name.empty() && name[0] == ':';
+}
+
+static bool checkServerName(std::string &name) {
+
+	std::string serverName = Server::getInstance().getServerName();
+
+	if (name == "*") {
+		name = serverName;
+		return true;
+	}
+	return serverName == name;
+
+}
+
+/*static bool isValidIp(std::string &host) {
+
+	std::vector<std::string>	tokens = split(host, '.');
+
+	if (tokens.size() != 4)
+		return false;
 	
+	for (size_t i = 0; i < tokens.size(); ++i) {
+		const std::string &part = tokens[i];
+
+		if (part.empty())
+			return false;
+		
+		for (size_t j = 0; j < part.size(); ++j) {
+			if (!std::isdigit(part[j]))
+				return false;
+		}
+		
+		if (part.size() > 1 && part[0] == '0')
+			return false;
+		
+		long value = std::strtol(part.c_str(), NULL, 10);
+		if (value < 0 || value > 255)
+			return false;
+	}
+	return true;
+}*/
+
+/*static bool checkUser(std::string &username)
+{
+	if (username.empty())
+		return false;
+
 	std::vector<Client *>	vclient = Server::getInstance().getClients();
-	for (long unsigned int i = 0; i < vclient.size(); i++)
-	{
+	for (size_t i = 0; i < vclient.size(); i++) {
 		if (vclient[i]->getUsername() == username)
 			return false;
 	}
 	return true;
+}*/
+
+static bool isValidIp(std::string &host) {
+	if (host == "0") {
+		std::string newHost = "127.0.0.1";
+		host = newHost;
+	}
+    struct sockaddr_in sa;
+    return inet_pton(AF_INET, host.c_str(), &(sa.sin_addr)) != 0;
 }
 
-void	user(Client *client, std::string pass)
+/*    Since it is easy for a client to lie about its username by relying
+   solely on the USER message, the use of an "Identity Server" is
+   recommended.  If the host which a user connects from has such a
+   server enabled the username is set to that as in the reply from the
+   "Identity Server". */
+
+void	user(Client *client, std::string &args)
 {
-    if (checkerIsLogged(client) == false)
-        return ;
-    std::vector<std::string> words = split(pass, ' ');
-    if (words.size() < 4)
-        return (sendError(client, 461, "Not enought parameters. \n/USER <user> <hostname> <serverName> <realname> ")); //revisar codi d'error  i missatge!!!    
-    //username es unic? en cas que si cal revisar si ja existeix o no. Mirar si el client ja esta registrat?
-    if (!checkUser(words[0]))
-    {    
-        sendError(client, 433, "This username already exists!"); //revisar codi d'error  i missatge!!!    
-        return ;
-    }
-    // <username> <hostname> <servername> <realname>
-    client->setUsername(words[0]);
-    client->setHostname(words[1]); // revisar com ha de ser hostname
-    client->setServername(words[2]);
-    client->setRealName(words[3]);
-	std::string response = "User created!\r\n";
-    send(client->getFd(), response.c_str(), response.size(), 0);
-    if (!client->getNickname().empty() && !client->getRegistered())
-    {
-        client->setRegistered(true);
-        std::string response = "Welcome to FT_IRC!!!!\r\n";
-        std::string pikachu_art = 
-"quu..__\n"
-" $$$b  `---.__\n"
-"  \"$b        `--.                          ___.---uuudP\n"
-"   `$$b           `.__.------.__     __.---'      $$$$\"              .\n"
-"     \"$b          -'            `-.-'            $$$\"              .'|\n"
-"       \".                                       d$\"             _.'  |\n"
-"         `.   /                              ...\"             .'     |\n"
-"           `./                           ..::-'            _.'       |\n"
-"            /                         .:::-'            .-'         .'\n"
-"           :                          ::''\\          _.'            |\n"
-"          .' .-.             .-.           `.      .'               |\n"
-"          : /'$$|           .@\"$\\           `.   .'              _.-'\n"
-"         .'|$u$$|          |$$,$$|           |  <            _.-'\n"
-"         | `:$$:'          :$$$$$:           `.  `.       .-'\n"
-"         :                  `\"--'             |    `-.     \\\n"
-"        :##.       ==             .###.       `.      `.    `\\\n"
-"        |##:                      :###:        |        >     >\n"
-"        |#'     `..'`..'          `###'        x:      /     /\n"
-"         \\                                   xXX|     /    ./\n"
-"          \\                                xXXX'|    /   ./\n"
-"          /`-.                                  `.  /   /\n"
-"         :    `-  ...........,                   | /  .'\n"
-"         |         ``:::::::'       .            |<    `.\n"
-"         |             ```          |           x| \\ `.:``.\n"
-"         |                         .'    /'   xXX|  `:`M`M':.\n"
-"         |    |                    ;    /:' xXXX'|  -'MMMMM:'\n"
-"         `.  .'                   :    /:'       |-'MMMM.-'\n"
-"          |  |                   .'   /'        .'MMM.-'\n"
-"          `'`'                   :  ,'          |MMM<\n"
-"            |                     `'            |tbap\\\n"
-"             \\                                  :MM.-'\n"
-"              \\                 |              .''\n"
-"               \\.               `.            /\n"
-"                /     .:::::::.. :           /\n"
-"               |     .:::::::::::`.         /\n"
-"               |   .:::------------\\       /\n"
-"              /   .''               >::'  /\n"
-"              `',:                 :    .'\n"
-"                                   `:.:' \n";
+	if (client->getRegistered()) {
+		sendError(client, 462, "ERR_ALREADYREGISTRED");
+        return;
+	}
+	
+	if (!client->getLogged() )// || client->getNickname().empty())
+		return ;
 
-        send(client->getFd(), response.c_str(), response.size(), 0);
-        //send(client->getFd(), pikachu_art.c_str(), pikachu_art.size(), 0);
+    std::vector<std::string> tokens = split(args, ' ');
+    if (tokens.size() < 4) {
+		std::cerr << "USE: /USER <user> <hostname> <serverName> <realname>" << std::endl;
+        sendError(client, 461, "ERR_NEEDMOREPARAMS");
+		return ;
+	}
 
-    }
+	std::string username = tokens[0];
+	std::string hostname = tokens[1];
+	std::string servername = tokens[2];
+	std::string realname = tokens[3];
+
+	if (!isValidIp(hostname)) {
+		sendError(client, 461, "ERR_NEEDMOREPARAMS - Invalid ip");
+        return ;
+	}
+	
+	if (!checkServerName(servername)) {
+		sendError(client, 461, "ERR_NEEDMOREPARAMS - Invalid server");
+        return ;
+	}
+	
+	if (!checkRealname(realname)) {
+		sendError(client, 461, "ERR_NEEDMOREPARAMS - Invalid realname");
+        return ;
+	}
+
+    client->setUsername(username); // lo unico que no se puede repetir es nickname
+    client->setHostname(hostname);
+	std::cout << "HOST: " << hostname << std::endl;
+	client->setServername(servername);
+    client->setRealName(realname);
+	client->setRegistered(true);
+	
+	std::cout << "User " << client->getUsername() << " created!\n" << std::endl;
+
+    std::ostringstream oss;
+    oss << ":" << Server::getInstance().getServerName()
+		<< " 001 " << client->getNickname() << " :Welcome to the IRC network, "
+		<< client->getNickname() << "!" << client->getUsername() << "@"
+		<< client->getHostname() << "\r\n";
+    std::string msg = oss.str();
+    send(client->getFd(), msg.c_str(), msg.size(), 0);
+    //send(client->getFd(), pikachu_art.c_str(), pikachu_art.size(), 0);
 }

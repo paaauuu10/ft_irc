@@ -12,93 +12,113 @@
 
 #include "Server.hpp"
 
-static bool validCommand(Client *client, std::string str, std::string cmd)
-{
-	//"SERVER", "OPER""QUIT", "SQUIT", "NAMES", "LIST", "VERSION","PART",
-    int index = 0;
-    std::string commands[9] = { "PASS", "NICK", "USER", "JOIN", "MODE", "TOPIC", "INVITE", "KICK", "PRIVMSG"};
-	if (!client->getLogged() && cmd != "PASS") {
-		std::string server = Server::getInstance().getServerName();
-		std::string response = ":" + server + " 451 :You have not registered\r\n"; //ERR_NOTREGISTERED
-		send(client->getFd(), response.c_str(), response.size(), 0);
-		return true;
-	}
-	if (client->getLogged() && cmd == "PASS") {
-		sendError(client, 462, "You may not reregister"); //ERR_NEEDMOREPARAMS
-		return true;
-	}
-	if (!client->getRegistered() && cmd != "USER" && cmd != "NICK" && client->getLogged()) {
-		if (client->getUsername().empty())
-			sendError(client, 1, "You need to use cmd USER <username> <hostname> <servername> <realname>");
-		if (client->getNickname().empty())
-			sendError(client, 1, "You need to use cmd NICK <nickname>");
-		return true;
+/* static	void	handleLoginAndRegistration(Client *client, const std::string &cmd) {
+	
+	if (!client->getLogged() && cmd != "/PASS") {
+		sendError(client, 444, "ERR_NOLOGIN");
+		return ;
 	}
 
-	std::string	value = str.substr(cmd.size(), str.size() - cmd.size());
-	while ((cmd != commands[index]) && cmd != ('/' + commands[index])) {
-		index++;
-		if (index == 9)
-			return false;
+	if (!client->getRegistered() && client->getLogged() && cmd != "/PASS") {
+		if (client->getNickname().empty()) {
+			if (cmd != "/NICK") {
+				sendError(client, 444, "ERR_NONICKNAMEGIVEN");
+				return ;
+			}
+		}
+
+		if (client->getUsername().empty()) {
+			if (cmd != "/USER" && cmd != "/NICK") {
+				sendError(client, 451, "ERR_NOTREGISTERED");
+				return ;
+			}
+		}
 	}
-	index++;
-	switch(index) {
-		case 1:
-			pass(client, value);
-			break;
-		case 2:
-			nick(client, value);
-			break;
-		case 3:
-			user(client, value);
-			break;
-		case 4:
-			join(client, value);
-			break;
-		case 5:
-			mode(client, value);
-			break;
-		case 6:
-			topic(client, value);
-			break;
-		case 7:
-			invite(client, value);
-			break;
-		case 8:
-			kick(client, value);
-			break;
-		case 9:
-			privMsg(client, value);
-			break;
-/* 		case 10:
-			MODE(client, value);
-			break; */
-		//default:
-		//	break ;
+} */
+
+static	bool	handleLoginAndRegistration(Client *client, const std::string &cmd) {
+	
+	if (client->getRegistered())
+		return true;
+
+	if (!client->getLogged() && cmd != "/PASS") {
+		sendError(client, 444, "ERR_NOLOGIN");
+		return false;
 	}
+
+	if ( client->getLogged() && !client->getRegistered() ) {// && cmd != "/PASS" && (cmd == "/NICK" || cmd == "/USER")) {
+		if (cmd != "/NICK" && cmd != "/USER") {
+        	sendError(client, 451, "ERR_NOTREGISTERED");
+        	return false;
+        }
+	}
+	//if (!client->getNickname().empty() && !client->getUsername().empty())
+	//	client->setRegistered(true);
 	return true;
 }
+
+
+//"SERVER", "OPER", "SQUIT", "NAMES", "LIST", "VERSION","PART",
+
+static bool validCommand(Client *client, std::string &value, std::string &cmd)
+{
+	//if (client == NULL)
+	//	return false;
+
+	//if (!handleLoginAndRegistration(client, cmd))
+	//	return true;
+	
+	typedef void (*cmdFunction)(Client *, std::string&);
+    
+	std::string commands[10] = { "PASS", "NICK", "USER", "JOIN", "MODE", "TOPIC", "INVITE", "KICK", "PRIVMSG"};//, "QUIT" };
+	cmdFunction functions[10] = { pass, nick, user, join, mode, topic, invite, kick, privMsg};//, quit };
+	
+	// if (!client->getLogged() && cmd != "PASS") {
+	// 	std::string server = Server::getInstance().getServerName();
+	// 	std::string response = ":" + server + " 451 :You have not registered\r\n"; //ERR_NOTREGISTERED
+	// 	send(client->getFd(), response.c_str(), response.size(), 0);
+	// 	return true;
+	// }
+
+	int index = 0;
+	for (; index < 10; ++index) {
+		if (cmd == '/' + std::string(commands[index]))
+			break;
+	}
+
+	if (index < 10) {
+		functions[index](client, value);
+		return true;
+	} else
+		return false;
+}
+
+
 void parser(Client *client, std::string str)
 {
-	while (!str.empty() && ((str[str.size() - 1]) == '\n' || (str[str.size() - 1]) == '\r'))
-		str.erase(str.size() -1);
+	if (!str.empty() && str[0] != '/')
+		str = "/" + str;
 
-    std::string cmd = str.substr(0, str.find(' '));
-	std::string cmdUpper = cmd;
-	
-	for (size_t i = 0; i < cmd.length(); ++i)
-		cmdUpper[i] = std::toupper(cmd[i]);
-    if (str == "\r\n") // revisar aquesta guarrada: Si treiem aixo mostra :UNKNOWN COMMAND!
-        return ;
-    if  (str.size() > 0)// && str[0] == '/')
-    {
-        if (!validCommand(client, str, cmdUpper))
-        {
-            std::string response = cmd + " :Unknown command\r\n";
-            send(client->getFd(), response.c_str(), response.size(), 0);
-        }
-    }
+	size_t tab = str.find('/');
+	if (tab == std::string::npos)
+		return;
+
+	std::string cmd = str.substr(tab, str.find_first_of(" \t", tab) - tab);
+
+	size_t value_start = str.find_first_not_of(" \t", tab + cmd.size());
+	std::string value = (value_start == std::string::npos) ? "" : str.substr(value_start);
+	value = trim(value);
+
+	if (!handleLoginAndRegistration(client, cmd))
+		return ;
+	std::cout << "PROMPT : " << cmd << " + " << value << std::endl;
+	// falta otro if
+	if (!cmd.empty() && !value.empty() && !validCommand(client, value, cmd)) {
+		std::string response = cmd + " :Unknown command\r\n";
+		send(client->getFd(), response.c_str(), response.size(), 0);
+	}
 }
+
 
 void parsingbuffer(char *buffer, Client *client)
 {
@@ -112,11 +132,12 @@ void parsingbuffer(char *buffer, Client *client)
 		temp.clear();
 		if (stream.eof() && temp.empty())
 			return ;
+
 		if (line.find('\0') != std::string::npos)
 			return ;
 
 		if (line != "CAP LS 302\r")
-			parser(client, line);
+			parser(client, trim(line));
 		line.clear();
 	}
 }

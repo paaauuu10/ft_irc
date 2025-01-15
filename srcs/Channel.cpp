@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:58:33 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/19 12:07:24 by pborrull         ###   ########.fr       */
+/*   Updated: 2025/01/13 16:23:41 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ Channel::Channel(const std::string &channelName, const std::string &key, Client 
 	else
 		_name = channelName;
 	_operatorClients.push_back(creator);
-	// invitation mode, by default is false
 	_modes['i'] = false;
 	_modes['t'] = false;
+	_modes['l'] = false;
 	if (key.empty()) {
 		_key = "";
 		_modes['k'] = false;
@@ -31,7 +31,7 @@ Channel::Channel(const std::string &channelName, const std::string &key, Client 
 		_key = key;
 		_modes['k'] = true;
 	}
-	_limit = 999; // ?? -1
+	_limit = -1;
 	std::cout << "Channel '" << channelName << "' created by " << creator->getUsername() << ".\n";
 }
 
@@ -41,7 +41,7 @@ std::string	Channel::getName() { return this->_name ; }
 
 bool		Channel::getMode(char key) {
 	if (_modes.find(key) != _modes.end()) {
-        return true; //_modes[key];
+        return _modes[key];
     }
     return false;
 }
@@ -96,13 +96,11 @@ std::string	Channel::getTopic() {
 	return this->_topic;
 }
 
-void	Channel::setMode(char mode, bool status, int value) {
+size_t		Channel::getUserCount() {
+	return (_clients.size() + _operatorClients.size());
+}
 
-// · i: Set/remove Invite-only channel
-// · t: Set/remove the restrictions of the TOPIC command to channel operators
-// · k: Set/remove the channel key (password)
-// · o: Give/take channel operator privilege
-// l: Set/remove the user limit to channel
+void	Channel::setMode(char mode, bool status, int value) {
 	(void)value;
 	_modes[mode] = status;
 	std::cout << "Channel " << _name << " mode " << mode << " set to " << (status ? "ON" : "OFF") << ".\n";
@@ -124,24 +122,32 @@ bool	Channel::isKeyProtected() {
 	return (getMode('k'));
 }
 
+bool	Channel::isInvited(const std::string &nickname) const {
+	return std::find(_clientsInvited.begin(), _clientsInvited.end(), nickname) != _clientsInvited.end();
+}
+
 bool	Channel::checkKey(const std::string &str) const {
 	return (_key == str);
 }
 
 bool	Channel::checkOperatorClient(Client *client) {
-	for (size_t i = 0; this->_operatorClients.size(); ++i) {
+	for (size_t i = 0; i < this->_operatorClients.size(); ++i) {
 		if (this->_operatorClients[i]->getNickname() == client->getNickname())
 			return true;
 	}
 	return false;
 }
 
-Client	*Channel::checkClient(std::string &nickname) {
+Client	*Channel::checkClient(std::string nickname) {
 	if (this->_clients.empty())
-    	return NULL;
+		return NULL;
 	for (size_t i = 0; i < this->_clients.size(); ++i) {
 		if (this->_clients[i]->getNickname() == nickname)
 			return this->_clients[i];
+	}
+	for (size_t i = 0; i < this->_operatorClients.size(); ++i) {
+		if (this->_operatorClients[i]->getNickname() == nickname)
+			return this->_operatorClients[i];
 	}
 	return NULL;
 }
@@ -152,21 +158,45 @@ bool	Channel::isFull() {
 	return ((this->_clients.size() + this->_operatorClients.size()) == static_cast<u_long>(this->_limit) ? true : false );
 }
 
-void	Channel::addClient(Client *client) { this->_clients.push_back(client); }
+void	Channel::addClient(Client *client) {
+
+    if (std::find(_clients.begin(), _clients.end(), client) == _clients.end() &&
+        std::find(_operatorClients.begin(), _operatorClients.end(), client) == _operatorClients.end()) {
+		if (this->isFull()) {
+            sendError(client, 471, "ERR_CHANNELISFULL - Channel is full", this->getName());
+            return;
+        }
+        _clients.push_back(client);
+    }
+}
 
 void	Channel::addClientsInvited(std::string client) { this->_clientsInvited.push_back(client); }
 
-void	Channel::addOperatorClient(Client *client) { this->_operatorClients.push_back(client); }
+void	Channel::addOperatorClient(Client *client) {
+
+    if (std::find(_clients.begin(), _clients.end(), client) == _clients.end() &&
+        std::find(_operatorClients.begin(), _operatorClients.end(), client) == _operatorClients.end()) {
+        if (this->isFull()) {
+            sendError(client, 471, "ERR_CHANNELISFULL - Channel is full", this->getName());
+            return;
+        }
+    }
+
+    if (std::find(_operatorClients.begin(), _operatorClients.end(), client) == _operatorClients.end())
+        _operatorClients.push_back(client);
+
+    std::vector<Client*>::iterator it = std::find(_clients.begin(), _clients.end(), client);
+    if (it != _clients.end())
+        _clients.erase(it);
+
+}
 
 void Channel::removeOperatorClient(Client *client) {
     // Usamos std::remove para desplazar el elemento al final
-    	this->_operatorClients.erase(std::remove(this->_operatorClients.begin(), this->_operatorClients.end(), client), this->_operatorClients.end());
-	
-	/*std::vector<Client *>::iterator it = this->_operatorClients.begin();
-	for (; it != this->_operatorClients.end(); ++it) {
-		if (*it == client)
-			it = this->_operatorClients.erase(it);
-	}*/
+    this->_operatorClients.erase(
+		std::remove(this->_operatorClients.begin(), this->_operatorClients.end(), client),
+		this->_operatorClients.end());
+
 }
 
 
@@ -178,74 +208,46 @@ void	Channel::rmClient(Client *client) {
             break;
 		}
 	}
-	//if (_clients.empty())
-	//	delete this;
+
+	for (size_t i = 0; i < _operatorClients.size(); ++i) {
+        if (_operatorClients[i]->getUsername() == client->getUsername()) {
+            _operatorClients.erase(_operatorClients.begin() + i);
+            break;
+        }
+    }
+	
+	if (_clients.empty() && _operatorClients.empty())
+		delete this;
 }
 
 std::vector<int>	Channel::listFdClients() {
 	std::vector<int>	list;
 	std::vector<Client *>::iterator it = _clients.begin();
 
-	for (; it != _clients.end(); ++it) {
+	for (; it != _clients.end(); ++it)
 		list.push_back((*it)->getFd());
-	}
+		
 	it = _operatorClients.begin();
-	for (; it != _operatorClients.end(); ++it) {
+	for (; it != _operatorClients.end(); ++it)
 		list.push_back((*it)->getFd());
-	}
+		
 	return (list);
 }
 
-void Channel::broadcast(Client *client, std::string &msg) {
-    std::vector<int> fds = listFdClients();
-	(void)client;
-
-    //std::ostringstream oss;
-
-    // Mensaje JOIN con el prefijo correcto
-	// :<nickname>!<username>@<hostname> JOIN :<channelName>\r\n
+void Channel::broadcast(Client *sender, std::string &msg) {
 	
-    //oss << ":" << client->getNickname() << "!" 
-    //    << client->getUsername() << "@127.0.0.1 JOIN :" 
-     //   << this->getName() << "\r\n";
-
-    //std::string msg = oss.str();
-
-    // Enviar a todos los clientes del canal
-    for (size_t i = 0; i < fds.size(); ++i) {
-        send(fds[i], msg.c_str(), msg.size(), 0);
+	for (size_t i = 0; i < _clients.size(); ++i) {
+        if (_clients[i] != sender) {
+            send(_clients[i]->getFd(), msg.c_str(), msg.size(), 0);
+        }
+    }
+    for (size_t i = 0; i < _operatorClients.size(); ++i) {
+        if (_operatorClients[i] != sender) {
+            send(_operatorClients[i]->getFd(), msg.c_str(), msg.size(), 0);
+        }
     }
 }
 
-
-/*
-void	Channel::broadcast(Client *client) {
-	//:<servidor> JOIN <cliente> <canal>
-	
-	std::vector<int> fds = listFdClients();
-	std::ostringstream oss;
-
-	oss << ":" << Server::getServerName() << " JOIN :"
-		<< client->getNickname() << " " << this->getName()
-		<< "\r\n";
-		
-	std::string msg = oss.str();
-	//:<server_name> JOIN :#canal1
-	std::ostringstream ossOwn;
-
-	ossOwn << ":" << Server::getServerName() << " JOIN :"
-		<< this->getName() << "\r\n";
-	std::string msgOwn = ossOwn.str();
-
-	for (size_t i = 0; i < fds.size(); ++i) {
-		if (fds[i] == client->getFd()) {
-			send(fds[i], msgOwn.c_str(), msgOwn.size(), 0);
-			continue ;
-		}
-		std::cout << "FD  == " << fds[i] << std::endl;
-		send(fds[i], msg.c_str(), msg.size(), 0);
-	}
-}*/
 
 void	Channel::RPLTOPIC(Client *client) {
 	std::ostringstream oss;
@@ -279,4 +281,21 @@ void	Channel::RPL_NAMREPLY(Client *client) {
 		<< " :End of NAMES list." << "\r\n";
 	msg = oss.str();
     send(client->getFd(), msg.c_str(), msg.size(), 0);
+}
+
+void Channel::cmdHelp(Client *client) {
+	std::ostringstream oss;
+
+	oss << "Available commands in the channel:\n"
+		<< "/join <channel> [key] - Join a channel\n"
+		// << "/part <channel> - Leave a channel\n"
+		<< "/topic <channel> [topic] - Set or view the topic of a channel\n"
+		// << "/names <channel> - List users in a channel\n"
+		// << "/list - List all channels\n"
+		<< "/invite <nickname> <channel> - Invite a user to a channel\n"
+		<< "/kick <channel> <nickname> - Kick a user from a channel\n"
+		<< "/mode <channel> <mode> [parameters] - Change channel modes\n"
+		<< "/!!!msg <nickname> <message> - Send a private message to a user\r\n";
+	std::string msg = oss.str();
+	send(client->getFd(), msg.c_str(), msg.size(), 0);
 }

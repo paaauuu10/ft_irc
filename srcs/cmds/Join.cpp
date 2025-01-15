@@ -1,20 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   JOIN.cpp                                           :+:      :+:    :+:   */
+/*   Join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 09:55:32 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/17 10:27:33 by pborrull         ###   ########.fr       */
+/*   Updated: 2025/01/14 12:41:59 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 #include "Client.hpp"
 #include "Channel.hpp"
-
-//JOIN  <channel1>{,<channel2>} [<key1>{,<key2>}]
 
 static bool isValidChannelName(std::string &name) {
 	if (name[0] == '#' || name[0] == '&')
@@ -25,28 +23,26 @@ static bool isValidChannelName(std::string &name) {
 static std::string	makeBroadcastMessage(Client *client, std::string &channelName) {
 	std::ostringstream oss;
 
-    // Mensaje JOIN con el prefijo correcto
-	// :<nickname>!<username>@<hostname> JOIN :<channelName>\r\n
     oss << ":" << client->getNickname() << "!" 
-        << client->getUsername() << "@127.0.0.1 JOIN :" 
+        << client->getUsername() << "@" << client->getHostname() << " JOIN :" 
         << channelName << "\r\n";
 
 	return (oss.str());
 }
 
-// default password == "default"
-//          ERR_INVITEONLYCHAN
-//		    ERR_TOOMANYCHANNELS
 
 void	join(Client *client, std::string& args) {
-	if (args.empty())
-		sendError(client, 461, "ERR_NEEDMOREPARAMS");
+	if (args.empty()) {
+		sendError(client, 461, "ERR_NEEDMOREPARAMSASIER");
+		return ;
+	}
+	
 	std::vector<std::string> tokens = split(args, ' ');
     std::vector<std::string> channels = split(tokens[0], ',');
     std::vector<std::string> keys = (tokens.size() > 1)
 		? split(tokens[1], ',')
 		: std::vector<std::string>();
-	//the user must be invited if the channel is invite-only
+
 	for (size_t i = 0; i < channels.size(); ++i) {
 		std::string channelName = channels[i];
 		std::string key = (i < keys.size()) ? keys[i] : "";
@@ -59,24 +55,32 @@ void	join(Client *client, std::string& args) {
 		Channel *channel = Server::getInstance().getCheckChannel(channelName);
 		
 		if (!channel) {
-			// channel constructor puts the creator client to operator client;
 			channel = new Channel(channelName, key, client);
 			Server::getInstance().addChannel(channel);
 		} else {
+			if (channel->getMode('i') && !channel->isInvited(client->getNickname())) {
+				sendError(client, 473, "ERR_INVITEONLYCHAN");
+				continue ;
+			}
+			
 			if (channel->isKeyProtected() && !channel->checkKey(key)) {
-				sendError(client, 475, "ERR_BADCHANNELKEY"); // channelName
+				sendError(client, 475, "ERR_BADCHANNELKEY");
 				continue ;
 			}
 			if (channel->isFull()) {
-				sendError(client, 471, "ERR_CHANNELISFULL"); // channelName
+				sendError(client, 471, "ERR_CHANNELISFULL");
 				continue ;
 			}
+			
 			channel->addClient(client);
 		}
 		std::string message = makeBroadcastMessage(client, channelName);
+		//ey
+		send(client->getFd(), message.c_str(), message.size(), 0);
         channel->broadcast(client, message);
+		
 		channel->RPLTOPIC(client);
 		channel->RPL_NAMREPLY(client);
-		// enviar lista de comandos
+		//channel->cmdHelp(client);
 	}
 }

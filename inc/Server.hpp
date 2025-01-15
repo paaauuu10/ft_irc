@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:20:37 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/17 12:29:00 by pbotargu         ###   ########.fr       */
+/*   Updated: 2024/12/29 18:42:56 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 #include <algorithm>
 #include <ctime>
 #include <limits.h>
+#include <fcntl.h>
 #include "Utils.hpp"
 
 
@@ -71,12 +72,16 @@ class Server
 		Client 				*getClientBySocket(int fd);
 		Client				*getClientByNickname(std::string nickname);
 		Channel				*getCheckChannel(const std::string &name);
+		std::vector<Channel *>	getChannels(Client *client);
+		// tener que hacerlo en vector tambien
 		std::vector<Client *>	getClients(void);
 		void				handleMode(Client *client, const std::string &channelName);
 		void				handleWho(Client *client, const std::string &channelName);
 		static std::string	getServerName() {
 			return _srvName;
 		}
+		void				removeClientFromPolls(int fd);
+		void				removeClientFromServer(Client *client);
 };
 
 void 	parser(Client *client, std::string str);
@@ -85,11 +90,13 @@ void 	parsingbuffer(char *buffer, Client *client);
 void	join(Client *client, std::string& args);
 void	kick(Client *client, std::string& args);
 void	topic(Client *client, std::string& args);
-void	pass(Client *client, std::string pass);
-void	user(Client *client, std::string pass);
+void	pass(Client *client, std::string &pass);
+void	user(Client *client, std::string &pass);
 void	nick(Client *client, std::string &nickname);
 void	invite(Client *client, std::string &invitation);
-void	mode(Client *client, std::string str);
+void	mode(Client *client, std::string &str);
+void	sendFile(Client *client, std::string &args);
+void	quit(Client *client, std::string &message);
 
 
 void 	privMsg(Client *sender, std::string &value);

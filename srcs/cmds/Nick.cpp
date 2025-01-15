@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   NICK.cpp                                           :+:      :+:    :+:   */
+/*   Nick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 11:47:10 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/19 10:57:31 by pborrull         ###   ########.fr       */
+/*   Updated: 2025/01/13 16:16:06 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,81 +47,37 @@ static int validateNick(std::string &nick)
 
 void	nick(Client *client, std::string &nickname)
 {
+	//nickname = trim(nickname);
 	std::cout << "--> " << nickname << std::endl;
-	std::vector<std::string> words = split(nickname, ' ');
-	if (words.empty())
-		return (sendError(client, 431, "ERR_NONICKNAMEGIVEN", client->getNickname())); //ERR_NONICKNAMEGIVEN
-	std::string nick = words[0];
-	while (nick[0] == ' ')
-		nick.erase(0, 1);
-	if (nick.empty())
-		sendError(client, 431, "No nickname given", client->getNickname()); //ERR_NONICKNAMEGIVEN
-	else if (validateNick(nick))
-		sendError(client, 432, "Erroneous nickname", client->getNickname() + " " + nick); //ERR_ERRONEUSNICKNAME
-	else if (!client->getNickname().empty() && nick == client->getNickname())
-		sendError(client, 436, "Nickname collision KILL", client->getNickname() + " " + nick); //ERR_NICKCOLLISION
-	else if (checkNickname(nick))
-		sendError(client, 433, "Nickname is already in use", client->getNickname() + " " + nick); //ERR_NICKNAMEINUSE
-	else
-	{
-		std::string str = "";
-		if (client->getNickname().empty())
-		{
-			str = "Introducing new nick \"" + nick + "\"\n";
-			send(client->getFd(), str.c_str(), str.size(), 0);
-		}
-		else
-		{
-			str = ":" + client->getNickname() + " NICK :" + nick + "\n";	
-			send(client->getFd(), str.c_str(), str.size(), 0);
-		}
-		client->setNickname(nick);
-		if (!client->getUsername().empty() && !client->getRegistered())
-		{	
-			client->setRegistered(true);
-			std::string response = "Welcome to FT_IRC!!!!\r\n";
-			std::string pikachu_art = 
-			"quu..__\n"
-			" $$$b  `---.__\n"
-			"  \"$b        `--.                          ___.---uuudP\n"
-			"   `$$b           `.__.------.__     __.---'      $$$$\"              .\n"
-			"     \"$b          -'            `-.-'            $$$\"              .'|\n"
-			"       \".                                       d$\"             _.'  |\n"
-			"         `.   /                              ...\"             .'     |\n"
-			"           `./                           ..::-'            _.'       |\n"
-			"            /                         .:::-'            .-'         .'\n"
-			"           :                          ::''\\          _.'            |\n"
-			"          .' .-.             .-.           `.      .'               |\n"
-			"          : /'$$|           .@\"$\\           `.   .'              _.-'\n"
-			"         .'|$u$$|          |$$,$$|           |  <            _.-'\n"
-			"         | `:$$:'          :$$$$$:           `.  `.       .-'\n"
-			"         :                  `\"--'             |    `-.     \\\n"
-			"        :##.       ==             .###.       `.      `.    `\\\n"
-			"        |##:                      :###:        |        >     >\n"
-			"        |#'     `..'`..'          `###'        x:      /     /\n"
-			"         \\                                   xXX|     /    ./\n"
-			"          \\                                xXXX'|    /   ./\n"
-			"          /`-.                                  `.  /   /\n"
-			"         :    `-  ...........,                   | /  .'\n"
-			"         |         ``:::::::'       .            |<    `.\n"
-			"         |             ```          |           x| \\ `.:``.\n"
-			"         |                         .'    /'   xXX|  `:`M`M':.\n"
-			"         |    |                    ;    /:' xXXX'|  -'MMMMM:'\n"
-			"         `.  .'                   :    /:'       |-'MMMM.-'\n"
-			"          |  |                   .'   /'        .'MMM.-'\n"
-			"          `'`'                   :  ,'          |MMM<\n"
-			"            |                     `'            |tbap\\\n"
-			"             \\                                  :MM.-'\n"
-			"              \\                 |              .''\n"
-			"               \\.               `.            /\n"
-			"                /     .:::::::.. :           /\n"
-			"               |     .:::::::::::`.         /\n"
-			"               |   .:::------------\\       /\n"
-			"              /   .''               >::'  /\n"
-			"              `',:                 :    .'\n"
-			"                                   `:.:' \n";
-			send(client->getFd(), response.c_str(), response.size(), 0);
-			//send(client->getFd(), pikachu_art.c_str(), pikachu_art.size(), 0);
-		}
+
+	if (nickname.empty()) {
+		sendError(client, 431, "ERR_NONICKNAMEGIVEN"); // ERR_NONICKNAMEGIVEN
+		return;
 	}
+	
+	if (validateNick(nickname)) {
+		sendError(client, 432, "ERR_ERRONEUSNICKNAME"); //ERR_ERRONEUSNICKNAME
+		return ;
+	}
+	
+	if (!client->getNickname().empty() && nickname == client->getNickname()) {
+		sendError(client, 436, "ERR_NICKCOLLISION", client->getNickname() + " " + nickname); // ERR_NICKCOLLISION
+		return;
+	}
+	if (checkNickname(nickname)) {
+		sendError(client, 433, "ERR_NICKNAMEINUSE", client->getNickname() + " " + nickname); // ERR_NICKNAMEINUSE
+		nickname += "1";
+        nick(client, nickname);
+		return;
+	}
+	
+	std::string str = "";
+	if (client->getNickname().empty()) {
+		str = "Introducing new nick \"" + nickname + "\"\n";
+		send(client->getFd(), str.c_str(), str.size(), 0);
+	} else {
+		str = ":" + client->getNickname() + " NICK :" + nickname + "\n";	
+		send(client->getFd(), str.c_str(), str.size(), 0);
+	}
+	client->setNickname(nickname);
 }

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+         #
+#    By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/21 14:36:31 by pbotargu          #+#    #+#              #
-#    Updated: 2024/12/19 12:26:05 by pborrull         ###   ########.fr        #
+#    Updated: 2024/12/27 11:22:52 by anovio-c         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,7 @@ SRC		= $(SRC_DIR)Server.cpp \
 		  $(SRC_DIR)cmds/Invite.cpp \
 		  $(SRC_DIR)cmds/Join.cpp \
 		  $(SRC_DIR)cmds/Topic.cpp \
+		  $(SRC_DIR)cmds/Quit.cpp \
 		  $(SRC_DIR)cmds/Kick.cpp \
 		  $(SRC_DIR)cmds/Pass.cpp \
 		  $(SRC_DIR)cmds/PrivMsg.cpp \
@@ -37,11 +38,12 @@ SRC		= $(SRC_DIR)Server.cpp \
 		  $(SRC_DIR)cmds/Mode.cpp \
 		  $(SRC_DIR)parser.cpp \
 		  $(SRC_DIR)main.cpp 
+#$(SRC_DIR)cmds/SendFile.cpp \
 
 OBJ = $(SRC:$(SRC_DIR)%.cpp=$(OBJ_DIR)%.o)
 DEP = $(OBJ:.o=.d)
 CC = g++ 
-CFLAGS = -Wall -Wextra -Werror -std=c++98 -fsanitize=address -pedantic -MMD -MP -g 
+CFLAGS = -Wall -Wextra -Werror -std=c++98 -pedantic -MMD -MP -g 
 
 # Colored output
 ERASE	= \033[2K\r

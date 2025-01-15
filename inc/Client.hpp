@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:31:40 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/16 12:56:21 by pbotargu         ###   ########.fr       */
+/*   Updated: 2024/12/25 20:32:19 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ class Client {
 		std::string	getBuffer(void);
 		bool		getRegistered(void);
 		Channel		*getChannel(Channel *channel);
+		std::vector<Channel *>	getChannels(void);
 		
 		// Setters
 		void	setNickname(std::string &nickname);
@@ -78,6 +79,7 @@ class Client {
 		void	addChannel(Channel *channel);
 		void	rmChannel(std::string &channelName);
 		void	freeBuffer(void);
+		void	disconnect(void);
 };
 
 #endif

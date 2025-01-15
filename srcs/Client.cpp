@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 12:00:38 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/16 12:55:40 by pbotargu         ###   ########.fr       */
+/*   Updated: 2025/01/13 16:21:52 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,11 @@ Channel		*Client::getChannel(Channel *channel) {
 	return (NULL);
 }
 
+std::vector<Channel *>	Client::getChannels(void) {
+
+	return _channels;
+}
+
 
 // SETTERS
 
@@ -107,8 +112,10 @@ void	Client::addChannel(Channel *channel) {
 
 void	Client::rmChannel(std::string &channelName) {
 	for (size_t i = 0; i < _channels.size(); ++i) {
-		if (_channels[i]->getName() == channelName)
-			delete _channels[i];
+		if (_channels[i]->getName() == channelName) {\
+			_channels.erase(_channels.begin() + i);
+			break ;
+		}
 	}
 }
 
@@ -116,3 +123,17 @@ void	Client::freeBuffer(void) {
 	this->_buffer.clear();
 }
 
+void	Client::disconnect(void) {
+	if (_fd != -1) {
+		close(_fd);
+		_fd = -1;
+	}
+
+	for (size_t i = 0; i < _channels.size(); ++i) {
+		_channels[i]->rmClient(this);
+		//if (_channels.empty())
+		//	delete _channels[i];
+	}
+	
+	_channels.clear();
+}

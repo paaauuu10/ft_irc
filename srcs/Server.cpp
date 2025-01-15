@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:24:51 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/19 11:17:27 by pborrull         ###   ########.fr       */
+/*   Updated: 2025/01/13 13:45:37 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,8 +129,7 @@ int	Server::start()
 					sockaddr_in clientSock;
 					socklen_t clientSize = sizeof(clientSock);
 					int clientSocket = accept(this->_listeningSocket, (sockaddr*)&clientSock, &clientSize);
-					if (clientSocket == -1)
-					{
+					if (clientSocket == -1) {
 						std::cerr << "Error accepting client" << std::endl;
 						continue;
 					}
@@ -152,10 +151,14 @@ int	Server::start()
 					if (received <= 0)
 					{
 						std::cout << "Client disconnected" << std::endl;
-						// delete de client aqui??
+						Client *client = getClientBySocket(pollfds[i].fd);
+						if (client) {
+							removeClientFromServer(client);
+							delete client;
+						}
 						close(pollfds[i].fd);
 						pollfds.erase(pollfds.begin() + i);
-						--i;	
+						--i;
 					}
 					else
 					{
@@ -227,3 +230,43 @@ void Server::handleWho(Client *client, const std::string &channelName) {
     send(client->getFd(), msg.c_str(), msg.size(), 0);
 }
 
+std::vector<Channel *>	Server::getChannels(Client *client) {
+	std::vector<Channel *>	channels;
+
+	if (client == NULL)
+		return _channels;
+
+	for (std::vector<Channel *>::iterator it = this->_channels.begin(); it != this->_channels.end(); ++it) {
+        if ((*it)->checkClient(client->getNickname())) {
+            channels.push_back(*it);
+        }
+    }
+	
+	return channels;
+}
+
+void	Server::removeClientFromPolls(int fd) {
+	std::vector<pollfd>::iterator it = pollfds.begin();
+	
+	for (; it != pollfds.end(); ++it) {
+		if (it->fd == fd) {
+			pollfds.erase(it);
+			break ;
+		}
+	}
+}
+
+void	Server::removeClientFromServer(Client *client) {
+	if (!client) return ;
+	
+	_clients.erase(std::remove(_clients.begin(), _clients.end(), client), _clients.end());
+	
+/* 	std::vector<Client *>::iterator it = _clients.begin();
+	
+	for (; it != _clients.end(); ++it) {
+		if ((*it) == client) {
+			_clients.erase(it);
+			break ;
+		}
+	} */
+}

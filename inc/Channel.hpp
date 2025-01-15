@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 12:08:38 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/19 12:08:29 by pborrull         ###   ########.fr       */
+/*   Updated: 2025/01/02 17:55:14 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ class Channel {
   	std::string	getTopic();
 		bool		getClientList(std::string nickname);
 		bool		getOperatorList(std::string nickname);
+		size_t		getUserCount();
 
 		// Setters
 
@@ -63,18 +64,20 @@ class Channel {
 		bool	isKeyProtected();
 		bool	checkKey(const std::string &key) const;
 		bool	checkOperatorClient(Client *client);
-		Client	*checkClient(std::string &nickname);
+		Client	*checkClient(std::string nickname);
 		bool	isEmtpy();
 		bool	isFull();
+		bool	isInvited(const std::string &nickname) const;
 		void	addOperatorClient(Client *client);
 		void 	removeOperatorClient(Client *client); 
 		void	addClient(Client *client);
 		void	addClientsInvited(std::string client);
 		void	rmClient(Client *client);
 		std::vector<int>	listFdClients();
-		void	broadcast(Client *client, std::string &msg);
+		void	broadcast(Client *sender, std::string &msg);
 		void	RPLTOPIC(Client *client);
 		void	RPL_NAMREPLY(Client *client);
+		void	cmdHelp(Client *client);
 
 };
 

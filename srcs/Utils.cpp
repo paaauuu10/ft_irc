@@ -3,23 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   Utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 12:00:21 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/17 11:54:15 by pborrull         ###   ########.fr       */
+/*   Updated: 2024/12/30 12:07:42 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Utils.hpp"
-
-
 
 // :<server> <error_code> <target> :<error_message>
 // :irc.example.com 432 user123 :Erroneous nickname
 
 // target se predefine en "", si no es pasado como parametro
 void sendError(Client* client, int errorCode, const std::string& errorMessage, const std::string& target) {
-    if (!client || !client->getLogged()) {
+    if (!client) {
         std::cerr << "Error: Cliente no está conectado.\n";
         return;
     }
@@ -46,25 +44,19 @@ std::vector<std::string> split(const std::string& input, char delimiter) {
                 token.clear();
             }
         }
-        else {
+        else
             token += input[i];
-            if (input[i] == delimiter)
-                ++i;
-        }
     }
     if (!token.empty())
         tokens.push_back(token);
     return (tokens);
 }
 
-bool    checkerIsLogged(Client *client)
+std::string trim(const std::string &str)
 {
-    if (client->getLogged() == false)
-    {
-        // el missatge s'ha d'enviar al Client!!!
-        std::cout << "First you have to enter the password" << std::endl;
-        return false;
-    }
-    return true;
+	size_t first = str.find_first_not_of(" \t\r");
+	if (first == std::string::npos)
+		return ""; // return empty str if only contains tabs or spaces
+	size_t last = str.find_last_not_of(" \t\r");
+	return str.substr(first, last - first + 1);
 }
-
