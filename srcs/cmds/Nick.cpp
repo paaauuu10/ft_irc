@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 11:47:10 by anovio-c          #+#    #+#             */
-/*   Updated: 2025/01/13 16:16:06 by anovio-c         ###   ########.fr       */
+/*   Updated: 2025/01/16 15:01:29 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 #include "Client.hpp"
 #include "Utils.hpp"
 #include <string>
-#include <iostream>
-#include <set>
 
 int checkNickname(std::string &nickname)
 {
@@ -47,8 +45,6 @@ static int validateNick(std::string &nick)
 
 void	nick(Client *client, std::string &nickname)
 {
-	//nickname = trim(nickname);
-	std::cout << "--> " << nickname << std::endl;
 
 	if (nickname.empty()) {
 		sendError(client, 431, "ERR_NONICKNAMEGIVEN"); // ERR_NONICKNAMEGIVEN
@@ -66,8 +62,10 @@ void	nick(Client *client, std::string &nickname)
 	}
 	if (checkNickname(nickname)) {
 		sendError(client, 433, "ERR_NICKNAMEINUSE", client->getNickname() + " " + nickname); // ERR_NICKNAMEINUSE
-		nickname += "1";
-        nick(client, nickname);
+		if (!client->getRegistered()) {
+			nickname += "1";
+        	nick(client, nickname);
+		}
 		return;
 	}
 	
