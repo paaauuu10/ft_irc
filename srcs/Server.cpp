@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:24:51 by anovio-c          #+#    #+#             */
-/*   Updated: 2025/01/15 16:13:03 by anovio-c         ###   ########.fr       */
+/*   Updated: 2025/01/16 11:22:26 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,7 @@ int	Server::start()
 						std::cout << "Client disconnected" << std::endl;
 						Client *client = getClientBySocket(pollfds[i].fd);
 						if (client) {
-							std::cout << "hola\n";
+							// hacer que remove client envie un broadcast de que este se va?
 							removeClientFromServer(client);
 							delete client;
 						}

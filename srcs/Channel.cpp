@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:58:33 by anovio-c          #+#    #+#             */
-/*   Updated: 2025/01/15 11:53:31 by anovio-c         ###   ########.fr       */
+/*   Updated: 2025/01/16 11:47:54 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -292,15 +292,16 @@ void Channel::cmdHelp(Client *client) {
 	std::ostringstream oss;
 
 	oss << "Available commands in the channel:\n"
-		<< "/join <channel> [key] - Join a channel\n"
+		<< "/JOIN <channel> [key] - Join a channel\n"
 		// << "/part <channel> - Leave a channel\n"
-		<< "/topic <channel> [topic] - Set or view the topic of a channel\n"
+		<< "/TOPIC <channel> [topic] - Set or view the topic of a channel\n"
 		// << "/names <channel> - List users in a channel\n"
 		// << "/list - List all channels\n"
-		<< "/invite <nickname> <channel> - Invite a user to a channel\n"
-		<< "/kick <channel> <nickname> - Kick a user from a channel\n"
-		<< "/mode <channel> <mode> [parameters] - Change channel modes\n"
-		<< "/!!!msg <nickname> <message> - Send a private message to a user\r\n";
+		<< "/INVITE <nickname> <channel> - Invite a user to a channel\n"
+		<< "/KICK <channel> <nickname> - Kick a user from a channel\n"
+		<< "/MODE <channel> <mode> [parameters] - Change channel modes\n"
+		<< "/PRIVMSG <nickname>[<channel>] <message> - Send a private message to a user\r\n";
 	std::string msg = oss.str();
+	
 	send(client->getFd(), msg.c_str(), msg.size(), 0);
 }
