@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:18:08 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/20 21:45:38 by anovio-c         ###   ########.fr       */
+/*   Updated: 2025/01/16 12:49:48 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ int main(int argc, char **argv) {
 		Server::init(std::atoi(port.c_str()), pass);
 		Server	&server = Server::getInstance();
 		signals();
-		// Init the server
 		if (server.start() != 0) {
 			std::cerr << "Failed to start the server." << std::endl;
 			return (1);

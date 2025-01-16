@@ -12,29 +12,6 @@
 
 #include "Server.hpp"
 
-/* static	void	handleLoginAndRegistration(Client *client, const std::string &cmd) {
-	
-	if (!client->getLogged() && cmd != "/PASS") {
-		sendError(client, 444, "ERR_NOLOGIN");
-		return ;
-	}
-
-	if (!client->getRegistered() && client->getLogged() && cmd != "/PASS") {
-		if (client->getNickname().empty()) {
-			if (cmd != "/NICK") {
-				sendError(client, 444, "ERR_NONICKNAMEGIVEN");
-				return ;
-			}
-		}
-
-		if (client->getUsername().empty()) {
-			if (cmd != "/USER" && cmd != "/NICK") {
-				sendError(client, 451, "ERR_NOTREGISTERED");
-				return ;
-			}
-		}
-	}
-} */
 
 static	bool	handleLoginAndRegistration(Client *client, const std::string &cmd) {
 	
@@ -46,39 +23,24 @@ static	bool	handleLoginAndRegistration(Client *client, const std::string &cmd) {
 		return false;
 	}
 
-	if ( client->getLogged() && !client->getRegistered() ) {// && cmd != "/PASS" && (cmd == "/NICK" || cmd == "/USER")) {
+	if ( client->getLogged() && !client->getRegistered() ) {
 		if (cmd != "/NICK" && cmd != "/USER") {
         	sendError(client, 451, "ERR_NOTREGISTERED");
         	return false;
         }
 	}
-	//if (!client->getNickname().empty() && !client->getUsername().empty())
-	//	client->setRegistered(true);
 	return true;
 }
 
-
-//"SERVER", "OPER", "SQUIT", "NAMES", "LIST", "VERSION","PART",
-
 static bool validCommand(Client *client, std::string &value, std::string &cmd)
 {
-	//if (client == NULL)
-	//	return false;
+	if (client == NULL)
+		return false;
 
-	//if (!handleLoginAndRegistration(client, cmd))
-	//	return true;
-	
 	typedef void (*cmdFunction)(Client *, std::string&);
     
 	std::string commands[10] = { "PASS", "NICK", "USER", "JOIN", "MODE", "TOPIC", "INVITE", "KICK", "PRIVMSG"};//, "QUIT" };
 	cmdFunction functions[10] = { pass, nick, user, join, mode, topic, invite, kick, privMsg};//, quit };
-	
-	// if (!client->getLogged() && cmd != "PASS") {
-	// 	std::string server = Server::getInstance().getServerName();
-	// 	std::string response = ":" + server + " 451 :You have not registered\r\n"; //ERR_NOTREGISTERED
-	// 	send(client->getFd(), response.c_str(), response.size(), 0);
-	// 	return true;
-	// }
 
 	int index = 0;
 	for (; index < 10; ++index) {
@@ -111,9 +73,8 @@ void parser(Client *client, std::string str)
 
 	if (!handleLoginAndRegistration(client, cmd))
 		return ;
-	std::cout << "PROMPT : " << cmd << " + " << value << std::endl;
-	// falta otro if
-	if (!cmd.empty() && !value.empty() && !validCommand(client, value, cmd)) {
+
+	if (!cmd.empty() && !validCommand(client, value, cmd)) {
 		std::string response = cmd + " :Unknown command\r\n";
 		send(client->getFd(), response.c_str(), response.size(), 0);
 	}
