@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 09:55:32 by anovio-c          #+#    #+#             */
-/*   Updated: 2025/01/16 11:53:02 by anovio-c         ###   ########.fr       */
+/*   Updated: 2025/01/16 11:55:29 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,6 @@ void	join(Client *client, std::string& args) {
 		sendError(client, 461, "ERR_NEEDMOREPARAMSASIER");
 		return ;
 	}
-
-	std::cout << "Channels in Server size: " << Server::getInstance().getChannels(NULL).size() << std::endl;
 	
 	std::vector<std::string> tokens = split(args, ' ');
     std::vector<std::string> channels = split(tokens[0], ',');
