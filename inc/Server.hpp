@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:20:37 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/29 18:42:56 by anovio-c         ###   ########.fr       */
+/*   Updated: 2025/01/15 11:34:49 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ class Server
 		}
 		void				removeClientFromPolls(int fd);
 		void				removeClientFromServer(Client *client);
+		void				removeChannel(Channel *channel);
 };
 
 void 	parser(Client *client, std::string str);

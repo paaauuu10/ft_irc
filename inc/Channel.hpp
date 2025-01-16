@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42barcelona.    +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 12:08:38 by anovio-c          #+#    #+#             */
-/*   Updated: 2025/01/02 17:55:14 by anovio-c         ###   ########.fr       */
+/*   Updated: 2025/01/15 11:53:45 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ class Channel {
 		std::vector<Client *>		_clients;
 		std::vector<std::string>	_clientsInvited;	
 		std::map<char, bool>		_modes;
+		Channel();
 	public:
-		Channel(void);
 		Channel(const std::string &channelName, const std::string &key, Client *creator);
 		~Channel();
 
@@ -65,7 +65,7 @@ class Channel {
 		bool	checkKey(const std::string &key) const;
 		bool	checkOperatorClient(Client *client);
 		Client	*checkClient(std::string nickname);
-		bool	isEmtpy();
+		bool	isEmpty() const;
 		bool	isFull();
 		bool	isInvited(const std::string &nickname) const;
 		void	addOperatorClient(Client *client);

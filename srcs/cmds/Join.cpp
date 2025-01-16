@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 09:55:32 by anovio-c          #+#    #+#             */
-/*   Updated: 2025/01/14 12:41:59 by pbotargu         ###   ########.fr       */
+/*   Updated: 2025/01/16 11:55:29 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,12 +75,12 @@ void	join(Client *client, std::string& args) {
 			channel->addClient(client);
 		}
 		std::string message = makeBroadcastMessage(client, channelName);
-		//ey
+		
 		send(client->getFd(), message.c_str(), message.size(), 0);
         channel->broadcast(client, message);
 		
 		channel->RPLTOPIC(client);
 		channel->RPL_NAMREPLY(client);
-		//channel->cmdHelp(client);
+		channel->cmdHelp(client);
 	}
 }
