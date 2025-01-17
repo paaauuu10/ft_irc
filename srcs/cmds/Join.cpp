@@ -6,13 +6,14 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 09:55:32 by anovio-c          #+#    #+#             */
-/*   Updated: 2025/01/16 11:55:29 by anovio-c         ###   ########.fr       */
+/*   Updated: 2025/01/17 13:20:19 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 #include "Client.hpp"
 #include "Channel.hpp"
+#include "ErrorCodes.hpp"
 
 static bool isValidChannelName(std::string &name) {
 	if (name[0] == '#' || name[0] == '&')
@@ -33,7 +34,7 @@ static std::string	makeBroadcastMessage(Client *client, std::string &channelName
 
 void	join(Client *client, std::string& args) {
 	if (args.empty()) {
-		sendError(client, 461, "ERR_NEEDMOREPARAMSASIER");
+		sendError(client, ERR_NEEDMOREPARAMS);
 		return ;
 	}
 	
@@ -48,7 +49,7 @@ void	join(Client *client, std::string& args) {
 		std::string key = (i < keys.size()) ? keys[i] : "";
 		
 		if (!isValidChannelName(channelName)) {
-			sendError(client, 403, "ERR_NOSUCHCHANNEL");
+			sendError(client, ERR_NOSUCHCHANNEL, channelName);
 			continue ;
 		}
 
@@ -59,16 +60,16 @@ void	join(Client *client, std::string& args) {
 			Server::getInstance().addChannel(channel);
 		} else {
 			if (channel->getMode('i') && !channel->isInvited(client->getNickname())) {
-				sendError(client, 473, "ERR_INVITEONLYCHAN");
+				sendError(client, ERR_INVITEONLYCHAN, channelName);
 				continue ;
 			}
 			
 			if (channel->isKeyProtected() && !channel->checkKey(key)) {
-				sendError(client, 475, "ERR_BADCHANNELKEY");
+				sendError(client, ERR_BADCHANNELKEY, channelName);
 				continue ;
 			}
 			if (channel->isFull()) {
-				sendError(client, 471, "ERR_CHANNELISFULL");
+				sendError(client, ERR_CHANNELISFULL, channelName);
 				continue ;
 			}
 			

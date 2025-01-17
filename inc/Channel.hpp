@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 12:08:38 by anovio-c          #+#    #+#             */
-/*   Updated: 2025/01/15 11:53:45 by anovio-c         ###   ########.fr       */
+/*   Updated: 2025/01/17 13:54:28 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ class Channel {
 		bool		getClientList(std::string nickname);
 		bool		getOperatorList(std::string nickname);
 		size_t		getUserCount();
+		size_t		getOperatorCount();
 
 		// Setters
 

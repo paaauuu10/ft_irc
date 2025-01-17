@@ -6,13 +6,14 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:58:33 by anovio-c          #+#    #+#             */
-/*   Updated: 2025/01/16 11:47:54 by anovio-c         ###   ########.fr       */
+/*   Updated: 2025/01/17 13:54:07 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Channel.hpp"
 #include "Server.hpp"
 #include "Client.hpp"
+#include "ErrorCodes.hpp"
 
 Channel::Channel(const std::string &channelName, const std::string &key, Client *creator) : _topic("") {
 	if (channelName.empty() || (channelName[0] != '&' && channelName[0] != '#'))
@@ -99,6 +100,10 @@ std::string	Channel::getTopic() {
 	return this->_topic;
 }
 
+size_t	Channel::getOperatorCount() {
+	return (_operatorClients.size());
+}
+
 size_t		Channel::getUserCount() {
 	return (_clients.size() + _operatorClients.size());
 }
@@ -170,7 +175,7 @@ void	Channel::addClient(Client *client) {
     if (std::find(_clients.begin(), _clients.end(), client) == _clients.end() &&
         std::find(_operatorClients.begin(), _operatorClients.end(), client) == _operatorClients.end()) {
 		if (this->isFull()) {
-            sendError(client, 471, "ERR_CHANNELISFULL - Channel is full", this->getName());
+            sendError(client, ERR_CHANNELISFULL, this->getName());
             return;
         }
         _clients.push_back(client);
@@ -184,7 +189,7 @@ void	Channel::addOperatorClient(Client *client) {
     if (std::find(_clients.begin(), _clients.end(), client) == _clients.end() &&
         std::find(_operatorClients.begin(), _operatorClients.end(), client) == _operatorClients.end()) {
         if (this->isFull()) {
-            sendError(client, 471, "ERR_CHANNELISFULL - Channel is full", this->getName());
+            sendError(client, ERR_CHANNELISFULL, this->getName());
             return;
         }
     }
@@ -210,14 +215,14 @@ void Channel::removeOperatorClient(Client *client) {
 void	Channel::rmClient(Client *client) {
 	for (size_t i = 0; i < _clients.size(); ++i) {
 		// send message all of clients before erase.
-		if (_clients[i]->getUsername() == client->getUsername()) {
+		if (_clients[i]->getNickname() == client->getNickname()) {
 			_clients.erase(_clients.begin() + i); // Eliminar del canal
             break;
 		}
 	}
 
 	for (size_t i = 0; i < _operatorClients.size(); ++i) {
-        if (_operatorClients[i]->getUsername() == client->getUsername()) {
+        if (_operatorClients[i]->getNickname() == client->getNickname()) {
             _operatorClients.erase(_operatorClients.begin() + i);
             break;
         }
@@ -293,9 +298,7 @@ void Channel::cmdHelp(Client *client) {
 
 	oss << "Available commands in the channel:\n"
 		<< "/JOIN <channel> [key] - Join a channel\n"
-		// << "/part <channel> - Leave a channel\n"
 		<< "/TOPIC <channel> [topic] - Set or view the topic of a channel\n"
-		// << "/names <channel> - List users in a channel\n"
 		// << "/list - List all channels\n"
 		<< "/INVITE <nickname> <channel> - Invite a user to a channel\n"
 		<< "/KICK <channel> <nickname> - Kick a user from a channel\n"

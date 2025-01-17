@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "Server.hpp"
+#include "ErrorCodes.hpp"
 
 
 static	bool	handleLoginAndRegistration(Client *client, const std::string &cmd) {
@@ -19,13 +20,13 @@ static	bool	handleLoginAndRegistration(Client *client, const std::string &cmd) {
 		return true;
 
 	if (!client->getLogged() && cmd != "/PASS") {
-		sendError(client, 444, "ERR_NOLOGIN");
+		sendError(client, ERR_NOLOGIN);
 		return false;
 	}
 
 	if ( client->getLogged() && !client->getRegistered() ) {
 		if (cmd != "/NICK" && cmd != "/USER") {
-        	sendError(client, 451, "ERR_NOTREGISTERED");
+        	sendError(client, ERR_NOTREGISTERED);
         	return false;
         }
 	}

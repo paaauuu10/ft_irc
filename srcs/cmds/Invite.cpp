@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Invite.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 13:51:35 by pborrull          #+#    #+#             */
-/*   Updated: 2025/01/14 12:30:31 by pbotargu         ###   ########.fr       */
+/*   Updated: 2025/01/17 13:15:12 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "Utils.hpp"
 #include "Client.hpp"
 #include "Channel.hpp"
+#include "ErrorCodes.hpp"
 
 // CHECKnickname la he pasado a BOOL!!!
 
@@ -76,20 +77,19 @@ void		invite(Client *client, std::string &invitation)
 	std::vector<std::string> words = split(invitation, ' ');
 	
 	if (words.size() < 2) {
-		sendError(client, 461, "ERR_NEEDMOREPARAMS"); //ERR_NEEDMOREPARAMS
+		sendError(client, ERR_NEEDMOREPARAMS); //ERR_NEEDMOREPARAMS
 		return ;
 	}
 	Channel *channel = Server::getInstance().getCheckChannel(words[1]);
 	if (!checkNickname(words[0]))
-		sendError(client, 401, "ERR_NOSUCHNICK"); //ERR_NOSUCHNICK
+		sendError(client, ERR_NOSUCHNICK, words[0]); //ERR_NOSUCHNICK
 	else if (!channel)
-		sendError(client, 403, "ERR_NOSUCHCHANNEL"); //ERR_NOSUCHCHANNEL
+		sendError(client, ERR_NOSUCHCHANNEL, words[1]); //ERR_NOSUCHCHANNEL
 	else if (channel->getClientList(words[0]))
-		sendError(client, 443, "ERR_USERONCHANNEL"); //ERR_USERONCHANNEL
+		sendError(client, ERR_USERONCHANNEL, std::string(words[0] + ' ' + words[1])); //ERR_USERONCHANNEL
 	else if (!channel->getOperatorList(client->getNickname())) //&& i is true)
-		sendError(client, 482, "ERR_CHANOPRIVSNEEDED"); //ERR_CHANOPRIVSNEEDED
-	else
-	{
+		sendError(client, ERR_CHANOPRIVSNEEDED, words[1]); //ERR_CHANOPRIVSNEEDED
+	else {
 		channel->addClientsInvited(words[0]);
 		Client *invited = Server::getInstance().getClientByNickname(words[0]);
 		

@@ -6,12 +6,13 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 19:44:07 by anovio-c          #+#    #+#             */
-/*   Updated: 2025/01/08 10:45:53 by anovio-c         ###   ########.fr       */
+/*   Updated: 2025/01/17 13:25:10 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 #include "Channel.hpp"
+#include "ErrorCodes.hpp"
 
 static bool	checkInput(std::vector<std::string> &tokens) {
 	size_t	count = 0;
@@ -64,7 +65,7 @@ static std::string	makeBroadcastMessage(Client *client, const std::string &chann
 
 void	kick(Client *client, std::string &args) {
 	if (args.empty()) {
-		sendError(client, 461, "ERR_NEEDMOREPARAMS");
+		sendError(client, ERR_NEEDMOREPARAMS);
 		return ;
 	}
 	
@@ -73,7 +74,7 @@ void	kick(Client *client, std::string &args) {
 	
 	std::vector<std::string>	tokens = split(args, ' ');
 	if (tokens.size() != 2 || !checkInput(tokens)) {
-		sendError(client, 461, "ERR_NEEDMOREPARAMS");
+		sendError(client, ERR_NEEDMOREPARAMS);
 		return ;
 	}
 	
@@ -81,7 +82,7 @@ void	kick(Client *client, std::string &args) {
 	std::vector<std::string>	usersList = split(tokens[1], ',');
 
 	if (channels.size() != usersList.size()) {
-        sendError(client, 461, "ERR_NEEDMOREPARAMS - Channels and users mismatch");
+        sendError(client, ERR_NEEDMOREPARAMS, "Channels and users mismatch");
         return;
     }
 
@@ -92,17 +93,17 @@ void	kick(Client *client, std::string &args) {
 		Channel *channel = Server::getInstance().getCheckChannel(channelName);
 
 		if (!channel) {
-			sendError(client, 403, "ERR_NOSUCHCHANNEL");
+			sendError(client, ERR_NOSUCHCHANNEL, channelName);
 			continue ;
 		}
 		
 		if (!channel->checkOperatorClient(client)) {
-			sendError(client, 482, "ERR_CHANOPRIVSNEEDED");
+			sendError(client, ERR_CHANOPRIVSNEEDED, channelName);
 			continue ;
 		}
 			
 		if (userToKick.empty()) {
-			sendError(client, 482, "ERR_NEEDMOREPARAMS - No user specified for channel " + channelName);
+			sendError(client, ERR_NEEDMOREPARAMS, "No user specified for channel " + channelName);
 			continue ;
 		}
 
@@ -112,7 +113,7 @@ void	kick(Client *client, std::string &args) {
 		Client *toKick = channel->checkClient(userToKick);
 		
 		if (!toKick) {
-			sendError(client, 442, "ERR_NOTONCHANNEL");
+			sendError(client, ERR_NOTONCHANNEL, channelName);
 			continue ;
 		}
 
