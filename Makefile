@@ -6,7 +6,7 @@
 #    By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/21 14:36:31 by pbotargu          #+#    #+#              #
-#    Updated: 2024/12/27 11:22:52 by anovio-c         ###   ########.fr        #
+#    Updated: 2025/01/17 13:55:35 by anovio-c         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,11 +19,13 @@ OBJ_DIR = objs/
 INC		= $(INC_DIR)Server.hpp \
 		  $(INC_DIR)Client.hpp \
 		  $(INC_DIR)Channel.hpp \
+		  $(INC_DIR)ErrorCodes.hpp \
 		  $(INC_DIR)Utils.hpp
 
 SRC		= $(SRC_DIR)Server.cpp \
 		  $(SRC_DIR)Client.cpp \
 		  $(SRC_DIR)Channel.cpp \
+		  $(SRC_DIR)ErrorCodes.cpp \
 		  $(SRC_DIR)Utils.cpp \
 		  $(SRC_DIR)signals.cpp \
 		  $(SRC_DIR)cmds/Invite.cpp \

@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 11:12:30 by pbotargu          #+#    #+#             */
-/*   Updated: 2025/01/13 15:59:32 by anovio-c         ###   ########.fr       */
+/*   Updated: 2025/01/17 13:44:50 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <vector>
 #include <string>
 #include "Utils.hpp"
+#include "ErrorCodes.hpp"
 
 static bool	checkRealname(std::string &name) {
 	return !name.empty() && name[0] == ':';
@@ -92,7 +93,7 @@ static bool isValidIp(std::string &host) {
 void	user(Client *client, std::string &args)
 {
 	if (client->getRegistered()) {
-		sendError(client, 462, "ERR_ALREADYREGISTRED");
+		sendError(client, ERR_ALREADYREGISTRED);
         return;
 	}
 	
@@ -102,7 +103,7 @@ void	user(Client *client, std::string &args)
     std::vector<std::string> tokens = split(args, ' ');
     if (tokens.size() < 4) {
 		std::cerr << "USE: /USER <user> <hostname> <serverName> <realname>" << std::endl;
-        sendError(client, 461, "ERR_NEEDMOREPARAMS");
+        sendError(client, ERR_NEEDMOREPARAMS);
 		return ;
 	}
 
@@ -112,17 +113,17 @@ void	user(Client *client, std::string &args)
 	std::string realname = tokens[3];
 
 	if (!isValidIp(hostname)) {
-		sendError(client, 461, "ERR_NEEDMOREPARAMS - Invalid ip");
+		sendError(client, ERR_NEEDMOREPARAMS, "Invalid ip");
         return ;
 	}
 	
 	if (!checkServerName(servername)) {
-		sendError(client, 461, "ERR_NEEDMOREPARAMS - Invalid server");
+		sendError(client, ERR_NEEDMOREPARAMS, "Invalid server");
         return ;
 	}
 	
 	if (!checkRealname(realname)) {
-		sendError(client, 461, "ERR_NEEDMOREPARAMS - Invalid realname");
+		sendError(client, ERR_NEEDMOREPARAMS, "Invalid realname");
         return ;
 	}
 

@@ -6,13 +6,14 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 11:47:10 by anovio-c          #+#    #+#             */
-/*   Updated: 2025/01/16 15:01:29 by anovio-c         ###   ########.fr       */
+/*   Updated: 2025/01/17 13:36:31 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 #include "Client.hpp"
 #include "Utils.hpp"
+#include "ErrorCodes.hpp"
 #include <string>
 
 int checkNickname(std::string &nickname)
@@ -47,25 +48,23 @@ void	nick(Client *client, std::string &nickname)
 {
 
 	if (nickname.empty()) {
-		sendError(client, 431, "ERR_NONICKNAMEGIVEN"); // ERR_NONICKNAMEGIVEN
+		sendError(client, ERR_NONICKNAMEGIVEN);
 		return;
 	}
 	
 	if (validateNick(nickname)) {
-		sendError(client, 432, "ERR_ERRONEUSNICKNAME"); //ERR_ERRONEUSNICKNAME
+		sendError(client, ERR_ERRONEUSNICKNAME, nickname);
 		return ;
 	}
 	
 	if (!client->getNickname().empty() && nickname == client->getNickname()) {
-		sendError(client, 436, "ERR_NICKCOLLISION", client->getNickname() + " " + nickname); // ERR_NICKCOLLISION
+		sendError(client, ERR_NICKCOLLISION, nickname);
 		return;
 	}
 	if (checkNickname(nickname)) {
-		sendError(client, 433, "ERR_NICKNAMEINUSE", client->getNickname() + " " + nickname); // ERR_NICKNAMEINUSE
-		if (!client->getRegistered()) {
-			nickname += "1";
-        	nick(client, nickname);
-		}
+		sendError(client, ERR_NICKNAMEINUSE, nickname);
+		nickname += "1";
+        nick(client, nickname);
 		return;
 	}
 	

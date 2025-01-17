@@ -6,23 +6,25 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 12:00:21 by anovio-c          #+#    #+#             */
-/*   Updated: 2024/12/30 12:07:42 by anovio-c         ###   ########.fr       */
+/*   Updated: 2025/01/17 12:33:44 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Utils.hpp"
+#include "ErrorCodes.hpp"
 
 // :<server> <error_code> <target> :<error_message>
 // :irc.example.com 432 user123 :Erroneous nickname
 
 // target se predefine en "", si no es pasado como parametro
-void sendError(Client* client, int errorCode, const std::string& errorMessage, const std::string& target) {
+void sendError(Client* client, ErrorCode errorCode, const std::string& target) {
     if (!client) {
         std::cerr << "Error: Cliente no está conectado.\n";
         return;
     }
 
     std::string serverName = Server::getServerName();
+	std::string	errorMessage = ErrorMessages.at(errorCode);
 
     std::ostringstream oss;
     oss << ":" << serverName << " " << errorCode << " " 

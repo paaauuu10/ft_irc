@@ -13,6 +13,7 @@
 #include "Server.hpp"
 #include "Client.hpp"
 #include "Channel.hpp"
+#include "ErrorCodes.hpp"
 
 static Client	*checkClient(std::string &nickname)
 {
@@ -32,14 +33,12 @@ void privMsg(Client *sender, std::string &value)
 	std::vector<std::string> words = split(value, ' ');
 	if (words.empty())
 	{
-		sendError(sender, 411, sender->getNickname() + " :No recipient given (PRIVMSG)");
-		//ERR_NORECIPIENT
+		sendError(sender, ERR_NORECIPIENT);
 		return;
 	}
 	if (words[0].empty())
 	{
-		sendError(sender, 411, sender->getNickname() + " :No recipient given (PRIVMSG)");
-		//ERR_NORECIPIENT
+		sendError(sender, ERR_NORECIPIENT);
 		return;
 	}
 	std::vector<std::string> targets = split(words[0], ',');
@@ -52,8 +51,7 @@ void privMsg(Client *sender, std::string &value)
 	}
 	if (message.empty())
 	{
-		sendError(sender, 412, sender->getNickname() + " :No text to send");
-		//ERR_NOTEXTTOSEND
+		sendError(sender, ERR_NOTEXTTOSEND);
 		return;
 	}
 	
@@ -84,7 +82,7 @@ void privMsg(Client *sender, std::string &value)
 		if (target == NULL && ctarget == NULL)
 		{
 			std::string errorMsg = sender->getNickname() + " " + targets[0] + " :No such nick/channel";
-			sendError(sender, 401, errorMsg.c_str());
+			sendError(sender, ERR_NOSUCHNICK, targets[0]);
 		}
 	}
 }

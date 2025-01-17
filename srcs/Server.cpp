@@ -6,13 +6,14 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:24:51 by anovio-c          #+#    #+#             */
-/*   Updated: 2025/01/16 11:22:26 by anovio-c         ###   ########.fr       */
+/*   Updated: 2025/01/17 12:42:30 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 #include "Client.hpp"
 #include "Channel.hpp"
+#include "ErrorCodes.hpp"
 
 Server Server::instance;
 bool Server::_initialized = false;
@@ -207,7 +208,7 @@ void Server::handleWho(Client *client, const std::string &channelName) {
 
     Channel *channel = this->getCheckChannel(channelName);
     if (!channel) {
-        sendError(client, 403, "ERR_NOSUCHCHANNEL");
+        sendError(client, ERR_NOSUCHCHANNEL, channelName);
         return;
     }
 
