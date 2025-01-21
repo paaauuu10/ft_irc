@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:58:33 by anovio-c          #+#    #+#             */
-/*   Updated: 2025/01/17 13:54:07 by anovio-c         ###   ########.fr       */
+/*   Updated: 2025/01/21 11:32:42 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ Channel::Channel(const std::string &channelName, const std::string &key, Client 
 		_modes['k'] = true;
 	}
 	_limit = -1;
-	std::cout << "Channel '" << channelName << "' created by " << creator->getUsername() << ".\n";
+	std::cout << "Channel '" << channelName << "' created by " << creator->getNickname() << ".\n";
 }
 
 
