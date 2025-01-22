@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Kick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 19:44:07 by anovio-c          #+#    #+#             */
-/*   Updated: 2025/01/17 13:25:10 by anovio-c         ###   ########.fr       */
+/*   Updated: 2025/01/22 12:02:58 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,11 +81,12 @@ void	kick(Client *client, std::string &args) {
 	std::vector<std::string>	channels = extractChannels(tokens[0]);
 	std::vector<std::string>	usersList = split(tokens[1], ',');
 
+	std::cout << "SIZE channels:" << channels.size() << std::endl;
+	std::cout << "USERS channels:" << usersList.size() << std::endl;
 	if (channels.size() != usersList.size()) {
-        sendError(client, ERR_NEEDMOREPARAMS, "Channels and users mismatch");
+        sendError(client, ERR_NEEDMOREPARAMS);
         return;
-    }
-
+    } 
 	for (size_t i = 0; i < channels.size(); ++i) {
 		const std::string &channelName = channels[i];
 		std::string &userToKick = usersList[i];
