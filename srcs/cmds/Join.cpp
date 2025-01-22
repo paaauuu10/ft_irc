@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 09:55:32 by anovio-c          #+#    #+#             */
-/*   Updated: 2025/01/17 13:20:19 by anovio-c         ###   ########.fr       */
+/*   Updated: 2025/01/22 11:14:54 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,12 @@
 #include "Client.hpp"
 #include "Channel.hpp"
 #include "ErrorCodes.hpp"
+
+static std::string	toLowerCase(const std::string &str) {
+	std::string	result = str;
+	std::transform(result.begin(), result.end(), result.begin(), ::tolower);
+	return result;
+}
 
 static bool isValidChannelName(std::string &name) {
 	if (name[0] == '#' || name[0] == '&')
@@ -52,9 +58,10 @@ void	join(Client *client, std::string& args) {
 			sendError(client, ERR_NOSUCHCHANNEL, channelName);
 			continue ;
 		}
-
-		Channel *channel = Server::getInstance().getCheckChannel(channelName);
 		
+		channelName = toLowerCase(channelName);
+		
+		Channel *channel = Server::getInstance().getCheckChannel(channelName);
 		if (!channel) {
 			channel = new Channel(channelName, key, client);
 			Server::getInstance().addChannel(channel);

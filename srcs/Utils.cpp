@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 12:00:21 by anovio-c          #+#    #+#             */
-/*   Updated: 2025/01/17 12:33:44 by anovio-c         ###   ########.fr       */
+/*   Updated: 2025/01/21 12:26:34 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,3 +62,5 @@ std::string trim(const std::string &str)
 	size_t last = str.find_last_not_of(" \t\r");
 	return str.substr(first, last - first + 1);
 }
+
+

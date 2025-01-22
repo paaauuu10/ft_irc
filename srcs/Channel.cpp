@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:58:33 by anovio-c          #+#    #+#             */
-/*   Updated: 2025/01/21 11:32:42 by pbotargu         ###   ########.fr       */
+/*   Updated: 2025/01/22 11:13:41 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,9 @@
 Channel::Channel(const std::string &channelName, const std::string &key, Client *creator) : _topic("") {
 	if (channelName.empty() || (channelName[0] != '&' && channelName[0] != '#'))
 		throw std::invalid_argument("Invalid channel name. Must start with '&' or '#'.");
-	else
-		_name = channelName;
+	
+	_name = channelName;
+	
 	_operatorClients.push_back(creator);
 	_modes['i'] = false;
 	_modes['t'] = false;
@@ -33,7 +34,7 @@ Channel::Channel(const std::string &channelName, const std::string &key, Client 
 		_modes['k'] = true;
 	}
 	_limit = -1;
-	std::cout << "Channel '" << channelName << "' created by " << creator->getNickname() << ".\n";
+	std::cout << "Channel '" << _name << "' created by " << creator->getNickname() << ".\n";
 }
 
 

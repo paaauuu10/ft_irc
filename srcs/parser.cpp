@@ -13,7 +13,6 @@
 #include "Server.hpp"
 #include "ErrorCodes.hpp"
 
-
 static	bool	handleLoginAndRegistration(Client *client, const std::string &cmd) {
 	
 	if (client->getRegistered())
@@ -103,3 +102,6 @@ void parsingbuffer(char *buffer, Client *client)
 		line.clear();
 	}
 }
+
+
+

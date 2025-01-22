@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:20:37 by anovio-c          #+#    #+#             */
-/*   Updated: 2025/01/15 11:34:49 by anovio-c         ###   ########.fr       */
+/*   Updated: 2025/01/22 11:16:38 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ class Server
 		void				removeChannel(Channel *channel);
 };
 
+
 void 	parser(Client *client, std::string str);
 void 	parsingbuffer(char *buffer, Client *client);
 
@@ -96,10 +97,7 @@ void	user(Client *client, std::string &pass);
 void	nick(Client *client, std::string &nickname);
 void	invite(Client *client, std::string &invitation);
 void	mode(Client *client, std::string &str);
-void	sendFile(Client *client, std::string &args);
 void	quit(Client *client, std::string &message);
-
-
 void 	privMsg(Client *sender, std::string &value);
 
 #endif
