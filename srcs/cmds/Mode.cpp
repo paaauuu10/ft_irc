@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 12:22:51 by pbotargu          #+#    #+#             */
-/*   Updated: 2025/01/17 14:00:53 by anovio-c         ###   ########.fr       */
+/*   Updated: 2025/01/22 12:46:19 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,12 @@ void handleModeO(Channel *channel, Client *client, char s, std::string nickname)
 	if (s == '-') {
         if (channel->checkOperatorClient(target)) {
             if (channel->getOperatorCount() == 1 && target == client) {
-				std::string response("Cannot remove the last operator from the channel");
+				std::string response("Cannot remove the last operator from the channel\r\n");
 				send(client->getFd(), response.c_str(), response.size(), 0);
                 return;
             }
             channel->removeOperatorClient(target);
+            channel->addClient(target);
             channel->broadcast(client, response);
             send(client->getFd(), response.c_str(), response.size(), 0);
         }

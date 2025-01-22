@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Invite.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 13:51:35 by pborrull          #+#    #+#             */
-/*   Updated: 2025/01/17 13:15:12 by anovio-c         ###   ########.fr       */
+/*   Updated: 2025/01/22 12:19:39 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ void		invite(Client *client, std::string &invitation)
 	else if (!channel)
 		sendError(client, ERR_NOSUCHCHANNEL, words[1]); //ERR_NOSUCHCHANNEL
 	else if (channel->getClientList(words[0]))
-		sendError(client, ERR_USERONCHANNEL, std::string(words[0] + ' ' + words[1])); //ERR_USERONCHANNEL
+		sendError(client, ERR_USERONCHANNEL, client->getNickname() + " " + words[0] + " " + words[1]); //ERR_USERONCHANNEL
 	else if (!channel->getOperatorList(client->getNickname())) //&& i is true)
 		sendError(client, ERR_CHANOPRIVSNEEDED, words[1]); //ERR_CHANOPRIVSNEEDED
 	else {

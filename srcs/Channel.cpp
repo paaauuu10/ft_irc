@@ -6,7 +6,7 @@
 /*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:58:33 by anovio-c          #+#    #+#             */
-/*   Updated: 2025/01/21 11:32:42 by pbotargu         ###   ########.fr       */
+/*   Updated: 2025/01/22 12:34:31 by pbotargu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,7 +194,7 @@ void	Channel::addOperatorClient(Client *client) {
         }
     }
 
-    if (std::find(_operatorClients.begin(), _operatorClients.end(), client) == _operatorClients.end())
+    if (std::find(_operatorClients.begin(), _operatorClients.end(), client) == _operatorClients.end()) {}
         _operatorClients.push_back(client);
 
     std::vector<Client*>::iterator it = std::find(_clients.begin(), _clients.end(), client);
@@ -208,7 +208,7 @@ void Channel::removeOperatorClient(Client *client) {
     this->_operatorClients.erase(
 		std::remove(this->_operatorClients.begin(), this->_operatorClients.end(), client),
 		this->_operatorClients.end());
-
+	
 }
 
 
