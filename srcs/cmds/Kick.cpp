@@ -3,16 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   Kick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 19:44:07 by anovio-c          #+#    #+#             */
-/*   Updated: 2025/01/22 12:02:58 by pbotargu         ###   ########.fr       */
+/*   Updated: 2025/01/23 11:23:17 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 #include "Channel.hpp"
 #include "ErrorCodes.hpp"
+
+static bool checkIfSenderIsOperator(Client *client, const std::vector<std::string> &channels) {
+    bool isOperatorInAnyChannel = false;
+	std::vector<std::string>::const_iterator it = channels.begin();
+
+    for (; it != channels.end(); ++it) {
+        Channel *channel = Server::getInstance().getCheckChannel(*it);
+        if (channel && channel->checkOperatorClient(client)) {
+            isOperatorInAnyChannel = true;
+            break;
+        }
+    }
+
+    if (!isOperatorInAnyChannel) {
+        sendError(client, ERR_CHANOPRIVSNEEDED, client->getNickname());
+        return false;
+    }
+    return true;
+}
 
 static bool	checkInput(std::vector<std::string> &tokens) {
 	size_t	count = 0;
@@ -81,12 +100,14 @@ void	kick(Client *client, std::string &args) {
 	std::vector<std::string>	channels = extractChannels(tokens[0]);
 	std::vector<std::string>	usersList = split(tokens[1], ',');
 
-	std::cout << "SIZE channels:" << channels.size() << std::endl;
-	std::cout << "USERS channels:" << usersList.size() << std::endl;
 	if (channels.size() != usersList.size()) {
         sendError(client, ERR_NEEDMOREPARAMS);
         return;
-    } 
+    }
+
+	if (!checkIfSenderIsOperator(client, channels))
+		return ;
+
 	for (size_t i = 0; i < channels.size(); ++i) {
 		const std::string &channelName = channels[i];
 		std::string &userToKick = usersList[i];
@@ -94,7 +115,7 @@ void	kick(Client *client, std::string &args) {
 		Channel *channel = Server::getInstance().getCheckChannel(channelName);
 
 		if (!channel) {
-			sendError(client, ERR_NOSUCHCHANNEL, channelName);
+			sendError(client, ERR_NOSUCHCHANNEL, client->getNickname() + " " + channelName);
 			continue ;
 		}
 		

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:58:33 by anovio-c          #+#    #+#             */
-/*   Updated: 2025/01/22 12:59:19 by pbotargu         ###   ########.fr       */
+/*   Updated: 2025/01/23 11:00:48 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ Channel::Channel(const std::string &channelName, const std::string &key, Client 
 		_modes['k'] = true;
 	}
 	_limit = -1;
-	std::cout << "Channel '" << _name << "' created by " << creator->getNickname() << ".\n";
+	//std::cout << "Channel '" << _name << "' created by " << creator->getNickname() << ".\n";
 }
 
 
@@ -112,7 +112,7 @@ size_t		Channel::getUserCount() {
 void	Channel::setMode(char mode, bool status, int value) {
 	(void)value;
 	_modes[mode] = status;
-	std::cout << "Channel " << _name << " mode " << mode << " set to " << (status ? "ON" : "OFF") << ".\n";
+	//std::cout << "Channel " << _name << " mode " << mode << " set to " << (status ? "ON" : "OFF") << ".\n";
 }
 
 void	Channel::setKey(std::string str){
@@ -176,7 +176,7 @@ void	Channel::addClient(Client *client) {
     if (std::find(_clients.begin(), _clients.end(), client) == _clients.end() &&
         std::find(_operatorClients.begin(), _operatorClients.end(), client) == _operatorClients.end()) {
 		if (this->isFull()) {
-            sendError(client, ERR_CHANNELISFULL, this->getName());
+            sendError(client, ERR_CHANNELISFULL, client->getNickname() + " " + this->getName());
             return;
         }
         _clients.push_back(client);
@@ -190,7 +190,7 @@ void	Channel::addOperatorClient(Client *client) {
     if (std::find(_clients.begin(), _clients.end(), client) == _clients.end() &&
         std::find(_operatorClients.begin(), _operatorClients.end(), client) == _operatorClients.end()) {
         if (this->isFull()) {
-            sendError(client, ERR_CHANNELISFULL, this->getName());
+            sendError(client, ERR_CHANNELISFULL, client->getNickname() + " " + this->getName());
             return;
         }
     }

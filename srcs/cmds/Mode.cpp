@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 12:22:51 by pbotargu          #+#    #+#             */
-/*   Updated: 2025/01/22 12:46:19 by pbotargu         ###   ########.fr       */
+/*   Updated: 2025/01/23 11:03:22 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,6 @@ void mode(Client *client, std::string &str)
     // MODE canal mode [value]
     
     std::vector<std::string> words = split(str, ' ');
-	std::cout << "SIZE: " << words.size() << std::endl;
     if (words.size() < 2 ) {
         sendError(client, ERR_NEEDMOREPARAMS);
         return;
@@ -112,7 +111,7 @@ void mode(Client *client, std::string &str)
 
     Channel *channel = Server::getInstance().getCheckChannel(words[0]);
     if (!channel) {
-        sendError(client, ERR_NOSUCHCHANNEL, words[0]);
+        sendError(client, ERR_NOSUCHCHANNEL, client->getNickname() + " " + words[0]);
         return;
     }
 

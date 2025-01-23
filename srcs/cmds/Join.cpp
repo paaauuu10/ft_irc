@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 09:55:32 by anovio-c          #+#    #+#             */
-/*   Updated: 2025/01/22 11:14:54 by anovio-c         ###   ########.fr       */
+/*   Updated: 2025/01/23 10:55:43 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	join(Client *client, std::string& args) {
 		std::string key = (i < keys.size()) ? keys[i] : "";
 		
 		if (!isValidChannelName(channelName)) {
-			sendError(client, ERR_NOSUCHCHANNEL, channelName);
+			sendError(client, ERR_NOSUCHCHANNEL, client->getNickname() + " " + channelName);
 			continue ;
 		}
 		
@@ -67,16 +67,16 @@ void	join(Client *client, std::string& args) {
 			Server::getInstance().addChannel(channel);
 		} else {
 			if (channel->getMode('i') && !channel->isInvited(client->getNickname())) {
-				sendError(client, ERR_INVITEONLYCHAN, channelName);
+				sendError(client, ERR_INVITEONLYCHAN, client->getNickname() + " " + channelName);
 				continue ;
 			}
 			
 			if (channel->isKeyProtected() && !channel->checkKey(key)) {
-				sendError(client, ERR_BADCHANNELKEY, channelName);
+				sendError(client, ERR_BADCHANNELKEY, client->getNickname() + " " + channelName);
 				continue ;
 			}
 			if (channel->isFull()) {
-				sendError(client, ERR_CHANNELISFULL, channelName);
+				sendError(client, ERR_CHANNELISFULL, client->getNickname() + " " + channelName);
 				continue ;
 			}
 			

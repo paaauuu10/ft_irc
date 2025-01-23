@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:24:51 by anovio-c          #+#    #+#             */
-/*   Updated: 2025/01/17 12:42:30 by anovio-c         ###   ########.fr       */
+/*   Updated: 2025/01/23 11:02:41 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	Server::init(int port, const std::string &pass) {
 	instance._port = port;
 	instance._pass = pass;
 	_initialized = true;
+	std::cout << "Server is running" << std::endl;
 }
 
 Client	*Server::getClientBySocket(int fd) {
@@ -154,7 +155,6 @@ int	Server::start()
 						std::cout << "Client disconnected" << std::endl;
 						Client *client = getClientBySocket(pollfds[i].fd);
 						if (client) {
-							// hacer que remove client envie un broadcast de que este se va?
 							removeClientFromServer(client);
 							delete client;
 						}
@@ -169,10 +169,7 @@ int	Server::start()
 						if (client) {
 							std::string message(buffer);
 							parsingbuffer(buffer, client);
-						//	parser(client, message);
 						}
-						//std::string response = "Message received: " + std::string(buffer) + "\r\n";
-						//send(pollfds[i].fd, response.c_str(), response.size(), 0);
 					}
 				}
 			}
@@ -184,53 +181,6 @@ int	Server::start()
 
 int			Server::getPort(void) {return this->_port;}
 std::string	Server::getPass(void) {return this->_pass;}
-
-
-void Server::handleMode(Client *client, const std::string &channelName) {
-    std::ostringstream oss;
-
-    // Enviar respuesta 324: modos del canal
-    oss << ":" << this->_srvName << " 324 " << client->getNickname()
-        << " " << channelName << " +nt" << "\r\n";
-    std::string msg = oss.str();
-    send(client->getFd(), msg.c_str(), msg.size(), 0);
-
-    oss.str("");
-    oss.clear();
-
-    oss << ":" << this->_srvName << " 329 " << client->getNickname()
-        << " " << channelName << " " << std::time(0) << "\r\n";
-    msg = oss.str();
-    send(client->getFd(), msg.c_str(), msg.size(), 0);
-}
-
-void Server::handleWho(Client *client, const std::string &channelName) {
-
-    Channel *channel = this->getCheckChannel(channelName);
-    if (!channel) {
-        sendError(client, ERR_NOSUCHCHANNEL, channelName);
-        return;
-    }
-
-    std::vector<Client*> clients = getClients();
-    for (std::vector<Client*>::iterator it = clients.begin(); it != clients.end(); ++it) {
-        Client *c = *it;
-        std::ostringstream oss;
-        oss << ":" << this->_srvName << " 352 " << client->getNickname()
-            << " " << channelName << " " << c->getUsername() << " "
-            << "127.0.0.1" << " " << this->_srvName << " "
-            << c->getNickname() << " H :0 " << c->getRealname() << "\r\n";
-        std::string msg = oss.str();
-        send(client->getFd(), msg.c_str(), msg.size(), 0);
-    }
-
-    // Enviar mensaje 315: End of WHO list
-    std::ostringstream oss;
-    oss << ":" << this->_srvName << " 315 " << client->getNickname()
-        << " " << channelName << " :End of WHO list" << "\r\n";
-    std::string msg = oss.str();
-    send(client->getFd(), msg.c_str(), msg.size(), 0);
-}
 
 std::vector<Channel *>	Server::getChannels(Client *client) {
 	std::vector<Channel *>	channels;
@@ -276,4 +226,49 @@ void	Server::removeClientFromServer(Client *client) {
 void	Server::removeChannel(Channel *channel) {
     _channels.erase(std::remove(_channels.begin(), _channels.end(), channel), _channels.end());
     delete channel;
+}
+
+void Server::handleMode(Client *client, const std::string &channelName) {
+    std::ostringstream oss;
+
+    // Enviar respuesta 324: modos del canal
+    oss << ":" << this->_srvName << " 324 " << client->getNickname()
+        << " " << channelName << " +nt" << "\r\n";
+    std::string msg = oss.str();
+    send(client->getFd(), msg.c_str(), msg.size(), 0);
+
+    oss.str("");
+    oss.clear();
+
+    oss << ":" << this->_srvName << " 329 " << client->getNickname()
+        << " " << channelName << " " << std::time(0) << "\r\n";
+    msg = oss.str();
+    send(client->getFd(), msg.c_str(), msg.size(), 0);
+}
+
+void Server::handleWho(Client *client, const std::string &channelName) {
+
+    Channel *channel = this->getCheckChannel(channelName);
+    if (!channel) {
+        sendError(client, ERR_NOSUCHCHANNEL, client->getNickname() + " " + channelName);
+        return;
+    }
+
+    std::vector<Client*> clients = getClients();
+    for (std::vector<Client*>::iterator it = clients.begin(); it != clients.end(); ++it) {
+        Client *c = *it;
+        std::ostringstream oss;
+        oss << ":" << this->_srvName << " 352 " << client->getNickname()
+            << " " << channelName << " " << c->getUsername() << " "
+            << "127.0.0.1" << " " << this->_srvName << " "
+            << c->getNickname() << " H :0 " << c->getRealname() << "\r\n";
+        std::string msg = oss.str();
+        send(client->getFd(), msg.c_str(), msg.size(), 0);
+    }
+
+    std::ostringstream oss;
+    oss << ":" << this->_srvName << " 315 " << client->getNickname()
+        << " " << channelName << " :End of WHO list" << "\r\n";
+    std::string msg = oss.str();
+    send(client->getFd(), msg.c_str(), msg.size(), 0);
 }

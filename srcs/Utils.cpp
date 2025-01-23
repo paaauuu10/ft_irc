@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 12:00:21 by anovio-c          #+#    #+#             */
-/*   Updated: 2025/01/21 12:26:34 by anovio-c         ###   ########.fr       */
+/*   Updated: 2025/01/23 11:00:17 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,7 @@
 #include "ErrorCodes.hpp"
 
 // :<server> <error_code> <target> :<error_message>
-// :irc.example.com 432 user123 :Erroneous nickname
 
-// target se predefine en "", si no es pasado como parametro
 void sendError(Client* client, ErrorCode errorCode, const std::string& target) {
     if (!client) {
         std::cerr << "Error: Cliente no está conectado.\n";
@@ -58,7 +56,7 @@ std::string trim(const std::string &str)
 {
 	size_t first = str.find_first_not_of(" \t\r");
 	if (first == std::string::npos)
-		return ""; // return empty str if only contains tabs or spaces
+		return "";
 	size_t last = str.find_last_not_of(" \t\r");
 	return str.substr(first, last - first + 1);
 }

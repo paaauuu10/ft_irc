@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 11:56:19 by anovio-c          #+#    #+#             */
-/*   Updated: 2025/01/17 13:43:32 by anovio-c         ###   ########.fr       */
+/*   Updated: 2025/01/23 10:57:29 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void    topic(Client *client, std::string &arg) {
     // verificar canal
     Channel *channel = Server::getInstance().getCheckChannel(channelName);
     if (!channel) {
-        sendError(client, ERR_NOSUCHCHANNEL, channelName);
+        sendError(client, ERR_NOSUCHCHANNEL, client->getNickname() + " " + channelName);
         return ;
     }
 

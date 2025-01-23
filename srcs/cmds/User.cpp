@@ -6,7 +6,7 @@
 /*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 11:12:30 by pbotargu          #+#    #+#             */
-/*   Updated: 2025/01/17 13:44:50 by anovio-c         ###   ########.fr       */
+/*   Updated: 2025/01/23 11:04:23 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,47 +34,6 @@ static bool checkServerName(std::string &name) {
 
 }
 
-/*static bool isValidIp(std::string &host) {
-
-	std::vector<std::string>	tokens = split(host, '.');
-
-	if (tokens.size() != 4)
-		return false;
-	
-	for (size_t i = 0; i < tokens.size(); ++i) {
-		const std::string &part = tokens[i];
-
-		if (part.empty())
-			return false;
-		
-		for (size_t j = 0; j < part.size(); ++j) {
-			if (!std::isdigit(part[j]))
-				return false;
-		}
-		
-		if (part.size() > 1 && part[0] == '0')
-			return false;
-		
-		long value = std::strtol(part.c_str(), NULL, 10);
-		if (value < 0 || value > 255)
-			return false;
-	}
-	return true;
-}*/
-
-/*static bool checkUser(std::string &username)
-{
-	if (username.empty())
-		return false;
-
-	std::vector<Client *>	vclient = Server::getInstance().getClients();
-	for (size_t i = 0; i < vclient.size(); i++) {
-		if (vclient[i]->getUsername() == username)
-			return false;
-	}
-	return true;
-}*/
-
 static bool isValidIp(std::string &host) {
 	if (host == "0") {
 		std::string newHost = "127.0.0.1";
@@ -84,12 +43,6 @@ static bool isValidIp(std::string &host) {
     return inet_pton(AF_INET, host.c_str(), &(sa.sin_addr)) != 0;
 }
 
-/*    Since it is easy for a client to lie about its username by relying
-   solely on the USER message, the use of an "Identity Server" is
-   recommended.  If the host which a user connects from has such a
-   server enabled the username is set to that as in the reply from the
-   "Identity Server". */
-
 void	user(Client *client, std::string &args)
 {
 	if (client->getRegistered()) {
@@ -97,7 +50,7 @@ void	user(Client *client, std::string &args)
         return;
 	}
 	
-	if (!client->getLogged() )// || client->getNickname().empty())
+	if (!client->getLogged() )
 		return ;
 
     std::vector<std::string> tokens = split(args, ' ');
@@ -129,13 +82,10 @@ void	user(Client *client, std::string &args)
 
     client->setUsername(username); // lo unico que no se puede repetir es nickname
     client->setHostname(hostname);
-	std::cout << "HOST: " << hostname << std::endl;
 	client->setServername(servername);
     client->setRealName(realname);
 	client->setRegistered(true);
 	
-	std::cout << "User " << client->getUsername() << " created!\n" << std::endl;
-
     std::ostringstream oss;
     oss << ":" << Server::getInstance().getServerName()
 		<< " 001 " << client->getNickname() << " :Welcome to the IRC network, "
@@ -143,5 +93,4 @@ void	user(Client *client, std::string &args)
 		<< client->getHostname() << "\r\n";
     std::string msg = oss.str();
     send(client->getFd(), msg.c_str(), msg.size(), 0);
-    //send(client->getFd(), pikachu_art.c_str(), pikachu_art.size(), 0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Invite.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbotargu <pbotargu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: anovio-c <anovio-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 13:51:35 by pborrull          #+#    #+#             */
-/*   Updated: 2025/01/22 12:19:39 by pbotargu         ###   ########.fr       */
+/*   Updated: 2025/01/23 10:55:09 by anovio-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,29 +17,6 @@
 #include "Channel.hpp"
 #include "ErrorCodes.hpp"
 
-// CHECKnickname la he pasado a BOOL!!!
-
-/*
-static int checkNickname(std::string &nickname)
-{
-	
-	std::vector<Client *>	vclient = Server::getInstance().getClients();
-	for (long unsigned int i = 0; i < vclient.size(); i++)
-	{
-		if (vclient[i]->getNickname() == nickname)
-			return 1;
-	}
-	return 0;
-}
-
-int checkChannel(std::string &nickname)
-{
-	
-	Channel	*vchannel = Server::getInstance().getCheckChannel(nickname);
-	if (vchannel)
-		return 1;
-	return 0;
-}*/
 static void makeInviterMessage(Client* client, const std::string &channelName, const std::string &invitedName) {
 
 	// :servername 341 Inviter invited channelname
@@ -69,28 +46,29 @@ static void	makeInvitedMessage(Client *client, std::string channelName, Client *
     send(invited->getFd(), msg.c_str(), msg.size(), 0);
 }
 
-void		invite(Client *client, std::string &invitation)
+void	invite(Client *client, std::string &invitation)
 {
-
-	// CHEQUEAR QUE NO SE INVITE AL MISMO CLIENTE QUE ENVIA LA PETICION DEL IVNITE
-	
 	std::vector<std::string> words = split(invitation, ' ');
 	
 	if (words.size() < 2) {
-		sendError(client, ERR_NEEDMOREPARAMS); //ERR_NEEDMOREPARAMS
+		sendError(client, ERR_NEEDMOREPARAMS);
 		return ;
 	}
-	Channel *channel = Server::getInstance().getCheckChannel(words[1]);
+	std::string invited = words[0];
+	std::string	inviter = client->getNickname();
+	std::string channelName = words[1];
+	
+	Channel *channel = Server::getInstance().getCheckChannel(channelName);
 	if (!checkNickname(words[0]))
-		sendError(client, ERR_NOSUCHNICK, words[0]); //ERR_NOSUCHNICK
+		sendError(client, ERR_NOSUCHNICK, invited);
 	else if (!channel)
-		sendError(client, ERR_NOSUCHCHANNEL, words[1]); //ERR_NOSUCHCHANNEL
-	else if (channel->getClientList(words[0]))
-		sendError(client, ERR_USERONCHANNEL, client->getNickname() + " " + words[0] + " " + words[1]); //ERR_USERONCHANNEL
-	else if (!channel->getOperatorList(client->getNickname())) //&& i is true)
-		sendError(client, ERR_CHANOPRIVSNEEDED, words[1]); //ERR_CHANOPRIVSNEEDED
+		sendError(client, ERR_NOSUCHCHANNEL, inviter + " " + channelName);
+	else if (channel->getClientList(invited))
+		sendError(client, ERR_USERONCHANNEL, client->getNickname() + " " + invited + " " + channelName);
+	else if (!channel->getOperatorList(client->getNickname()))
+		sendError(client, ERR_CHANOPRIVSNEEDED, channelName);
 	else {
-		channel->addClientsInvited(words[0]);
+		channel->addClientsInvited(invited);
 		Client *invited = Server::getInstance().getClientByNickname(words[0]);
 		
 		makeInviterMessage(client, channel->getName(), invited->getNickname());
