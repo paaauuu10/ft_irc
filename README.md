@@ -3,7 +3,7 @@ ft_irc - Internet Relay Chat Server
 
 Description
 -----------
-This project involves creating an IRC server in C++98 that handles multiple clients simultaneously with non-blocking I/O operations. The server implements core IRC functionality including authentication, channel operations, and operator commands.
+This project involves creating an IRC server in C++98 that handles multiple clients simultaneously with non-blocking I/O operations. The server implements core IRC functionality including authentication, channel operations, and operator commands
 
 Features
 --------
